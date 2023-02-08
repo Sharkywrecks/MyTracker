@@ -12,6 +12,12 @@
         android:theme="@style/Theme.MyTracker"
         tools:targetApi="31">
         <activity
+            android:name=".FoodTrackerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MoneyTrackerActivity"
+            android:exported="false" />
+        <activity
             android:name=".HomeActivity"
             android:exported="false" />
         <activity
