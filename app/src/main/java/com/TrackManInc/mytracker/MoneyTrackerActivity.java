@@ -8,11 +8,8 @@ import android.widget.RadioGroup;
 
 public class MoneyTrackerActivity extends AppCompatActivity {
 
-    RadioGroup radioGroup;
-    RadioButton dayRadioButton, weekRadioButton, monthRadioButton;
-
-
-
+    private RadioGroup radioGroup;
+    private RadioButton dayRadioButton, weekRadioButton, monthRadioButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
