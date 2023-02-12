@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +24,8 @@ import java.util.HashMap;
 
 public class SignUpActivity extends AppCompatActivity {
 
+    private EditText usernameET,emailET,passwordET;
+    private Button signUpButton;
     private ProgressDialog loadingBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,13 +35,12 @@ public class SignUpActivity extends AppCompatActivity {
         setupUIView();
     }
     private void setupUIView(){
-        createAccountButton = findViewById(R.id.register_btn);
-        inputName = findViewById(R.id.register_username_input);
-        inputPhoneNumber = findViewById(R.id.register_phone_number_input);
-        inputPassword = findViewById(R.id.register_password_input);
-        inputEmail = findViewById(R.id.register_email_input);
+        usernameET = findViewById(R.id.username);
+        emailET = findViewById(R.id.email);
+        passwordET = findViewById(R.id.password);
+        signUpButton = findViewById(R.id.sign_up_button);
         loadingBar = new ProgressDialog(this);
-        createAccountButton.setOnClickListener(new View.OnClickListener() {
+        signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 createAccount();
@@ -45,22 +48,18 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
     private void createAccount(){
-        String name=inputName.getText().toString();
-        String phone=inputPhoneNumber.getText().toString();
-        String password=inputPassword.getText().toString();
-        String email=inputEmail.getText().toString();
+        String username=usernameET.getText().toString();
+        String email=emailET.getText().toString();
+        String password=passwordET.getText().toString();
 
-        if(TextUtils.isEmpty(name)){
-            Toast.makeText(this, "Please write your name...", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(phone)){
-            Toast.makeText(this, "Please write your phone number...", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(username)){
+            Toast.makeText(this, "Please enter your name...", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Please write your email...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter your email...", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(password)){
-            Toast.makeText(this, "Please write your password...", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please enter your password...", Toast.LENGTH_SHORT).show();
         }
         else{
             loadingBar.setTitle("Creating Account");
@@ -68,25 +67,24 @@ public class SignUpActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            ValidatePhoneNumber(name,phone,password,email);
+            ValidatePhoneNumber(username,email,password);
         }
     }
 
-    private void ValidatePhoneNumber(String name, String phone, String password,String email) {
+    private void ValidatePhoneNumber(String name,String email,String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!(snapshot.child("Users").child(phone).exists())){
+                if(!(snapshot.child("Users").child(email).exists())){
                     HashMap<String,Object> userDataMap = new HashMap<>();
-                    userDataMap.put("phone",phone);
                     userDataMap.put("password",password);
                     userDataMap.put("name",name);
                     userDataMap.put("email",email);
 
-                    RootRef.child("Users").child(phone).updateChildren(userDataMap)
+                    RootRef.child("Users").child(email).updateChildren(userDataMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -103,9 +101,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             });
                 }else{
-                    Toast.makeText(getApplicationContext(), "This "+phone+" already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "This "+email+" already exists", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
-                    Toast.makeText(getApplicationContext(), "Please try again using another phone number.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please try again using another email address.", Toast.LENGTH_SHORT).show();
                 }
             }
 

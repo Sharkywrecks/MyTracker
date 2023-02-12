@@ -16,7 +16,7 @@
         android:layout_alignParentBottom="true">
 
         <Button
-            android:id="@+id/signUpButton"
+            android:id="@+id/sign_up_button"
             android:text="Sign Up"
             android:textStyle="bold"
             android:layout_marginLeft="10dp"
@@ -24,7 +24,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
         <Button
-            android:id="@+id/LogInButton"
+            android:id="@+id/log_in_button"
             android:text="Login in"
             android:textStyle="bold"
             android:layout_marginTop="10dp"
