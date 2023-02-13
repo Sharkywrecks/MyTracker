@@ -2,6 +2,7 @@
   "project_info": {
     "project_number": "485843806281",
     "project_id": "mytracker-9855b",
+    "firebase_url": "https://mytracker-9855b-default-rtdb.europe-west1.firebasedatabase.app/",
     "storage_bucket": "mytracker-9855b.appspot.com"
   },
   "client": [
