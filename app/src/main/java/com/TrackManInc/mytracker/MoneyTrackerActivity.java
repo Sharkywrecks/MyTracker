@@ -2,11 +2,13 @@ package com.TrackManInc.mytracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
 
+import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -16,6 +18,7 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MoneyTrackerActivity extends AppCompatActivity {
 
@@ -26,7 +29,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_tracker);
-
         setupUIView();
     }
 
@@ -51,10 +53,14 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
 
+
         barChart.getAxisLeft().setDrawGridLines(true);
-        barChart.getAxisRight().setDrawGridLines(true);
         barChart.getAxisLeft().setDrawLabels(true);
+        barChart.getAxisLeft().setAxisMinimum(0);
+
+        barChart.getAxisRight().setDrawGridLines(true);
         barChart.getAxisRight().setDrawLabels(true);
+        barChart.getAxisRight().setAxisMinimum(0);
 
         barChart.setTouchEnabled(true);
         barChart.setPinchZoom(false);
@@ -99,6 +105,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private void addDataToGraph(BarDataSet barDataSet){
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
+        barChart.animateXY(500, 900, Easing.Linear, Easing.EaseOutCubic);
         barChart.setData(barData);
         barChart.invalidate();
     }
@@ -109,13 +116,10 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(daysOfWeek));
 
         ArrayList<BarEntry> testData = new ArrayList<>();
-        testData.add(new BarEntry(0,2)); // x value must start with index 0
-        testData.add(new BarEntry(1,3));
-        testData.add(new BarEntry(2,4));
-        testData.add(new BarEntry(3,24));
-        testData.add(new BarEntry(4,6));
-        testData.add(new BarEntry(5,7));
-        testData.add(new BarEntry(6,8));
+        for(int dayOfWeek = 0; dayOfWeek<7; dayOfWeek++){
+            testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20)));
+        }
+
         BarDataSet barDataSet = new BarDataSet(testData, "Test Data Set 1");
         return barDataSet;
     }
@@ -138,18 +142,11 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setLabelCount(months.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(months));
         ArrayList<BarEntry> testData = new ArrayList<>();
-        testData.add(new BarEntry(0,2)); // x value must start with index 0
-        testData.add(new BarEntry(1,2));
-        testData.add(new BarEntry(2,3));
-        testData.add(new BarEntry(3,4));
-        testData.add(new BarEntry(4,24));
-        testData.add(new BarEntry(5,6));
-        testData.add(new BarEntry(6,7));
-        testData.add(new BarEntry(7,8));
-        testData.add(new BarEntry(8,2));
-        testData.add(new BarEntry(9,3));
-        testData.add(new BarEntry(10,4));
-        testData.add(new BarEntry(11,24));
+
+        for(int month = 0; month<12; month++){
+            testData.add(new BarEntry(month,new Random().nextInt(20)));
+        }
+
         BarDataSet barDataSet = new BarDataSet(testData, "Test Data Set 3");
         return barDataSet;
     }
