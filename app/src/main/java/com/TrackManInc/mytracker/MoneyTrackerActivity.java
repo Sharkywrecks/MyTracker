@@ -104,9 +104,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private void addDataToGraph(BarDataSet barDataSet){
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
-        barChart.animateXY(500, 900, Easing.Linear, Easing.EaseOutCubic);
         barChart.setData(barData);
         barChart.invalidate();
+        barChart.animateXY(500, 900, Easing.Linear, Easing.EaseOutCubic);
     }
 
     private BarDataSet findWeekData(){ // will eventually add real data from db instead
