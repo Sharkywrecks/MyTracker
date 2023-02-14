@@ -2,7 +2,6 @@ package com.TrackManInc.mytracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -120,8 +119,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20)));
         }
 
-        BarDataSet barDataSet = new BarDataSet(testData, "Test Data Set 1");
-        return barDataSet;
+        return new BarDataSet(testData, "Test Data Set 1");
     }
 
     private BarDataSet findMonthData(){ // will eventually add real data from db instead
@@ -133,8 +131,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         testData.add(new BarEntry(5,6));
         testData.add(new BarEntry(6,7));
         testData.add(new BarEntry(7,8));
-        BarDataSet barDataSet = new BarDataSet(testData, "Test Data Set 2");
-        return barDataSet;
+        return new BarDataSet(testData, "Test Data Set 2");
     }
 
     private BarDataSet findYearData(){ // will eventually add real data from db instead
@@ -147,8 +144,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             testData.add(new BarEntry(month,new Random().nextInt(20)));
         }
 
-        BarDataSet barDataSet = new BarDataSet(testData, "Test Data Set 3");
-        return barDataSet;
+        return new BarDataSet(testData, "Test Data Set 3");
     }
 
 }
