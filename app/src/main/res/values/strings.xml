@@ -3,4 +3,11 @@
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="year">Year</string>
+    <string name="chart_title">Chart Title</string>
+    <string name="yearChartTitle">Previous 12 Months</string>
+    <string name="yearChartXAxisTitle">Month</string>
+    <string name="monthChartTitle">Previous 4 Weeks</string>
+    <string name="monthChartXAxisTitle">Week Start Date</string>
+    <string name="weekChartTitle">Previous 7 Days</string>
+    <string name="weekChartXAxisTitle">Day</string>
 </resources>

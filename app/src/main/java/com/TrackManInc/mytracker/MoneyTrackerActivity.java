@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -18,6 +19,7 @@ import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -25,6 +27,7 @@ import java.util.Random;
 
 public class MoneyTrackerActivity extends AppCompatActivity {
 
+    private TextView chartTitle, xAxisTitle;
     private RadioButton weekRadioButton, monthRadioButton, yearRadioButton;
     private BarChart barChart;
 
@@ -40,6 +43,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         monthRadioButton = findViewById(R.id.prev_month_radio_btn);
         yearRadioButton = findViewById(R.id.prev_year_radio_btn);
         barChart = findViewById(R.id.bar_chart);
+        chartTitle = findViewById(R.id.chart_title);
+        xAxisTitle = findViewById(R.id.xAxis_title);
         graphSettings();
         weekRadioButton.setChecked(true);
         generateGraph(R.id.prev_week_radio_btn); // defaults to week graph
@@ -47,11 +52,12 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
     private void graphSettings(){  // temporary settings for now
         barChart.setNoDataText("No Data.");
-        barChart.setBackgroundColor(Color.WHITE);
         barChart.setNoDataTextColor(Color.BLACK);
         barChart.setBorderColor(Color.BLACK);
         barChart.setDrawBorders(true);
         barChart.setBorderWidth(3);
+        barChart.setDescription(null);
+        barChart.getLegend().setEnabled(false);
 
         barChart.getXAxis().setDrawGridLines(false);
         barChart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -98,16 +104,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         }
     }
 
-    private void addChartDescription(String description){
-        Description chartDescription = new Description();
-        chartDescription.setText(description);
-        chartDescription.setTextColor(Color.BLACK);
-        chartDescription.setTextSize(20);
-        chartDescription.setEnabled(true);
-        barChart.setDescription(chartDescription);
-    }
-
-
     private void addDataToGraph(BarDataSet barDataSet){
         BarData barData = new BarData();
         barData.addDataSet(barDataSet);
@@ -116,27 +112,33 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.animateXY(500, 900, Easing.Linear, Easing.EaseOutCubic);
     }
 
+    private String[] rightCircularShift(String[] arr, int startIdx){
+        int length = arr.length;
+        if (startIdx == 0) {
+            return arr;
+        }
+        String[] firstPart = Arrays.copyOfRange(arr, 0, startIdx+1);
+        String[] secondPart = Arrays.copyOfRange(arr, startIdx+1, length);
+        String[] shiftedArr = new String[length];
+        System.arraycopy(secondPart, 0, shiftedArr, 0, secondPart.length);
+        System.arraycopy(firstPart, 0, shiftedArr, secondPart.length, firstPart.length);
+        return shiftedArr;
+    }
+
     private BarDataSet findWeekData(){ // previous 7 days
         final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         final int length = daysOfWeek.length;
-        String[] shiftedDays = new String[length];
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
-        for(int i = 0; i<length-(day+1);i++){
-            shiftedDays[i] = daysOfWeek[day+1+i];
-        }
-        int count = 0;
-        for(int i = length-(day+1); i<length;i++){
-            shiftedDays[i] = daysOfWeek[count];
-            count++;
-        }
+        String[] shiftedDays = rightCircularShift(daysOfWeek, day);
         ArrayList<BarEntry> testData = new ArrayList<>();
         for(int dayOfWeek = 0; dayOfWeek<length; dayOfWeek++){
-            testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20)));
+            testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20))); // add db data here
         }
         barChart.getXAxis().setLabelCount(shiftedDays.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
-        addChartDescription("Previous 7 Days");
+        chartTitle.setText(R.string.weekChartTitle);
+        xAxisTitle.setText(R.string.weekChartXAxisTitle);
         return new BarDataSet(testData, "Test Data Set 1");
     }
 
@@ -152,37 +154,30 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             weekStartDates[i] = formatter.format(weekStartDate);
         }
         ArrayList<BarEntry> testData = new ArrayList<>();
-        for(int dayOfWeek = 0; dayOfWeek<4; dayOfWeek++){
-            testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20)));
+        for(int week = 0; week<4; week++){
+            testData.add(new BarEntry(week, new Random().nextInt(20))); // add db data here
         }
         barChart.getXAxis().setLabelCount(weekStartDates.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
-        addChartDescription("Previous 4 Weeks");
+        chartTitle.setText(R.string.monthChartTitle);
+        xAxisTitle.setText(R.string.monthChartXAxisTitle);
         return new BarDataSet(testData, "Test Data Set 2");
     }
 
     private BarDataSet findYearData(){ // previous 12 months
         final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         final int length = months.length;
-        String[] shiftedMonths = new String[length];
         Calendar calendar = Calendar.getInstance();
         int monthNum = calendar.get(Calendar.MONTH);
-        for(int i = 0; i<length-(monthNum+1);i++){
-            shiftedMonths[i] = months[monthNum+1+i];
-        }
-        int count = 0;
-        for(int i = length-(monthNum+1); i<length;i++){
-            shiftedMonths[i] = months[count];
-            count++;
-        }
+        String[] shiftedMonths = rightCircularShift(months, monthNum);
         ArrayList<BarEntry> testData = new ArrayList<>();
         for(int month = 0; month<length; month++){
-            testData.add(new BarEntry(month, new Random().nextInt(20)));
+            testData.add(new BarEntry(month, new Random().nextInt(20))); // add db data here
         }
         barChart.getXAxis().setLabelCount(shiftedMonths.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedMonths));
-        addChartDescription("Previous 7 Days");
-        addChartDescription("Previous 12 Months");
+        chartTitle.setText(R.string.yearChartTitle);
+        xAxisTitle.setText(R.string.yearChartXAxisTitle);
         return new BarDataSet(testData, "Test Data Set 3");
     }
 
