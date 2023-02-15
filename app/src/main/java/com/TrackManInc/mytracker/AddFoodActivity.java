@@ -65,12 +65,18 @@ public class AddFoodActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_food);
-
+        setupUIView();
         initDatePicker();
         setupPermissionsCamera();
         setupCodeScanner();
         checkForEditNote();
     }
+
+    private void setupUIView() {
+        foodNameEditText = findViewById(R.id.foodNameEditText);
+        expiryDateText = findViewById(R.id.expiryDateEditText);
+    }
+
     private void checkForEditNote() {
         //Option to edit data
     }
