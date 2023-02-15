@@ -15,9 +15,6 @@
         android:theme="@style/Theme.MyTracker"
         tools:targetApi="31">
         <activity
-            android:name=".CodeScannerActivity"
-            android:exported="false" />
-        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
