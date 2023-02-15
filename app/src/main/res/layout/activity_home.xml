@@ -6,4 +6,40 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="testing" />
+
+    </ScrollView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MyTracker"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="135dp"
+        tools:layout_editor_absoluteY="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Food"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="67.5dp"
+        tools:layout_editor_absoluteY="80dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Money"
+        android:textSize="30dp"
+        tools:layout_editor_absoluteX="262.5dp"
+        tools:layout_editor_absoluteY="80dp" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
