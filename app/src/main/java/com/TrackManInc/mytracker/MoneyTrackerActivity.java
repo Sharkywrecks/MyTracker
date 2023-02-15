@@ -143,6 +143,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private BarDataSet findMonthData() { // Previous 4 weeks
         String[] weekStartDates = new String[4];
         Calendar cal = Calendar.getInstance();
+        //https://stackoverflow.com/questions/10465487/get-next-week-and-previous-week-staring-and-ending-dates-in-java
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM", Locale.ENGLISH);
         for(int i=3;i>=0;i--){
