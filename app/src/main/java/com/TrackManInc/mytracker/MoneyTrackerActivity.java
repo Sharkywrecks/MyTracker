@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
@@ -30,6 +29,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private TextView chartTitle, xAxisTitle;
     private RadioButton weekRadioButton, monthRadioButton, yearRadioButton;
     private BarChart barChart;
+    private int radioState = 0; // 0:week, 1:month, 2:year
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +84,30 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private void generateGraph(int id) {
         switch (id){
             case R.id.prev_week_radio_btn:
+                if(radioState == 0 && !barChart.isEmpty()){
+                    return;
+                }
+                radioState = 0;
                 monthRadioButton.setChecked(false);
                 yearRadioButton.setChecked(false);
                 BarDataSet weekData = findWeekData();
                 addDataToGraph(weekData);
                 break;
             case R.id.prev_month_radio_btn:
+                if(radioState == 1 && !barChart.isEmpty()){
+                    return;
+                }
+                radioState = 1;
                 weekRadioButton.setChecked(false);
                 yearRadioButton.setChecked(false);
                 BarDataSet monthData = findMonthData();
                 addDataToGraph(monthData);
                 break;
             case R.id.prev_year_radio_btn:
+                if(radioState == 2 && !barChart.isEmpty()){
+                    return;
+                }
+                radioState = 2;
                 weekRadioButton.setChecked(false);
                 monthRadioButton.setChecked(false);
                 BarDataSet yearData = findYearData();
