@@ -29,7 +29,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private TextView chartTitle, xAxisTitle;
     private RadioButton weekRadioButton, monthRadioButton, yearRadioButton;
     private BarChart barChart;
-    private int radioState = 0; // 0:week, 1:month, 2:year
+    private int radioState =0; // 0:week, 1:month, 2:year
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
