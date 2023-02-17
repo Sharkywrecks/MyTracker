@@ -10,6 +10,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.TrackManInc.mytracker.Model.Money;
+import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -138,8 +139,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("date").child(phone).exists()) {
-                    Money moneyData = snapshot.child("date").child("money").getValue(Money.class);
+                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
+                    Money moneyData = snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(date).getValue(Money.class);
 
                 } else {
 

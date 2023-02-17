@@ -68,9 +68,9 @@ public class AddFoodActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
     private CodeScanner mCodeScanner;
     private org.jsoup.nodes.Document document = null;
-    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount;
+    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity;
     private TextView foodNameTV;
-    private EditText carbsET,proteinET,fatsET,saltET,fibreET,expiryDate;
+    private EditText carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET;
     private DatePickerDialog.OnDateSetListener setListener;
     private Button saveButton,deleteButton;
     private ProgressDialog loadingBar;
@@ -91,13 +91,14 @@ public class AddFoodActivity extends AppCompatActivity {
         proteinET = findViewById(R.id.protein);
         fatsET = findViewById(R.id.fats);
         saltET = findViewById(R.id.salt);
-        fibreET = findViewById(R.id.fiber);
-        expiryDate = findViewById(R.id.expiry_date);
-        expiryDate.setFocusable(false);
-        expiryDate.setKeyListener(null);
+        fiberET = findViewById(R.id.fiber);
+        dateET = findViewById(R.id.date);
+        dateET.setFocusable(false);
+        dateET.setKeyListener(null);
         foodNameTV = findViewById(R.id.food_name);
         saveButton = findViewById(R.id.save_input_button);
         deleteButton = findViewById(R.id.delete_input_button);
+        quantityET = findViewById(R.id.quantity);
         loadingBar = new ProgressDialog(this);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,6 +112,12 @@ public class AddFoodActivity extends AppCompatActivity {
         //Option to edit data
     }
     public void saveInput(){
+        if(checkNoInput("Carbohydrates",carbsET)|| checkNoInput("Protein",proteinET)||
+            checkNoInput("Fats",fatsET)|| checkNoInput("Salt",saltET)||
+            checkNoInput("Fiber",fiberET)|| checkNoInput("Date",dateET)||
+            checkNoInput("Quantity",quantityET)){
+            return;
+        }
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -121,18 +128,20 @@ public class AddFoodActivity extends AppCompatActivity {
                 userDataMap.put("fat",fatAmount);
                 userDataMap.put("salt",saltAmount);
                 userDataMap.put("fiber",fiberAmount);
+                quantity = quantityET.getText().toString();
+                userDataMap.put("quantity",quantity);
 
-                RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(expiryDate.getText().toString()).child(foodName).updateChildren(userDataMap)
+                RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
-                                    Toast.makeText(getApplicationContext(), "Food item added.", Toast.LENGTH_SHORT).show();
+                                    toastMessage("Food item added.");
                                     loadingBar.dismiss();
 
                                     finish();
                                 }else{
-                                    Toast.makeText(getApplicationContext(), "Network Error: Please try again after some time...", Toast.LENGTH_SHORT).show();
+                                    toastMessage("Network Error: Please try again after some time...");
                                     loadingBar.dismiss();
                                 }
                             }
@@ -145,6 +154,14 @@ public class AddFoodActivity extends AppCompatActivity {
             }
         });
         finish();
+    }
+
+    private boolean checkNoInput(String nutrient,EditText editText) {
+        if(editText.getText().toString().equals("")){
+            toastMessage("Enter a value for "+nutrient);
+            return true;
+        }
+        return false;
     }
 
     public void deleteInput(View view){
@@ -169,11 +186,12 @@ public class AddFoodActivity extends AppCompatActivity {
                 if(month<10){
                     m = "0"+month;
                 }
-                date = day+"-"+m+"-"+year;
-                expiryDate.setText(date);
+                date = day+"/"+m+"/"+year;
+                dateHtml = year+"/"+m+"/"+day;
+                dateET.setText(date);
             }
         };
-        expiryDate.setOnClickListener(new View.OnClickListener() {
+        dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -260,11 +278,17 @@ public class AddFoodActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST_CODE:
                 if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "You need the camera permission to be able to use the scanner", Toast.LENGTH_SHORT);
+                    toastMessage( "You need the camera permission to be able to use the scanner");
                 } else {
                     //successful
                 }
         }
+    }
+    private void toastMessage(String message){
+        Spannable centeredText = new SpannableString(message);
+        centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),0,message.length()-1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
     private void toastFailMessage(){
         if(foodNameTV.getText().toString().equals("") || document==null) {
@@ -297,14 +321,6 @@ public class AddFoodActivity extends AppCompatActivity {
                     saltAmount = getFoodDataValue("Salt ",elements.text());
                     fiberAmount = getFoodDataValue("Fiber ",elements.text());
 
-                } else{
-                    document = Jsoup.connect(("https://upcitemdb.com/upc/" + scannedCodeValue)).get();
-                    if(document!=null) {
-                        //org.jsoup.select.Elements elements = document.getElementsByClass("detailtitle");
-                        Element elements = document.getElementsByTag("span").first();
-                        foodName = elements.text();
-
-                    }
                 }
             } catch (IOException e) {
                 //failed
@@ -321,7 +337,7 @@ public class AddFoodActivity extends AppCompatActivity {
             proteinET.setText(proteinAmount+"g");
             fatsET.setText(fatAmount+"g");
             saltET.setText(saltAmount+"g");
-            fibreET.setText(fiberAmount+"g");
+            fiberET.setText(fiberAmount+"g");
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             //}

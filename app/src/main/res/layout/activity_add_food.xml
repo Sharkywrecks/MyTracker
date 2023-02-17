@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:hint="Scan barcode or enter carbs"
+            android:hint="Enter carbs"
             android:maxLines="3"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:hint="Scan barcode or enter protein"
+            android:hint="Enter protein"
             android:maxLines="3"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:hint="Scan barcode or enter fats"
+            android:hint="Enter fats"
             android:maxLines="3"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
@@ -127,7 +127,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:hint="Scan barcode or enter salt"
+            android:hint="Enter salt"
             android:maxLines="3"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
@@ -153,7 +153,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:hint="Scan barcode or enter fiber"
+            android:hint="Enter fiber"
             android:maxLines="3"
             android:minHeight="48dp"
             android:paddingLeft="10dp"
@@ -169,12 +169,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_gravity="center"
-            android:text="Expiry Date:"
+            android:text="Date:"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/expiry_date"
+            android:id="@+id/date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -185,7 +185,33 @@
             android:layout_marginEnd="6dp"
             android:paddingLeft="20dp" />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_gravity="center"
+            android:text="Quantity:"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/quantity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:inputType="numberDecimal"
+            android:background="@android:color/transparent"
+            android:text="1"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:layout_marginEnd="6dp"
+            android:paddingLeft="20dp" />
+    </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
