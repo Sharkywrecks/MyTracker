@@ -1,13 +1,15 @@
 package com.TrackManInc.mytracker;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.TrackManInc.mytracker.Model.Money;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -15,6 +17,11 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,7 +34,7 @@ import java.util.Random;
 public class MoneyTrackerActivity extends AppCompatActivity {
 
     private TextView chartTitle, xAxisTitle;
-    private RadioButton weekRadioButton, monthRadioButton, yearRadioButton;
+    private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
 
@@ -39,14 +46,11 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private void setupUIView() {
-        weekRadioButton = findViewById(R.id.prev_week_radio_btn);
-        monthRadioButton = findViewById(R.id.prev_month_radio_btn);
-        yearRadioButton = findViewById(R.id.prev_year_radio_btn);
+        radioGroup = findViewById(R.id.radio_group);
         barChart = findViewById(R.id.bar_chart);
         chartTitle = findViewById(R.id.chart_title);
         xAxisTitle = findViewById(R.id.xAxis_title);
         graphSettings();
-        weekRadioButton.setChecked(true);
         generateGraph(R.id.prev_week_radio_btn); // defaults to week graph
     }
 
@@ -78,41 +82,32 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     public void onRadioButtonClicked(View view) {
-        generateGraph(view.getId());
+        int radioBtnId = radioGroup.getCheckedRadioButtonId();
+        generateGraph(radioBtnId);
     }
 
     private void generateGraph(int id) {
-        switch (id){
-            case R.id.prev_week_radio_btn:
-                if(radioState == 0 && !barChart.isEmpty()){
-                    return;
-                }
-                radioState = 0;
-                monthRadioButton.setChecked(false);
-                yearRadioButton.setChecked(false);
-                BarDataSet weekData = findWeekData();
-                addDataToGraph(weekData);
-                break;
-            case R.id.prev_month_radio_btn:
-                if(radioState == 1 && !barChart.isEmpty()){
-                    return;
-                }
-                radioState = 1;
-                weekRadioButton.setChecked(false);
-                yearRadioButton.setChecked(false);
-                BarDataSet monthData = findMonthData();
-                addDataToGraph(monthData);
-                break;
-            case R.id.prev_year_radio_btn:
-                if(radioState == 2 && !barChart.isEmpty()){
-                    return;
-                }
-                radioState = 2;
-                weekRadioButton.setChecked(false);
-                monthRadioButton.setChecked(false);
-                BarDataSet yearData = findYearData();
-                addDataToGraph(yearData);
-                break;
+        if(id == R.id.prev_week_radio_btn){
+            if(radioState == 0 && !barChart.isEmpty()){
+                return;
+            }
+            radioState = 0;
+            BarDataSet weekData = findWeekData();
+            addDataToGraph(weekData);
+        }else if(id == R.id.prev_month_radio_btn){
+            if(radioState == 1 && !barChart.isEmpty()){
+                return;
+            }
+            radioState = 1;
+            BarDataSet monthData = findMonthData();
+            addDataToGraph(monthData);
+        }else if(id == R.id.prev_year_radio_btn){
+            if(radioState == 2 && !barChart.isEmpty()){
+                return;
+            }
+            radioState = 2;
+            BarDataSet yearData = findYearData();
+            addDataToGraph(yearData);
         }
     }
 
@@ -135,6 +130,27 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         System.arraycopy(secondPart, 0, shiftedArr, 0, secondPart.length);
         System.arraycopy(firstPart, 0, shiftedArr, secondPart.length, firstPart.length);
         return shiftedArr;
+    }
+
+    private void graphFromDB(String date){
+        final DatabaseReference RootRef;
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("date").child(phone).exists()) {
+                    Money moneyData = snapshot.child("date").child("money").getValue(Money.class);
+
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private BarDataSet findWeekData(){ // previous 7 days
