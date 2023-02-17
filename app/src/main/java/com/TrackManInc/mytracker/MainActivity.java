@@ -36,12 +36,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupPaper() {
         Paper.init(this);
-        String userPhoneKey = Paper.book().read(Prevalent.userEmailKey);
+        String userEmailKey = Paper.book().read(Prevalent.userEmailKey);
         String userPasswordKey = Paper.book().read(Prevalent.userPasswordKey);
 
-        if(userPhoneKey!= "" && userPasswordKey!=""){
-            if(!TextUtils.isEmpty(userPhoneKey) && !TextUtils.isEmpty(userPasswordKey)){
-                AllowAccess(userPhoneKey,userPasswordKey);
+        if(userEmailKey!= "" && userPasswordKey!=""){
+            if(!TextUtils.isEmpty(userEmailKey) && !TextUtils.isEmpty(userPasswordKey)){
+                AllowAccess(userEmailKey,userPasswordKey);
 
                 loadingBar.setTitle("Already logged in");
                 loadingBar.setMessage("Please wait...");
@@ -71,17 +71,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void AllowAccess(final String phone, final String password) {
+    private void AllowAccess(final String email, final String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("Users").child(phone).exists()){
-                    Users usersData = snapshot.child("Users").child(phone).getValue(Users.class);
+                if(snapshot.child("Users").child(email).exists()){
+                    Users usersData = snapshot.child("Users").child(email).getValue(Users.class);
 
-                    if(usersData.getEmail().equals(phone)){
+                    if(usersData.getEmail().equals(email)){
                         if(usersData.getPassword().equals(password)){
                             Toast.makeText(getApplicationContext(), "You are already logged in.", Toast.LENGTH_SHORT).show();
                             loadingBar.dismiss();
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    Toast.makeText(getApplicationContext(), "Account with this "+phone+" number does not exist.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Account with this "+email+" address does not exist.", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
                 }
             }
