@@ -3,11 +3,18 @@ package com.TrackManInc.mytracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
@@ -18,6 +25,8 @@ import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
 
@@ -38,6 +48,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
+    private ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +62,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart = findViewById(R.id.bar_chart);
         chartTitle = findViewById(R.id.chart_title);
         xAxisTitle = findViewById(R.id.xAxis_title);
+        loadingBar = new ProgressDialog(this);
         graphSettings();
         generateGraph(R.id.prev_week_radio_btn); // defaults to week graph
     }
@@ -133,6 +145,56 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         return shiftedArr;
     }
 
+    public void addMoney(View view){
+        EditText et = findViewById(R.id.money_entered);
+        if(checkNoInput("Money used today.", et)){
+            return;
+        }
+        final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                HashMap<String,Object> userDataMap = new HashMap<>();
+                userDataMap.put("amount",et.getText().toString());
+
+                Calendar calender = Calendar.getInstance();
+                int year = calender.get(Calendar.YEAR);
+                int month = calender.get(Calendar.MONTH);
+                int day = calender.get(Calendar.DAY_OF_MONTH);
+                month = month+1;
+                String d = String.valueOf(day);
+                String m = String.valueOf(month);
+                if(day<10){
+                    d = "0"+day;
+                }
+                if(month<10){
+                    m = "0"+month;
+                }
+
+                String dateHtml = year+"/"+m+"/"+d;
+                RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).updateChildren(userDataMap)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if(task.isSuccessful()){
+                                    toastMessage("Money added.");
+                                    loadingBar.dismiss();
+                                    finish();
+                                }else{
+                                    toastMessage("Network Error: Please try again after some time...");
+                                    loadingBar.dismiss();
+                                }
+                            }
+                        });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void graphFromDB(String date){
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
@@ -152,6 +214,21 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean checkNoInput(String money, EditText editText) {
+        if(editText.getText().toString().equals("")){
+            toastMessage("Enter a value for "+money);
+            return true;
+        }
+        return false;
+    }
+
+    private void toastMessage(String message){
+        Spannable centeredText = new SpannableString(message);
+        centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),0,message.length()-1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
 
     private BarDataSet findWeekData(){ // previous 7 days
