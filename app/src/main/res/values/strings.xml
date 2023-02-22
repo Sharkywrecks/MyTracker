@@ -10,4 +10,7 @@
     <string name="monthChartXAxisTitle">Week Start Date</string>
     <string name="weekChartTitle">Previous 7 Days</string>
     <string name="weekChartXAxisTitle">Day</string>
+    <string name="enter_money_used_today">Enter money used today</string>
+    <string name="pound">£</string>
+    <string name="add_money">Add money</string>
 </resources>
