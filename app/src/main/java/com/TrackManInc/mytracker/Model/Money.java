@@ -2,40 +2,21 @@ package com.TrackManInc.mytracker.Model;
 
 public class Money {
 
-    private double[] year;
-    private double[] month;
-    private double[] week;
+    private String amount;
     public Money() {
 
     }
 
-    public Money(double[] year, double[] month, double[] week) {
-        this.year = year;
-        this.month = month;
-        this.week = week;
+    public String getAmount() {
+        return amount;
     }
 
-    public double[] getYear() {
-        return year;
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 
-    public void setYear(double[] year) {
-        this.year = year;
+    public Money(String amount) {
+        this.amount = amount;
     }
 
-    public double[] getMonth() {
-        return month;
-    }
-
-    public void setMonth(double[] month) {
-        this.month = month;
-    }
-
-    public double[] getWeek() {
-        return week;
-    }
-
-    public void setWeek(double[] week) {
-        this.week = week;
-    }
 }

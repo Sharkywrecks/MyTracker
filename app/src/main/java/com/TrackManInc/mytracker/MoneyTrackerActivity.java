@@ -16,6 +16,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.github.mikephil.charting.animation.Easing;
@@ -50,6 +51,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private int radioState = 0; // 0:week, 1:month, 2:year
     private ProgressDialog loadingBar;
 
+    private double[] weekAmountArray = new double[7];
+    private double[] monthAmountArray = new double[28];
+    private double[] yearAmountArray = new double[12];
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,8 +150,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     public void addMoney(View view){
-        EditText et = findViewById(R.id.money_entered);
-        if(checkNoInput("Money used today.", et)){
+        EditText moneyEnteredET = findViewById(R.id.money_entered);
+        if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
         }
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
@@ -155,7 +159,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                userDataMap.put("amount",et.getText().toString());
+                userDataMap.put("amount",moneyEnteredET.getText().toString());
 
                 Calendar calender = Calendar.getInstance();
                 int year = calender.get(Calendar.YEAR);
@@ -172,7 +176,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 }
 
                 String dateHtml = year+"/"+m+"/"+d;
-                RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).updateChildren(userDataMap)
+                RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child("amount").updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -195,15 +199,112 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private void graphFromDB(String date){
+    private String retrieveDaysMoney(String formattedDate) {
+        final String[] totalMoney = {""};
+        final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Money money = snapshot.getValue(Money.class);
+                    totalMoney[0] = money.getAmount();
+                }else{
+                    totalMoney[0] = "0";
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return totalMoney[0];
+    }
+
+
+    private void weekDataFromDB(){
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
-                    Money moneyData = snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(date).getValue(Money.class);
+                    weekAmountArray = new double[7];
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    String formattedDate;
+                    String dayMoney;
+                    for(int count = 6;count>=0;count--){
+                        formattedDate = df.format(cal.getTime());
+                        dayMoney = retrieveDaysMoney(formattedDate);
+                        weekAmountArray[count] = Double.parseDouble(dayMoney);
+                        cal.add(Calendar.DAY_OF_MONTH,-1);
+                    }
+                } else {
 
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void monthDataFromDB(String date){
+        final DatabaseReference RootRef;
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
+                    monthAmountArray = new double[28];
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    String formattedDate;
+                    String dayMoney = "";
+                    for(int count = 0;count<28;count++){
+                        formattedDate = df.format(cal.getTime());
+                        dayMoney = retrieveDaysMoney(formattedDate);
+                        monthAmountArray[count] = Double.parseDouble(dayMoney);
+                        cal.add(Calendar.DAY_OF_MONTH,-1);
+                    }
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void yearDataFromDB(String date){
+        final DatabaseReference RootRef;
+        RootRef = FirebaseDatabase.getInstance().getReference();
+        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
+                    yearAmountArray = new double[12];
+                    Calendar cal = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+                    String formattedDate;
+                    String dayMoney = "";
+                    for(int month = 0;month<12;month++){
+                        double monthSum = 0;
+                        while(month == Calendar.MONTH){
+                            formattedDate = df.format(cal.getTime());
+                            dayMoney = retrieveDaysMoney(formattedDate);
+                            monthSum += Double.parseDouble(dayMoney);
+                            cal.add(Calendar.DAY_OF_MONTH,-1);
+                        }
+                        monthAmountArray[month] = monthSum;
+                        cal.add(Calendar.DAY_OF_MONTH,-1);
+                    }
                 } else {
 
                 }
@@ -232,6 +333,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findWeekData(){ // previous 7 days
+        weekDataFromDB();
         final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         final int length = daysOfWeek.length;
         Calendar calendar = Calendar.getInstance();
@@ -239,7 +341,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         String[] shiftedDays = rightCircularShift(daysOfWeek, day);
         ArrayList<BarEntry> testData = new ArrayList<>();
         for(int dayOfWeek = 0; dayOfWeek<length; dayOfWeek++){
-            testData.add(new BarEntry(dayOfWeek, new Random().nextInt(20))); // add db data here
+            testData.add(new BarEntry(dayOfWeek, (int)weekAmountArray[dayOfWeek])); // add db data here
         }
         barChart.getXAxis().setLabelCount(shiftedDays.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
@@ -259,9 +361,17 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             Date weekStartDate = cal.getTime();
             weekStartDates[i] = formatter.format(weekStartDate);
         }
+        int[] weeksTotal = new int[4];
+        for(int week = 0; week<4;week++){
+            int weekSum = 0;
+            for(int day = week*7; day<(week*7)+7; day++) {
+                weekSum+=monthAmountArray[day];
+            }
+            weeksTotal[week] = weekSum;
+        }
         ArrayList<BarEntry> testData = new ArrayList<>();
         for(int week = 0; week<4; week++){
-            testData.add(new BarEntry(week, new Random().nextInt(20))); // add db data here
+            testData.add(new BarEntry(week, weeksTotal[week])); // add db data here
         }
         barChart.getXAxis().setLabelCount(weekStartDates.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
