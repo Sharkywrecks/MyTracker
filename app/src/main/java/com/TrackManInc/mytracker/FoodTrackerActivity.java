@@ -30,10 +30,14 @@ public class FoodTrackerActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_food_tracker);
+
         //temp values//
         calorieTarget = 2500;
         proteinTarget = 55;
         carbsTarget = 333;
+        fibreTarget = 30;
+        saltTarget = 6;
+        fatTarget = 97;
 
         setUpUIView();
         retrieveNutrients(getIntent().getStringExtra("DATE"));
