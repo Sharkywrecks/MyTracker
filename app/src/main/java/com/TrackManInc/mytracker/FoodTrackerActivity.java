@@ -83,7 +83,7 @@ public class FoodTrackerActivity extends AppCompatActivity {
                     protein = checkRetrievedValue(usersNutrients.getProtein());
                     fat = checkRetrievedValue(usersNutrients.getFat());
                     fibre = checkRetrievedValue(usersNutrients.getFibre());
-                    salt = checkRetrievedValue(usersNutrients.getSalt())
+                    salt = checkRetrievedValue(usersNutrients.getSalt());
                     carbsVal+=Integer.parseInt(carbs);
                     proteinVal += Integer.parseInt(protein);
                     fatVal += Integer.parseInt(fat);
