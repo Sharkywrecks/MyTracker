@@ -12,7 +12,7 @@ public class Nutrients {
     }
 
     public Nutrients(String carbs, String protein, String fat, String salt, String fibre) {
-        this.carbohydrates = carbs;
+        this.carbs = carbs;
         this.protein = protein;
         this.fat = fat;
         this.salt = salt;
@@ -23,7 +23,7 @@ public class Nutrients {
         return carbs;
     }
 
-    public void setCarbs(String carbohydrates) {
+    public void setCarbs(String carbs) {
         this.carbs = carbs;
     }
 
