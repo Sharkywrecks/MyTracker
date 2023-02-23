@@ -12,6 +12,7 @@ import android.widget.Button;
 
 import com.TrackManInc.mytracker.Adapters.FoodVsMoneyAdapter;
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
+import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +49,6 @@ public class HomeActivity extends AppCompatActivity {
             formattedDate = df.format(cal.getTime());
             dayFoods = retrieveDaysFoods(formattedDate);
             dayMoney = retrieveDaysMoney(formattedDate);
-            System.out.println(dayFoods);
             foodVsMoneyArrayList.add(new FoodVsMoney(formattedDate,dayMoney,dayFoods));
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
@@ -73,21 +73,22 @@ public class HomeActivity extends AppCompatActivity {
 
     private void fillRecyclerView() {
         super.onStart();
-        System.out.println("Reached adapter");
         FoodVsMoneyAdapter adapter = new FoodVsMoneyAdapter(HomeActivity.this,foodVsMoneyArrayList);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        adapter.notifyItemRangeChanged(0,foodVsMoneyArrayList.size());
     }
 
     private String retrieveDaysMoney(String formattedDate) {
         final String[] totalMoney = {""};
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail());
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                totalMoney[0] = snapshot.getValue(String.class);
-
+                if(snapshot.child(formattedDate).exists()){
+                    Money userMoney = snapshot.child(formattedDate).getValue(Money.class);
+                    totalMoney[0] = userMoney.getAmount();
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {

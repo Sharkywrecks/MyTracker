@@ -101,6 +101,9 @@ public class FoodTrackerActivity extends AppCompatActivity {
     }
 
     private String checkRetrievedValue(String data) {
+        if(data==null){
+            data = "0";
+        }
         if(data.equals("")||data.equals("?")){
             data = "0";
         }

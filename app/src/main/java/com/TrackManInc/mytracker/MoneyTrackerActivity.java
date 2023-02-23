@@ -237,6 +237,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                     for(int count = 6;count>=0;count--){
                         formattedDate = df.format(cal.getTime());
                         dayMoney = retrieveDaysMoney(formattedDate);
+                        if(dayMoney.equals("")){
+                            dayMoney="0";
+                        }
                         weekAmountArray[count] = Double.parseDouble(dayMoney);
                         cal.add(Calendar.DAY_OF_MONTH,-1);
                     }

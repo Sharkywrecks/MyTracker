@@ -39,7 +39,6 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
     @Override
     public void onBindViewHolder(@NonNull FoodvsMoneyViewHolder holder, int position) {
         FoodVsMoney foodVsMoney = foodVsMoneyList.get(position);
-        System.out.println(foodVsMoney.getDate()+"\t"+foodVsMoney.getFoodNames());
         holder.foodListTV.setText(listToLineBrokenString(foodVsMoney.getFoodNames()));
         holder.moneyTV.setText(foodVsMoney.getMoney());
         holder.date1.setText(foodVsMoney.getDate());
@@ -60,7 +59,6 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MoneyTrackerActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 intent.putExtra("DATE",foodVsMoneyList.get(position).getDate());
                 context.startActivity(intent);
             }
@@ -79,7 +77,6 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
             }
             lineBrokenString = lineBrokenString +"\u2022"+foodName ;
         }
-        //System.out.println("Line 54 : "+lineBrokenString);
         return lineBrokenString;
     }
 }

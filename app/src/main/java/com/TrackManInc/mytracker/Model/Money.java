@@ -6,7 +6,9 @@ public class Money {
     public Money() {
 
     }
-
+    public Money(String amount) {
+        this.amount = amount;
+    }
     public String getAmount() {
         return amount;
     }
@@ -15,8 +17,6 @@ public class Money {
         this.amount = amount;
     }
 
-    public Money(String amount) {
-        this.amount = amount;
-    }
+
 
 }
