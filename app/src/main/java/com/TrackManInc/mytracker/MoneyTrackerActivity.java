@@ -154,29 +154,43 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
         }
+
+        Calendar calender = Calendar.getInstance();
+        int year = calender.get(Calendar.YEAR);
+        int month = calender.get(Calendar.MONTH);
+        int day = calender.get(Calendar.DAY_OF_MONTH);
+        month = month+1;
+        String d = String.valueOf(day);
+        String m = String.valueOf(month);
+        if(day<10){
+            d = "0"+day;
+        }
+        if(month<10){
+            m = "0"+month;
+        }
+
+        String dateHtml = year+"/"+m+"/"+d;
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail());
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                float totalMoney = Float.parseFloat(moneyEnteredET.getText().toString());
+                String moneyString = "0";
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                userDataMap.put("amount",moneyEnteredET.getText().toString());
-
-                Calendar calender = Calendar.getInstance();
-                int year = calender.get(Calendar.YEAR);
-                int month = calender.get(Calendar.MONTH);
-                int day = calender.get(Calendar.DAY_OF_MONTH);
-                month = month+1;
-                String d = String.valueOf(day);
-                String m = String.valueOf(month);
-                if(day<10){
-                    d = "0"+day;
+                if(snapshot.child(dateHtml).exists()) {
+                    Money money = snapshot.child(dateHtml).getValue(Money.class);
+                    if (money != null) {
+                        if (money.getAmount() != null) {
+                            if (!money.getAmount().equals("")) {
+                                moneyString = money.getAmount();
+                            }
+                        }
+                    }
                 }
-                if(month<10){
-                    m = "0"+month;
-                }
-
-                String dateHtml = year+"/"+m+"/"+d;
-                RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child("amount").updateChildren(userDataMap)
+                totalMoney +=Float.parseFloat(moneyString);
+                userDataMap.put("amount",""+totalMoney);
+                MoneyRef.child(dateHtml).updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {

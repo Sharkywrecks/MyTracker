@@ -81,12 +81,12 @@ public class HomeActivity extends AppCompatActivity {
     private String retrieveDaysMoney(String formattedDate) {
         final String[] totalMoney = {""};
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail());
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child(formattedDate).exists()){
-                    Money userMoney = snapshot.child(formattedDate).getValue(Money.class);
+                if(snapshot.exists()){
+                    Money userMoney = snapshot.getValue(Money.class);
                     totalMoney[0] = userMoney.getAmount();
                 }
             }
