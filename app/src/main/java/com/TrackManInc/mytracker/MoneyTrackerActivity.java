@@ -11,6 +11,7 @@ import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -45,12 +46,13 @@ import java.util.Random;
 
 public class MoneyTrackerActivity extends AppCompatActivity {
 
+    private float dayMoneyToday = 0;
     private TextView chartTitle, xAxisTitle;
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
     private ProgressDialog loadingBar;
-
+    private Button addMoneyButton;
     private double[] weekAmountArray = new double[7];
     private double[] monthAmountArray = new double[28];
     private double[] yearAmountArray = new double[12];
@@ -59,6 +61,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_tracker);
         setupUIView();
+        retrieveDaysMoney(calenderDate(Calendar.getInstance()));
     }
 
     private void setupUIView() {
@@ -67,8 +70,15 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         chartTitle = findViewById(R.id.chart_title);
         xAxisTitle = findViewById(R.id.xAxis_title);
         loadingBar = new ProgressDialog(this);
+        addMoneyButton=findViewById(R.id.add_money_btn);
         graphSettings();
         generateGraph(R.id.prev_week_radio_btn); // defaults to week graph
+        addMoneyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addMoney();
+            }
+        });
     }
 
     private void graphSettings(){  // temporary settings for now
@@ -148,17 +158,10 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         System.arraycopy(firstPart, 0, shiftedArr, secondPart.length, firstPart.length);
         return shiftedArr;
     }
-
-    public void addMoney(View view){
-        EditText moneyEnteredET = findViewById(R.id.money_entered);
-        if(checkNoInput("Money used today.", moneyEnteredET)){
-            return;
-        }
-
-        Calendar calender = Calendar.getInstance();
-        int year = calender.get(Calendar.YEAR);
-        int month = calender.get(Calendar.MONTH);
-        int day = calender.get(Calendar.DAY_OF_MONTH);
+    private String calenderDate(Calendar calendar){
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
         month = month+1;
         String d = String.valueOf(day);
         String m = String.valueOf(month);
@@ -168,29 +171,27 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         if(month<10){
             m = "0"+month;
         }
+        return year+"/"+m+"/"+d;
+    }
+    private void addMoney(){
+        EditText moneyEnteredET = findViewById(R.id.money_entered);
+        if(checkNoInput("Money used today.", moneyEnteredET)){
+            return;
+        }
 
-        String dateHtml = year+"/"+m+"/"+d;
+        Calendar calender = Calendar.getInstance();
+
+        String dateHtml = calenderDate(calender);
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail());
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
+        MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 float totalMoney = Float.parseFloat(moneyEnteredET.getText().toString());
-                String moneyString = "0";
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                if(snapshot.child(dateHtml).exists()) {
-                    Money money = snapshot.child(dateHtml).getValue(Money.class);
-                    if (money != null) {
-                        if (money.getAmount() != null) {
-                            if (!money.getAmount().equals("")) {
-                                moneyString = money.getAmount();
-                            }
-                        }
-                    }
-                }
-                totalMoney +=Float.parseFloat(moneyString);
+                totalMoney +=dayMoneyToday;
                 userDataMap.put("amount",""+totalMoney);
-                MoneyRef.child(dateHtml).updateChildren(userDataMap)
+                MoneyRef.updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -213,26 +214,22 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private String retrieveDaysMoney(String formattedDate) {
-        final String[] totalMoney = {""};
+    private void retrieveDaysMoney(String formattedDate) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    Money money = snapshot.getValue(Money.class);
-                    totalMoney[0] = money.getAmount();
-                }else{
-                    totalMoney[0] = "0";
+                    dayMoneyToday = Float.parseFloat(snapshot.getValue(Money.class).getAmount());
                 }
+                System.out.println(dayMoneyToday);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-        return totalMoney[0];
     }
 
 
@@ -250,11 +247,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                     String dayMoney;
                     for(int count = 6;count>=0;count--){
                         formattedDate = df.format(cal.getTime());
-                        dayMoney = retrieveDaysMoney(formattedDate);
-                        if(dayMoney.equals("")){
-                            dayMoney="0";
-                        }
-                        weekAmountArray[count] = Double.parseDouble(dayMoney);
+                        retrieveDaysMoney(formattedDate);
+
+                        weekAmountArray[count] = dayMoneyToday;
                         cal.add(Calendar.DAY_OF_MONTH,-1);
                     }
                 } else {
@@ -283,7 +278,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                     String dayMoney = "";
                     for(int count = 0;count<28;count++){
                         formattedDate = df.format(cal.getTime());
-                        dayMoney = retrieveDaysMoney(formattedDate);
+                        retrieveDaysMoney(formattedDate);
                         monthAmountArray[count] = Double.parseDouble(dayMoney);
                         cal.add(Calendar.DAY_OF_MONTH,-1);
                     }
@@ -315,8 +310,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                         double monthSum = 0;
                         while(month == Calendar.MONTH){
                             formattedDate = df.format(cal.getTime());
-                            dayMoney = retrieveDaysMoney(formattedDate);
-                            monthSum += Double.parseDouble(dayMoney);
+                            retrieveDaysMoney(formattedDate);
+                            monthSum += dayMoneyToday;
                             cal.add(Calendar.DAY_OF_MONTH,-1);
                         }
                         monthAmountArray[month] = monthSum;

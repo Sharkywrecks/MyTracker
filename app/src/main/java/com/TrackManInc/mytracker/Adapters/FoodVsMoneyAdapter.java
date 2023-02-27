@@ -59,7 +59,7 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MoneyTrackerActivity.class);
-                intent.putExtra("DATE",foodVsMoneyList.get(position).getDate());
+                //intent.putExtra("DATE",foodVsMoneyList.get(position).getDate());
                 context.startActivity(intent);
             }
         });
