@@ -52,6 +52,7 @@ public class HomeActivity extends AppCompatActivity {
             foodVsMoneyArrayList.add(new FoodVsMoney(formattedDate,dayMoney,dayFoods));
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
+        Calendar.getInstance().clear();
     }
 
     private void setupUIView() {

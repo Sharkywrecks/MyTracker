@@ -61,7 +61,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_tracker);
         setupUIView();
-        retrieveDaysMoney(calenderDate(Calendar.getInstance()));
+        //TODO:Reset calendar date
     }
 
     private void setupUIView() {
@@ -174,14 +174,20 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         return year+"/"+m+"/"+d;
     }
     private void addMoney(){
+
         EditText moneyEnteredET = findViewById(R.id.money_entered);
         if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
         }
-
+        Calendar.getInstance().clear();
         Calendar calender = Calendar.getInstance();
-
         String dateHtml = calenderDate(calender);
+        loadingBar.setTitle("Adding money");
+        loadingBar.setMessage("Please wait. We are adding for "+dateHtml);
+        loadingBar.setCanceledOnTouchOutside(false);
+        loadingBar.show();
+
+        retrieveDaysMoney(dateHtml);
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -223,7 +229,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 if (snapshot.exists()) {
                     dayMoneyToday = Float.parseFloat(snapshot.getValue(Money.class).getAmount());
                 }
-                System.out.println(dayMoneyToday);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -241,6 +246,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
                     weekAmountArray = new double[7];
+                    Calendar.getInstance().clear();
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                     String formattedDate;
@@ -272,6 +278,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
                     monthAmountArray = new double[28];
+                    Calendar.getInstance().clear();
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                     String formattedDate;
@@ -302,6 +309,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
                     yearAmountArray = new double[12];
+                    Calendar.getInstance().clear();
                     Calendar cal = Calendar.getInstance();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
                     String formattedDate;
@@ -348,6 +356,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         weekDataFromDB();
         final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         final int length = daysOfWeek.length;
+        Calendar.getInstance().clear();
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
         String[] shiftedDays = rightCircularShift(daysOfWeek, day);
@@ -364,6 +373,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
     private BarDataSet findMonthData() { // Previous 4 weeks
         String[] weekStartDates = new String[4];
+        Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
         //https://stackoverflow.com/questions/10465487/get-next-week-and-previous-week-staring-and-ending-dates-in-java
         cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
@@ -395,6 +405,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private BarDataSet findYearData(){ // previous 12 months
         final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         final int length = months.length;
+        Calendar.getInstance().clear();
         Calendar calendar = Calendar.getInstance();
         int monthNum = calendar.get(Calendar.MONTH);
         String[] shiftedMonths = rightCircularShift(months, monthNum);
