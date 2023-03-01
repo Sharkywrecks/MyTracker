@@ -237,104 +237,52 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         });
     }
 
-
     private void weekDataFromDB(){
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
-                    weekAmountArray = new double[7];
-                    Calendar.getInstance().clear();
-                    Calendar cal = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                    String formattedDate;
-                    String dayMoney;
-                    for(int count = 6;count>=0;count--){
-                        formattedDate = df.format(cal.getTime());
-                        retrieveDaysMoney(formattedDate);
-
-                        weekAmountArray[count] = dayMoneyToday;
-                        cal.add(Calendar.DAY_OF_MONTH,-1);
-                    }
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        weekAmountArray = new double[7];
+        Calendar.getInstance().clear();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate;
+        for(int count = 6;count>=0;count--){
+            formattedDate = df.format(cal.getTime());
+            retrieveDaysMoney(formattedDate);
+            weekAmountArray[count] = dayMoneyToday;
+            cal.add(Calendar.DAY_OF_MONTH,-1);
+        }
     }
 
-    private void monthDataFromDB(String date){
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
-                    monthAmountArray = new double[28];
-                    Calendar.getInstance().clear();
-                    Calendar cal = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                    String formattedDate;
-                    String dayMoney = "";
-                    for(int count = 0;count<28;count++){
-                        formattedDate = df.format(cal.getTime());
-                        retrieveDaysMoney(formattedDate);
-                        monthAmountArray[count] = Double.parseDouble(dayMoney);
-                        cal.add(Calendar.DAY_OF_MONTH,-1);
-                    }
-                } else {
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    private void monthDataFromDB(){
+        monthAmountArray = new double[28];
+        Calendar.getInstance().clear();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate;
+        for(int count = 0;count<28;count++){
+            formattedDate = df.format(cal.getTime());
+            retrieveDaysMoney(formattedDate);
+            monthAmountArray[count] = dayMoneyToday;
+            cal.add(Calendar.DAY_OF_MONTH,-1);
+        }
     }
 
-    private void yearDataFromDB(String date){
-        final DatabaseReference RootRef;
-        RootRef = FirebaseDatabase.getInstance().getReference();
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).exists()) {
-                    yearAmountArray = new double[12];
-                    Calendar.getInstance().clear();
-                    Calendar cal = Calendar.getInstance();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-                    String formattedDate;
-                    String dayMoney = "";
-                    for(int month = 0;month<12;month++){
-                        double monthSum = 0;
-                        while(month == Calendar.MONTH){
-                            formattedDate = df.format(cal.getTime());
-                            retrieveDaysMoney(formattedDate);
-                            monthSum += dayMoneyToday;
-                            cal.add(Calendar.DAY_OF_MONTH,-1);
-                        }
-                        monthAmountArray[month] = monthSum;
-                        cal.add(Calendar.DAY_OF_MONTH,-1);
-                    }
-                } else {
-
-                }
+    private void yearDataFromDB(){
+        yearAmountArray = new double[12];
+        Calendar.getInstance().clear();
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate;
+        for(int month = 0;month<12;month++){
+            double monthSum = 0;
+            while(month == Calendar.MONTH){
+                formattedDate = df.format(cal.getTime());
+                retrieveDaysMoney(formattedDate);
+                monthSum += dayMoneyToday;
+                cal.add(Calendar.DAY_OF_MONTH,-1);
             }
+            monthAmountArray[month] = monthSum;
+            cal.add(Calendar.DAY_OF_MONTH,-1);
+        }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     private boolean checkNoInput(String money, EditText editText) {
@@ -372,6 +320,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findMonthData() { // Previous 4 weeks
+        monthDataFromDB();
         String[] weekStartDates = new String[4];
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
@@ -403,6 +352,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findYearData(){ // previous 12 months
+        yearDataFromDB();
         final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         final int length = months.length;
         Calendar.getInstance().clear();
