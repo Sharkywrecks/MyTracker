@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class HomeActivity extends AppCompatActivity {
+    private int index = 0;
+    private FoodVsMoneyAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FoodVsMoney> foodVsMoneyArrayList = new ArrayList<>();
@@ -44,12 +47,12 @@ public class HomeActivity extends AppCompatActivity {
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate;
         ArrayList<String> dayFoods;
-        String dayMoney = "";
+        //String dayMoney = "";
         for(int count = 0;count<31;count++){
             formattedDate = df.format(cal.getTime());
             dayFoods = retrieveDaysFoods(formattedDate);
-            dayMoney = retrieveDaysMoney(formattedDate);
-            foodVsMoneyArrayList.add(new FoodVsMoney(formattedDate,dayMoney,dayFoods));
+            retrieveDaysMoney(formattedDate);
+            foodVsMoneyArrayList.add(new FoodVsMoney(formattedDate,"£0.00",dayFoods));
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
         Calendar.getInstance().clear();
@@ -74,29 +77,35 @@ public class HomeActivity extends AppCompatActivity {
 
     private void fillRecyclerView() {
         super.onStart();
-        FoodVsMoneyAdapter adapter = new FoodVsMoneyAdapter(HomeActivity.this,foodVsMoneyArrayList);
+        adapter = new FoodVsMoneyAdapter(HomeActivity.this,foodVsMoneyArrayList);
         recyclerView.setAdapter(adapter);
         adapter.notifyItemRangeChanged(0,foodVsMoneyArrayList.size());
     }
-
-    private String retrieveDaysMoney(String formattedDate) {
-        final String[] totalMoney = {""};
+    private void retrieveDaysMoney(String formattedDate) {
+        final String[] totalMoney = {"£0.00"};
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
                     Money userMoney = snapshot.getValue(Money.class);
-                    totalMoney[0] = userMoney.getAmount();
+                    if(userMoney!=null){
+                        if(!userMoney.getAmount().equals("")){
+                            totalMoney[0] = userMoney.getAmount();
+                        }
+                    }
                 }
+                foodVsMoneyArrayList.get(index).setMoney("£"+totalMoney[0]);
+                index++;
+                adapter.notifyDataSetChanged();
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-        return totalMoney[0];
     }
 
     private ArrayList<String> retrieveDaysFoods(String formattedDate) {
@@ -104,11 +113,13 @@ public class HomeActivity extends AppCompatActivity {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         FoodRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     foodList.add(ds.getKey());
                 }
+                adapter.notifyDataSetChanged();
             }
 
             @Override
