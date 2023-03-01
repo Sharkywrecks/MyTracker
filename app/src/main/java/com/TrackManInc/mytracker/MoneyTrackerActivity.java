@@ -43,25 +43,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
-
+//TODO: Fix this thing
 public class MoneyTrackerActivity extends AppCompatActivity {
-
-    private float dayMoneyToday = 0;
+    private int indexMonth,indexYear = 0;
+    private double dayMoneyToday = 0;
     private TextView chartTitle, xAxisTitle;
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
     private ProgressDialog loadingBar;
     private Button addMoneyButton;
-    private double[] weekAmountArray = new double[7];
-    private double[] monthAmountArray = new double[28];
-    private double[] yearAmountArray = new double[12];
+    private ArrayList<Double> weekAmountArray = new ArrayList<>();
+    private ArrayList<Double> monthAmountArray = new ArrayList<>();
+    private ArrayList<Double> yearAmountArray = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_money_tracker);
         setupUIView();
-        //TODO:Reset calendar date
     }
 
     private void setupUIView() {
@@ -109,6 +108,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     public void onRadioButtonClicked(View view) {
+        indexMonth=0;
+        indexYear=0;
         int radioBtnId = radioGroup.getCheckedRadioButtonId();
         generateGraph(radioBtnId);
     }
@@ -174,7 +175,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         return year+"/"+m+"/"+d;
     }
     private void addMoney(){
-
         EditText moneyEnteredET = findViewById(R.id.money_entered);
         if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
@@ -187,13 +187,13 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         loadingBar.setCanceledOnTouchOutside(false);
         loadingBar.show();
 
-        retrieveDaysMoney(dateHtml);
+        retrieveDaysMoney(dateHtml,5);
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                float totalMoney = Float.parseFloat(moneyEnteredET.getText().toString());
+                double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
                 HashMap<String,Object> userDataMap = new HashMap<>();
                 totalMoney +=dayMoneyToday;
                 userDataMap.put("amount",""+totalMoney);
@@ -220,15 +220,36 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         });
     }
 
-    private void retrieveDaysMoney(String formattedDate) {
+    private void retrieveDaysMoney(String formattedDate, int arrayNum) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                double moneyDouble=0.00;
                 if (snapshot.exists()) {
-                    dayMoneyToday = Float.parseFloat(snapshot.getValue(Money.class).getAmount());
+                    Money money = snapshot.getValue(Money.class);
+                    if(money!=null){
+                        if(!money.getAmount().equals("")){
+                            moneyDouble = Double.parseDouble(money.getAmount());
+                        }
+                    }
                 }
+                switch(arrayNum){
+                    case 0:
+                        weekAmountArray.add(moneyDouble);
+                        break;
+                    case 1:
+                        monthAmountArray.add(moneyDouble);
+                        break;
+                    case 2:
+                        yearAmountArray.set(indexYear,moneyDouble);
+                        indexYear++;
+                        break;
+                    case 5:
+                        break;
+                }
+                onRadioButtonClicked(null);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -238,35 +259,34 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private void weekDataFromDB(){
-        weekAmountArray = new double[7];
+        weekAmountArray = new ArrayList<>();
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate;
-        for(int count = 6;count>=0;count--){
+        for(int count = 0;count<7;count++){
             formattedDate = df.format(cal.getTime());
-            retrieveDaysMoney(formattedDate);
-            weekAmountArray[count] = dayMoneyToday;
+            retrieveDaysMoney(formattedDate,0);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
     }
 
     private void monthDataFromDB(){
-        monthAmountArray = new double[28];
+        monthAmountArray = new ArrayList<>();
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate;
         for(int count = 0;count<28;count++){
             formattedDate = df.format(cal.getTime());
-            retrieveDaysMoney(formattedDate);
-            monthAmountArray[count] = dayMoneyToday;
+            retrieveDaysMoney(formattedDate,1);
+            monthAmountArray.add(dayMoneyToday);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
     }
 
     private void yearDataFromDB(){
-        yearAmountArray = new double[12];
+        yearAmountArray = new ArrayList<>();
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
@@ -275,11 +295,11 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             double monthSum = 0;
             while(month == Calendar.MONTH){
                 formattedDate = df.format(cal.getTime());
-                retrieveDaysMoney(formattedDate);
+                retrieveDaysMoney(formattedDate,2);
                 monthSum += dayMoneyToday;
                 cal.add(Calendar.DAY_OF_MONTH,-1);
             }
-            monthAmountArray[month] = monthSum;
+            monthAmountArray.add(monthSum);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
 
@@ -309,8 +329,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
         String[] shiftedDays = rightCircularShift(daysOfWeek, day);
         ArrayList<BarEntry> testData = new ArrayList<>();
-        for(int dayOfWeek = 0; dayOfWeek<length; dayOfWeek++){
-            testData.add(new BarEntry(dayOfWeek, (int)weekAmountArray[dayOfWeek])); // add db data here
+        for(int dayOfWeek = 0; dayOfWeek<weekAmountArray.size(); dayOfWeek++){
+            testData.add(new BarEntry(dayOfWeek, Integer.parseInt(String.valueOf(weekAmountArray.get(dayOfWeek))))); // add db data here
         }
         barChart.getXAxis().setLabelCount(shiftedDays.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
@@ -336,7 +356,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         for(int week = 0; week<4;week++){
             int weekSum = 0;
             for(int day = week*7; day<(week*7)+7; day++) {
-                weekSum+=monthAmountArray[day];
+                weekSum+=monthAmountArray.get(day);
             }
             weeksTotal[week] = weekSum;
         }
@@ -360,6 +380,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         int monthNum = calendar.get(Calendar.MONTH);
         String[] shiftedMonths = rightCircularShift(months, monthNum);
         ArrayList<BarEntry> testData = new ArrayList<>();
+        //TODO: Make use actual data
         for(int month = 0; month<length; month++){
             testData.add(new BarEntry(month, new Random().nextInt(20))); // add db data here
         }

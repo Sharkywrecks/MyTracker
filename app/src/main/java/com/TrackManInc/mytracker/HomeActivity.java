@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         adapter.notifyItemRangeChanged(0,foodVsMoneyArrayList.size());
     }
     private void retrieveDaysMoney(String formattedDate) {
-        final String[] totalMoney = {"£0.00"};
+        final String[] totalMoney = {"0.00"};
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
