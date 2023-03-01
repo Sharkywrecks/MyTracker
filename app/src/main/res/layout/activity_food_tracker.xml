@@ -35,6 +35,15 @@
                 android:padding="16dp" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/calorieProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -54,6 +63,14 @@
                 android:layout_height="match_parent"
                 android:padding="16dp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/fatProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
 
         <LinearLayout
         android:layout_width="match_parent"
@@ -74,6 +91,14 @@
             android:padding="16dp"
             android:progress="100" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/carbsProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -96,6 +121,14 @@
                 android:padding="16dp"
                 android:progress="50" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/proteinProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -115,6 +148,14 @@
                 android:layout_height="match_parent"
                 android:padding="16dp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/fibreProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -126,6 +167,7 @@
                 android:layout_height="match_parent"
                 android:text="Salt"
                 android:textSize="16sp" />
+
             <ProgressBar
                 android:id="@+id/saltBar"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -133,5 +175,13 @@
                 android:layout_height="match_parent"
                 android:padding="16dp" />
         </LinearLayout>
+        <TextView
+            android:id="@+id/saltProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0"
+            android:gravity="end"
+            android:paddingEnd="16dp"
+            android:textSize="11sp" />
     </LinearLayout>
 </RelativeLayout>
