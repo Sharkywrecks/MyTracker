@@ -1,5 +1,7 @@
 package com.TrackManInc.mytracker;
 
+import static android.graphics.Color.RED;
+
 import android.os.Bundle;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -61,12 +63,31 @@ public class FoodTrackerActivity extends AppCompatActivity {
         saltBar.setProgress(saltVal);
         fatBar.setProgress(fatVal);
 
-        calorieProgress.setText(calorieVal + "/" + calorieTarget);
-        proteinProgress.setText(proteinVal + "/" + proteinTarget);
-        carbsProgress.setText(carbsVal + "/" + carbsTarget);
-        calorieProgress.setText(calorieVal + "/" + calorieTarget);
-        calorieProgress.setText(calorieVal + "/" + calorieTarget);
-        calorieProgress.setText(calorieVal + "/" + calorieTarget);
+        calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
+        proteinProgress.setText(proteinVal + "/" + proteinTarget + "g");
+        carbsProgress.setText(carbsVal + "/" + carbsTarget + "g");
+        fibreProgress.setText(fibreVal + "/" + fibreTarget + "g");
+        saltProgress.setText(saltVal + "/" + saltTarget + "g");
+        fatProgress.setText(fatVal + "/" + fatTarget + "g");
+
+        if (calorieVal >= calorieTarget) {
+            calorieProgress.setTextColor(RED);
+        }
+        if (proteinVal >= proteinTarget) {
+            proteinProgress.setTextColor(RED);
+        }
+        if (carbsVal >= carbsTarget) {
+            carbsProgress.setTextColor(RED);
+        }
+        if (fibreVal >= fibreTarget) {
+            fibreProgress.setTextColor(RED);
+        }
+        if (saltVal >= saltTarget) {
+            saltProgress.setTextColor(RED);
+        }
+        if (fatVal >= fatTarget) {
+            fatProgress.setTextColor(RED);
+        }
     }
 
     private void setUpUIView(){
