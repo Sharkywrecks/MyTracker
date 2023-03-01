@@ -2,6 +2,7 @@ package com.TrackManInc.mytracker;
 
 import android.os.Bundle;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class FoodTrackerActivity extends AppCompatActivity {
 
     private ProgressBar calorieBar, proteinBar, carbsBar, fibreBar, saltBar, fatBar;
+    private TextView calorieProgress, proteinProgress, carbsProgress, fibreProgress, saltProgress, fatProgress;
     private int calorieVal=0;
     private int proteinVal=0;
     private int carbsVal=0;
@@ -58,6 +60,13 @@ public class FoodTrackerActivity extends AppCompatActivity {
         fibreBar.setProgress(fibreVal);
         saltBar.setProgress(saltVal);
         fatBar.setProgress(fatVal);
+
+        calorieProgress.setText(calorieVal + "/" + calorieTarget);
+        proteinProgress.setText(proteinVal + "/" + proteinTarget);
+        carbsProgress.setText(carbsVal + "/" + carbsTarget);
+        calorieProgress.setText(calorieVal + "/" + calorieTarget);
+        calorieProgress.setText(calorieVal + "/" + calorieTarget);
+        calorieProgress.setText(calorieVal + "/" + calorieTarget);
     }
 
     private void setUpUIView(){
@@ -67,6 +76,14 @@ public class FoodTrackerActivity extends AppCompatActivity {
         fatBar = findViewById(R.id.fatBar);
         fibreBar = findViewById(R.id.fibreBar);
         saltBar = findViewById(R.id.saltBar);
+        calorieProgress = findViewById(R.id.calorieProgress);
+        proteinProgress = findViewById(R.id.proteinProgress);
+        carbsProgress = findViewById(R.id.carbsProgress);
+        fatProgress = findViewById(R.id.fatProgress);
+        fibreProgress = findViewById(R.id.fibreProgress);
+        saltProgress = findViewById(R.id.saltProgress);
+
+
     }
 
     private void retrieveNutrients(String formattedDate) {
@@ -89,6 +106,8 @@ public class FoodTrackerActivity extends AppCompatActivity {
                     fatVal += Integer.parseInt(fat);
                     saltVal += Integer.parseInt(salt);
                     fibreVal += Integer.parseInt(fibre);
+                    calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
+                    setupProgressBars();
 
                 }
             }
