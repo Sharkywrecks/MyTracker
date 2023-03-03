@@ -25,24 +25,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Calories"
-                android:textSize="16sp" />
+                android:textSize="18dp" />
 
             <ProgressBar
                 android:id="@+id/calorieBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp" />
+                android:padding="18dp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/calorieProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0/0"
+            android:text="0/0g"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -54,23 +54,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Fat"
-                android:textSize="16sp" />
+                android:textSize="18dp" />
 
             <ProgressBar
                 android:id="@+id/fatBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp" />
+                android:padding="18dp" />
         </LinearLayout>
         <TextView
             android:id="@+id/fatProgress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="0/0"
+            android:text="0/0g"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
 
         <LinearLayout
         android:layout_width="match_parent"
@@ -82,13 +82,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Carbohydrates"
-            android:textSize="16sp" />
+            android:textSize="18dp" />
         <ProgressBar
             android:id="@+id/carbsBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="16dp"
+            android:padding="18dp"
             android:progress="100" />
         </LinearLayout>
         <TextView
@@ -97,8 +97,8 @@
             android:layout_height="wrap_content"
             android:text="0/0"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Protein"
-                android:textSize="16sp" />
+                android:textSize="18dp" />
 
             <ProgressBar
                 android:id="@+id/proteinBar"
@@ -118,7 +118,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:max="100"
-                android:padding="16dp"
+                android:padding="18dp"
                 android:progress="50" />
         </LinearLayout>
         <TextView
@@ -127,8 +127,8 @@
             android:layout_height="wrap_content"
             android:text="0/0"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -140,13 +140,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Fibre"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
             <ProgressBar
                 android:id="@+id/fibreBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp" />
+                android:padding="18dp" />
         </LinearLayout>
         <TextView
             android:id="@+id/fibreProgress"
@@ -154,8 +154,8 @@
             android:layout_height="wrap_content"
             android:text="0/0"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -166,14 +166,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Salt"
-                android:textSize="16sp" />
+                android:textSize="18dp" />
 
             <ProgressBar
                 android:id="@+id/saltBar"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="16dp" />
+                android:padding="18dp" />
         </LinearLayout>
         <TextView
             android:id="@+id/saltProgress"
@@ -181,7 +181,7 @@
             android:layout_height="wrap_content"
             android:text="0/0"
             android:gravity="end"
-            android:paddingEnd="16dp"
-            android:textSize="11sp" />
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
     </LinearLayout>
 </RelativeLayout>
