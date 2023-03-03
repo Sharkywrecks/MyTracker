@@ -75,11 +75,12 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private void fillRecyclerView() {
         super.onStart();
         adapter = new FoodVsMoneyAdapter(HomeActivity.this,foodVsMoneyArrayList);
         recyclerView.setAdapter(adapter);
-        adapter.notifyItemRangeChanged(0,foodVsMoneyArrayList.size());
+        adapter.notifyDataSetChanged();
     }
     private void retrieveDaysMoney(String formattedDate) {
         final String[] totalMoney = {"0.00"};
@@ -128,5 +129,13 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
         return foodList;
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        index=0;
+        retrieveData();
     }
 }

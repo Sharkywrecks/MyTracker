@@ -355,4 +355,9 @@ public class AddFoodActivity extends AppCompatActivity {
         }
         return result;
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

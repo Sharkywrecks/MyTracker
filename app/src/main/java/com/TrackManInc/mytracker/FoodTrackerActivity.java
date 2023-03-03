@@ -128,4 +128,9 @@ public class FoodTrackerActivity extends AppCompatActivity {
         }
         return data;
     }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }

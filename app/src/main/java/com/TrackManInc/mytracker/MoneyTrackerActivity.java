@@ -39,15 +39,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
-//TODO: Fix this thing
 public class MoneyTrackerActivity extends AppCompatActivity {
-    private int indexMonth,indexYear = 0;
-    private double dayMoneyToday = 0;
     private TextView chartTitle, xAxisTitle;
+    private EditText moneyEnteredET;
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
@@ -55,7 +56,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private Button addMoneyButton;
     private ArrayList<Double> weekAmountArray = new ArrayList<>();
     private ArrayList<Double> monthAmountArray = new ArrayList<>();
+    private ArrayList<Double> monthAmountWeekArray = new ArrayList<>();
     private ArrayList<Double> yearAmountArray = new ArrayList<>();
+    private ArrayList<Double> yearAmountMonthArray = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,6 +67,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private void setupUIView() {
+        moneyEnteredET = findViewById(R.id.money_entered);
         radioGroup = findViewById(R.id.radio_group);
         barChart = findViewById(R.id.bar_chart);
         chartTitle = findViewById(R.id.chart_title);
@@ -75,7 +79,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         addMoneyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addMoney();
+                getMoney();
             }
         });
     }
@@ -108,8 +112,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     public void onRadioButtonClicked(View view) {
-        indexMonth=0;
-        indexYear=0;
         int radioBtnId = radioGroup.getCheckedRadioButtonId();
         generateGraph(radioBtnId);
     }
@@ -120,22 +122,19 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 return;
             }
             radioState = 0;
-            BarDataSet weekData = findWeekData();
-            addDataToGraph(weekData);
+            weekDataFromDB();
         }else if(id == R.id.prev_month_radio_btn){
             if(radioState == 1 && !barChart.isEmpty()){
                 return;
             }
             radioState = 1;
-            BarDataSet monthData = findMonthData();
-            addDataToGraph(monthData);
+            monthDataFromDB();
         }else if(id == R.id.prev_year_radio_btn){
             if(radioState == 2 && !barChart.isEmpty()){
                 return;
             }
             radioState = 2;
-            BarDataSet yearData = findYearData();
-            addDataToGraph(yearData);
+            yearDataFromDB();
         }
     }
 
@@ -174,8 +173,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         }
         return year+"/"+m+"/"+d;
     }
-    private void addMoney(){
-        EditText moneyEnteredET = findViewById(R.id.money_entered);
+    private void getMoney(){
         if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
         }
@@ -188,6 +186,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         loadingBar.show();
 
         retrieveDaysMoney(dateHtml,5);
+    }
+    private void addMoney(String dateHtml, Double dayMoney){
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -195,7 +195,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                totalMoney +=dayMoneyToday;
+                totalMoney +=dayMoney;
                 userDataMap.put("amount",""+totalMoney);
                 MoneyRef.updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -209,6 +209,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                                     toastMessage("Network Error: Please try again after some time...");
                                     loadingBar.dismiss();
                                 }
+                                generateGraph(radioState);
                             }
                         });
             }
@@ -238,18 +239,21 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 switch(arrayNum){
                     case 0:
                         weekAmountArray.add(moneyDouble);
+                        addDataToGraph(findWeekData());
                         break;
                     case 1:
                         monthAmountArray.add(moneyDouble);
+                        addDataToGraph(findMonthData());
                         break;
                     case 2:
-                        yearAmountArray.set(indexYear,moneyDouble);
-                        indexYear++;
+                        yearAmountArray.add(moneyDouble);
+                        addDataToGraph(findYearData());
                         break;
                     case 5:
+                        addMoney(formattedDate,moneyDouble);
                         break;
                 }
-                onRadioButtonClicked(null);
+                //onRadioButtonClicked(null);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -280,7 +284,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         for(int count = 0;count<28;count++){
             formattedDate = df.format(cal.getTime());
             retrieveDaysMoney(formattedDate,1);
-            monthAmountArray.add(dayMoneyToday);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
     }
@@ -291,15 +294,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate;
-        for(int month = 0;month<12;month++){
-            double monthSum = 0;
-            while(month == Calendar.MONTH){
-                formattedDate = df.format(cal.getTime());
-                retrieveDaysMoney(formattedDate,2);
-                monthSum += dayMoneyToday;
-                cal.add(Calendar.DAY_OF_MONTH,-1);
-            }
-            monthAmountArray.add(monthSum);
+        for(int i = 0;i<365;i++){
+            formattedDate = df.format(cal.getTime());
+            retrieveDaysMoney(formattedDate,2);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
 
@@ -321,16 +318,20 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findWeekData(){ // previous 7 days
-        weekDataFromDB();
-        final String[] daysOfWeek = new String[]{"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+        //weekDataFromDB();
+        final String[] daysOfWeek = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
         final int length = daysOfWeek.length;
         Calendar.getInstance().clear();
         Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK) - 2;
+        int day = calendar.get(Calendar.DAY_OF_WEEK)-2;
         String[] shiftedDays = rightCircularShift(daysOfWeek, day);
         ArrayList<BarEntry> testData = new ArrayList<>();
+        if(weekAmountArray.size()==7){
+            Collections.reverse(weekAmountArray);
+            //Collections.rotate(weekAmountArray,day);
+        }
         for(int dayOfWeek = 0; dayOfWeek<weekAmountArray.size(); dayOfWeek++){
-            testData.add(new BarEntry(dayOfWeek, Integer.parseInt(String.valueOf(weekAmountArray.get(dayOfWeek))))); // add db data here
+            testData.add(new BarEntry(dayOfWeek, (float) Double.parseDouble(String.valueOf(weekAmountArray.get(dayOfWeek))))); // add db data here
         }
         barChart.getXAxis().setLabelCount(shiftedDays.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
@@ -340,30 +341,29 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findMonthData() { // Previous 4 weeks
-        monthDataFromDB();
-        String[] weekStartDates = new String[4];
+        String[] weekStartDates = {"Week 4","Week 3", "Week 2", "Current"};
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
         //https://stackoverflow.com/questions/10465487/get-next-week-and-previous-week-staring-and-ending-dates-in-java
-        cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM", Locale.ENGLISH);
-        for(int i=3;i>=0;i--){
-            cal.add(Calendar.DATE, -7);
-            Date weekStartDate = cal.getTime();
-            weekStartDates[i] = formatter.format(weekStartDate);
-        }
-        int[] weeksTotal = new int[4];
-        for(int week = 0; week<4;week++){
-            int weekSum = 0;
-            for(int day = week*7; day<(week*7)+7; day++) {
-                weekSum+=monthAmountArray.get(day);
+        int weekDay = Calendar.DAY_OF_WEEK;
+        if(monthAmountArray.size()== 28){
+            for(int i =0;i<4;i++){
+                Double sum = 0.00;
+                for(int j =0;j<weekDay;j++){
+                    sum+=monthAmountArray.remove(0);
+                    cal.add(Calendar.DAY_OF_WEEK,-1);
+                }
+                monthAmountWeekArray.add(sum);
+                weekDay = Calendar.DAY_OF_WEEK;
             }
-            weeksTotal[week] = weekSum;
+            monthAmountArray.clear();
         }
         ArrayList<BarEntry> testData = new ArrayList<>();
-        for(int week = 0; week<4; week++){
-            testData.add(new BarEntry(week, weeksTotal[week])); // add db data here
+        Collections.reverse(monthAmountWeekArray);
+        for(int week = 0; week<monthAmountWeekArray.size(); week++){
+            testData.add(new BarEntry(week, Float.parseFloat(monthAmountWeekArray.get(week).toString()))); // add db data here
         }
+        monthAmountWeekArray.clear();
         barChart.getXAxis().setLabelCount(weekStartDates.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
         chartTitle.setText(R.string.monthChartTitle);
@@ -372,23 +372,40 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findYearData(){ // previous 12 months
-        yearDataFromDB();
         final String[] months = new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
-        final int length = months.length;
         Calendar.getInstance().clear();
-        Calendar calendar = Calendar.getInstance();
-        int monthNum = calendar.get(Calendar.MONTH);
+        Calendar cal = Calendar.getInstance();
+        int monthNum = cal.get(Calendar.MONTH);
         String[] shiftedMonths = rightCircularShift(months, monthNum);
-        ArrayList<BarEntry> testData = new ArrayList<>();
-        //TODO: Make use actual data
-        for(int month = 0; month<length; month++){
-            testData.add(new BarEntry(month, new Random().nextInt(20))); // add db data here
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        int monthDay = Integer.parseInt(df.format(cal.getTime()).substring(8,10));
+        if(yearAmountArray.size()== 365){
+            for(int i =0;i<12;i++){
+                Double sum = 0.00;
+                for(int j =0;j<monthDay;j++){
+                    sum+=yearAmountArray.remove(0);
+                    cal.add(Calendar.DATE,-1);
+                }
+                yearAmountMonthArray.add(sum);
+                monthDay = Integer.parseInt(df.format(cal.getTime()).substring(8,10));
+            }
+            yearAmountArray.clear();
         }
+        ArrayList<BarEntry> testData = new ArrayList<>();
+        Collections.reverse(yearAmountMonthArray);
+        for(int month = 0; month<yearAmountMonthArray.size(); month++){
+            testData.add(new BarEntry(month,Float.parseFloat(yearAmountMonthArray.get(month).toString()) )); // add db data here
+        }
+        yearAmountMonthArray.clear();
         barChart.getXAxis().setLabelCount(shiftedMonths.length);
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedMonths));
         chartTitle.setText(R.string.yearChartTitle);
         xAxisTitle.setText(R.string.yearChartXAxisTitle);
         return new BarDataSet(testData, "Test Data Set 3");
     }
-
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
 }
