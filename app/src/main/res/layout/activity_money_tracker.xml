@@ -10,13 +10,12 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
-        <Button
-            android:id="@+id/add_money_btn"
+        <EditText
+            android:id="@+id/date"
             android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:text="@string/add_money"/>
-
+            android:layout_height="match_parent"
+            android:hint="Select Date"
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -28,11 +27,15 @@
         <EditText
             android:id="@+id/money_entered"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:inputType="numberDecimal"
             android:hint="@string/enter_money_used_today"
             />
-
+        <Button
+            android:id="@+id/add_money_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_money" />
     </LinearLayout>
 
 

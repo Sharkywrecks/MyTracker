@@ -3,8 +3,10 @@ package com.TrackManInc.mytracker;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Layout;
 import android.text.Spannable;
@@ -12,6 +14,7 @@ import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -35,6 +38,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,14 +49,17 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Random;
 public class MoneyTrackerActivity extends AppCompatActivity {
     private TextView chartTitle, xAxisTitle;
-    private EditText moneyEnteredET;
+    private EditText moneyEnteredET, dateET;
+    private String dateHtml;
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
     private ProgressDialog loadingBar;
+    private DatePickerDialog.OnDateSetListener setListener;
     private Button addMoneyButton;
     private ArrayList<Double> weekAmountArray = new ArrayList<>();
     private ArrayList<Double> monthAmountArray = new ArrayList<>();
@@ -67,6 +74,9 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private void setupUIView() {
+        dateET = findViewById(R.id.date);
+        dateET.setFocusable(false);
+        dateET.setKeyListener(null);
         moneyEnteredET = findViewById(R.id.money_entered);
         radioGroup = findViewById(R.id.radio_group);
         barChart = findViewById(R.id.bar_chart);
@@ -75,6 +85,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         loadingBar = new ProgressDialog(this);
         addMoneyButton=findViewById(R.id.add_money_btn);
         graphSettings();
+        initDatePicker();
         generateGraph(R.id.prev_week_radio_btn); // defaults to week graph
         addMoneyButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +125,62 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     public void onRadioButtonClicked(View view) {
         int radioBtnId = radioGroup.getCheckedRadioButtonId();
         generateGraph(radioBtnId);
+    }
+
+
+    private void initDatePicker(){
+        Calendar calender = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        try {
+            calender.setTime(Objects.requireNonNull(sdf.parse(getIntent().getStringExtra("DATE"))));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        final int year = calender.get(Calendar.YEAR);
+        final int month = calender.get(Calendar.MONTH) + 1;
+        final int day = calender.get(Calendar.DAY_OF_MONTH);
+
+        String date;
+        String dayStr = String.valueOf(day);
+        String monthStr = String.valueOf(month);
+        if(day<10){
+            dayStr = "0"+day;
+        }
+        if(month<10){
+            monthStr = "0"+month;
+        }
+        date = dayStr+"/"+monthStr+"/"+year;
+        dateHtml = year+"/"+monthStr+"/"+dayStr;
+        dateET.setText(date);
+        setListener = new DatePickerDialog.OnDateSetListener(){
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                month = month+1;
+                String date;
+                String day = String.valueOf(dayOfMonth);
+                String m = String.valueOf(month);
+                if(dayOfMonth<10){
+                    day = "0"+dayOfMonth;
+                }
+                if(month<10){
+                    m = "0"+month;
+                }
+                date = day+"/"+m+"/"+year;
+                dateHtml = year+"/"+m+"/"+day;
+                dateET.setText(date);
+            }
+        };
+        dateET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MoneyTrackerActivity.this,
+                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
+                        year,month-1,day);
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.show();
+            }
+        });
     }
 
     private void generateGraph(int id) {
@@ -178,8 +245,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             return;
         }
         Calendar.getInstance().clear();
-        Calendar calender = Calendar.getInstance();
-        String dateHtml = calenderDate(calender);
         loadingBar.setTitle("Adding money");
         loadingBar.setMessage("Please wait. We are adding for "+dateHtml);
         loadingBar.setCanceledOnTouchOutside(false);
@@ -187,7 +252,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
         retrieveDaysMoney(dateHtml,5);
     }
-    private void addMoney(String dateHtml, Double dayMoney){
+    private void addMoney(Double dayMoney){
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -250,7 +315,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                         addDataToGraph(findYearData());
                         break;
                     case 5:
-                        addMoney(formattedDate,moneyDouble);
+                        addMoney(moneyDouble);
                         break;
                 }
                 //onRadioButtonClicked(null);
@@ -299,7 +364,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             retrieveDaysMoney(formattedDate,2);
             cal.add(Calendar.DAY_OF_MONTH,-1);
         }
-
     }
 
     private boolean checkNoInput(String money, EditText editText) {
