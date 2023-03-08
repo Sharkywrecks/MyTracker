@@ -198,6 +198,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(AddFoodActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
                         year,month,day);
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }

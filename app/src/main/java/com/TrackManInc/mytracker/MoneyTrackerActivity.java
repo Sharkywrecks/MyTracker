@@ -177,6 +177,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MoneyTrackerActivity.this,
                         android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
                         year,month-1,day);
+                datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }
