@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -45,7 +46,6 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FoodVsMoney> foodVsMoneyArrayList = new ArrayList<>();
-    private  NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,16 +72,25 @@ public class HomeActivity extends AppCompatActivity {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         toggle.syncState();
-        navigationView = drawer.findViewById(R.id.nav_view);
+        NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                Toast.makeText(HomeActivity.this,"Works",Toast.LENGTH_SHORT).show();
-                return false;
+                int id = item.getItemId();
+                if(id==R.id.nav_settings){
+                    return true;
+                }else if(id==R.id.nav_logout){
+                    Paper.book().destroy();
+                    Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+                    finish();
+                }
+                DrawerLayout drawer = findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                return true;
             }
         });
-        //TODO:Fix menu item click
-
     }
 
     @Override
@@ -91,30 +100,12 @@ public class HomeActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
-        System.out.println("Reached");
-        if(id==R.id.nav_settings){
-            return true;
-        }else if(id==R.id.nav_logout){
-            Paper.book().destroy();
-            Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        }
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void retrieveData() {
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
         String formattedDate;
         ArrayList<String> dayFoods;
+        foodVsMoneyArrayList.clear();
         for(int count = 0;count<31;count++){
             formattedDate = df.format(cal.getTime());
             dayFoods = retrieveDaysFoods(formattedDate);
@@ -195,4 +186,5 @@ public class HomeActivity extends AppCompatActivity {
         index=0;
         retrieveData();
     }
+
 }
