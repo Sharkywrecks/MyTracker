@@ -15,6 +15,11 @@
         android:theme="@style/Theme.MyTracker"
         tools:targetApi="31">
         <activity
+            android:name=".HomeActivity"
+            android:exported="false"
+            android:label="@string/title_activity_temp"
+            android:theme="@style/Theme.MyTracker.NoActionBar" />
+        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
@@ -28,9 +33,6 @@
             android:exported="false" />
         <activity
             android:name=".MoneyTrackerActivity"
-            android:exported="false" />
-        <activity
-            android:name=".HomeActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -8,9 +8,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-
-
+        android:layout_height="match_parent"
+        android:src="@drawable/banner_ver_4"
+        android:scaleType="centerCrop" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -2,7 +2,10 @@ package com.TrackManInc.mytracker;
 
 import static android.graphics.Color.RED;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -104,7 +107,15 @@ public class FoodTrackerActivity extends AppCompatActivity {
         fibreProgress = findViewById(R.id.fibreProgress);
         saltProgress = findViewById(R.id.saltProgress);
 
+        Button temp = findViewById(R.id.temp);
 
+        temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),AddFoodActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void retrieveNutrients(String formattedDate) {
