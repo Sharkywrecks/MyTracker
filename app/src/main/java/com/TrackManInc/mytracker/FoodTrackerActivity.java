@@ -31,6 +31,7 @@ public class FoodTrackerActivity extends AppCompatActivity {
     private int fibreVal=0;
     private int saltVal=0;
     private int fatVal=0;
+    private int amountVal=0;
     private int calorieTarget, proteinTarget, carbsTarget, fibreTarget, saltTarget, fatTarget;
 
     @Override
@@ -127,17 +128,19 @@ public class FoodTrackerActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
                     Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
-                    String carbs,protein,fat,fibre,salt;
+                    String carbs,protein,fat,fibre,salt,amount;
                     carbs = checkRetrievedValue(usersNutrients.getCarbs());
                     protein = checkRetrievedValue(usersNutrients.getProtein());
                     fat = checkRetrievedValue(usersNutrients.getFat());
                     fibre = checkRetrievedValue(usersNutrients.getFibre());
                     salt = checkRetrievedValue(usersNutrients.getSalt());
+                    amount = checkRetrievedValue(usersNutrients.getSalt());
                     carbsVal+=Integer.parseInt(carbs);
                     proteinVal += Integer.parseInt(protein);
                     fatVal += Integer.parseInt(fat);
                     saltVal += Integer.parseInt(salt);
                     fibreVal += Integer.parseInt(fibre);
+                    amountVal+=Integer.parseInt(amount);
                     calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
                     setupProgressBars();
 

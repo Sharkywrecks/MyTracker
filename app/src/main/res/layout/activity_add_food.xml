@@ -17,19 +17,25 @@
         app:flashButtonVisible="true"
         app:maskColor="#41000000"/>
 
-    <TextView
+    <EditText
         android:id="@+id/food_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/scanner_view"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
-        android:text="Scan food item code"
+        android:hint="Scan food item code"
         android:textColor="@color/black"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="20dp"/>
-    <LinearLayout
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="330dp">
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -38,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Carbohydrates:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -54,8 +60,8 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"/>
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -64,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Protein:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -80,8 +86,8 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"/>
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -90,7 +96,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Fats:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -106,8 +112,8 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"/>
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -116,7 +122,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Salt:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -132,8 +138,8 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"/>
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -142,7 +148,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Fiber:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -158,8 +164,8 @@
             android:minHeight="48dp"
             android:paddingLeft="10dp"
             android:inputType="numberDecimal"/>
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -168,7 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Date:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -184,8 +190,8 @@
             android:minHeight="48dp"
             android:layout_marginEnd="6dp"
             android:paddingLeft="20dp" />
-    </LinearLayout>
-    <LinearLayout
+    </TableRow>
+    <TableRow
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -194,7 +200,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
-            android:layout_gravity="center"
+            android:layout_gravity="start|center"
             android:text="Quantity:"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -211,7 +217,36 @@
             android:minHeight="48dp"
             android:layout_marginEnd="6dp"
             android:paddingLeft="20dp" />
-    </LinearLayout>
+    </TableRow>
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="25dp"
+            android:layout_gravity="start|center"
+            android:text="Amount(g):"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/amount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:inputType="numberDecimal"
+            android:background="@android:color/transparent"
+            android:hint="Enter amount eaten"
+            android:maxLines="1"
+            android:minHeight="48dp"
+            android:layout_marginEnd="6dp"
+            android:paddingLeft="20dp" />
+    </TableRow>
+    </TableLayout>
+    </ScrollView>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

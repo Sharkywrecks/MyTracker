@@ -3,20 +3,20 @@ package com.TrackManInc.mytracker.Model;
 public class Nutrients {
     private String carbs;
     private String protein;
-
     private String fat;
     private String salt;
     private String fibre;
-
+    private String amount;
     public Nutrients() {
     }
 
-    public Nutrients(String carbs, String protein, String fat, String salt, String fibre) {
+    public Nutrients(String carbs, String protein, String fat, String salt, String fibre,String amount) {
         this.carbs = carbs;
         this.protein = protein;
         this.fat = fat;
         this.salt = salt;
         this.fibre = fibre;
+        this.amount = amount;
     }
 
     public String getCarbs() {
@@ -57,5 +57,13 @@ public class Nutrients {
 
     public void setFibre(String fibre) {
         this.fibre = fibre;
+    }
+
+    public String getAmount() {
+        return amount;
+    }
+
+    public void setAmount(String amount) {
+        this.amount = amount;
     }
 }

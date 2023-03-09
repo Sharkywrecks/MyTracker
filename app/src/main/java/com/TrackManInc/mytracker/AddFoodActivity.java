@@ -19,9 +19,11 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.AlignmentSpan;
 import android.util.Log;
 import android.view.View;
@@ -68,9 +70,9 @@ public class AddFoodActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
     private CodeScanner mCodeScanner;
     private org.jsoup.nodes.Document document = null;
-    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity;
-    private TextView foodNameTV;
-    private EditText carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET;
+    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity,amountGrams;
+
+    private EditText foodNameET,carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET,amountET;
     private DatePickerDialog.OnDateSetListener setListener;
     private Button saveButton,deleteButton;
     private ProgressDialog loadingBar;
@@ -95,10 +97,11 @@ public class AddFoodActivity extends AppCompatActivity {
         dateET = findViewById(R.id.date);
         dateET.setFocusable(false);
         dateET.setKeyListener(null);
-        foodNameTV = findViewById(R.id.food_name);
+        foodNameET = findViewById(R.id.food_name);
         saveButton = findViewById(R.id.save_input_button);
         deleteButton = findViewById(R.id.delete_input_button);
         quantityET = findViewById(R.id.quantity);
+        amountET = findViewById(R.id.amount);
         loadingBar = new ProgressDialog(this);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +109,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 saveInput();
             }
         });
+        setupETListeners();
     }
 
     private void checkForEditNote() {
@@ -115,7 +119,7 @@ public class AddFoodActivity extends AppCompatActivity {
         if(checkNoInput("Carbohydrates",carbsET)|| checkNoInput("Protein",proteinET)||
             checkNoInput("Fats",fatsET)|| checkNoInput("Salt",saltET)||
             checkNoInput("Fiber",fiberET)|| checkNoInput("Date",dateET)||
-            checkNoInput("Quantity",quantityET)){
+            checkNoInput("Quantity",quantityET)|| checkNoInput("Amount",amountET)){
             return;
         }
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
@@ -128,6 +132,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 userDataMap.put("fat",fatAmount);
                 userDataMap.put("salt",saltAmount);
                 userDataMap.put("fiber",fiberAmount);
+                userDataMap.put("amount",amountGrams);
                 quantity = quantityET.getText().toString();
                 userDataMap.put("quantity",quantity);
 
@@ -157,7 +162,8 @@ public class AddFoodActivity extends AppCompatActivity {
     }
 
     private boolean checkNoInput(String nutrient,EditText editText) {
-        if(editText.getText().toString().equals("")){
+        if(editText.getText().toString().equals("") || editText.getText().toString().equals("?")
+                || editText.getText().toString().equals("g")|| editText.getText().toString().equals("?g")){
             toastMessage("Enter a value for "+nutrient);
             return true;
         }
@@ -292,8 +298,8 @@ public class AddFoodActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
     private void toastFailMessage(){
-        if(foodNameTV.getText().toString().equals("") || document==null) {
-            String text = "Could not find scanned code. Check connection to internet";
+        if(foodNameET.getText().toString().equals("") || document==null) {
+            String text = "Could not find scanned code. Check connection to internet or enter manually by touching";
             Spannable centeredText = new SpannableString(text);
             centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),0,text.length()-1,
                     Spannable.SPAN_INCLUSIVE_INCLUSIVE);
@@ -309,19 +315,17 @@ public class AddFoodActivity extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            //org.jsoup.nodes.Document document = null;
             try {
                 document = Jsoup.connect(("https://world.openfoodfacts.org/product/"+scannedCodeValue)).get();;
                 if(document!=null) {
                     foodName = document.getElementsByTag("h1").first().text();
-                    ArrayList<String> nutrientList = new ArrayList<>();
-                    Elements elements = document.getElementsByTag("span");
+                    Elements elements = document.getElementsByTag("table");
                     carbAmount = getFoodDataValue("Carbohydrates ",elements.text());
                     proteinAmount = getFoodDataValue("Proteins ",elements.text());
                     fatAmount = getFoodDataValue("Fat ",elements.text());
                     saltAmount = getFoodDataValue("Salt ",elements.text());
                     fiberAmount = getFoodDataValue("Fiber ",elements.text());
-
+                    amountGrams = getFoodDataValue("per serving ",elements.text());
                 }
             } catch (IOException e) {
                 //failed
@@ -333,16 +337,17 @@ public class AddFoodActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             //if(!foodNameEditText.getText().toString().equals(foodName)) {
-            foodNameTV.setText(foodName);
+            foodNameET.setText(foodName);
             carbsET.setText(carbAmount+"g");
             proteinET.setText(proteinAmount+"g");
             fatsET.setText(fatAmount+"g");
             saltET.setText(saltAmount+"g");
             fiberET.setText(fiberAmount+"g");
+            amountET.setText(amountGrams+"g");
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             //}
-            if(foodNameTV.getText().toString().equals("")){
+            if(foodNameET.getText().toString().equals("")){
                 toastFailMessage();
             }
         }
@@ -355,6 +360,158 @@ public class AddFoodActivity extends AppCompatActivity {
             result = result.substring(foodData.length(),result.length());
         }
         return result;
+    }
+    private void setupETListeners() {
+        carbsET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(carbsET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                carbAmount = temp.toString();
+            }
+        });
+        proteinET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(proteinET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                proteinAmount = temp.toString();
+            }
+        });
+        fatsET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(fatsET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                fatAmount = temp.toString();
+            }
+        });
+        saltET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(saltET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                saltAmount = temp.toString();
+            }
+        });
+        fiberET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(fiberET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                fiberAmount = temp.toString();
+            }
+        });
+        amountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(amountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                amountGrams = temp.toString();
+            }
+        });
     }
     @Override
     public void onBackPressed() {
