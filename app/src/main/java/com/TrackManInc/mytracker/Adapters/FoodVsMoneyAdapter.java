@@ -1,7 +1,13 @@
 package com.TrackManInc.mytracker.Adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.transition.Scene;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.transition.TransitionManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +28,13 @@ import java.util.List;
 
 public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHolder>{
     private Context context;
+    private Activity activity;
     private ArrayList<FoodVsMoney> foodVsMoneyList;
 
-    public FoodVsMoneyAdapter(Context context, ArrayList<FoodVsMoney> foodVsMoneyList) {
+    public FoodVsMoneyAdapter(Context context, Activity activity, ArrayList<FoodVsMoney> foodVsMoneyList) {
         this.context = context;
         this.foodVsMoneyList = foodVsMoneyList;
+        this.activity = activity;
     }
 
     @NonNull
@@ -53,15 +61,16 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
                 Intent intent = new Intent(context, FoodTrackerActivity.class);
                 intent.putExtra("DATE",foodVsMoneyList.get(position).getDate());
                 context.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_left,R.anim.slide_out_right);
             }
         });
         holder.moneyTV.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, MoneyTrackerActivity.class);
-                System.out.println(foodVsMoneyList.get(position).getDate());
                 intent.putExtra("DATE",foodVsMoneyList.get(position).getDate());
                 context.startActivity(intent);
+                activity.overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
             }
         });
     }

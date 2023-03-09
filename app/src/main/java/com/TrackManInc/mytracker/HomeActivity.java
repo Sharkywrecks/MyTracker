@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
@@ -49,6 +51,8 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_home);
         Paper.init(this);
         setupDrawerNav();
@@ -126,7 +130,7 @@ public class HomeActivity extends AppCompatActivity {
     @SuppressLint("NotifyDataSetChanged")
     private void fillRecyclerView() {
         super.onStart();
-        adapter = new FoodVsMoneyAdapter(HomeActivity.this,foodVsMoneyArrayList);
+        adapter = new FoodVsMoneyAdapter(HomeActivity.this,HomeActivity.this,foodVsMoneyArrayList);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
