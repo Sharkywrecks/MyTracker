@@ -81,7 +81,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int id = item.getItemId();
-                if(id==R.id.nav_settings){
+                if(id==R.id.nav_profile){
+                    Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
+                    startActivity(intent);
+                }else if(id==R.id.nav_settings){
                     return true;
                 }else if(id==R.id.nav_logout){
                     Paper.book().destroy();

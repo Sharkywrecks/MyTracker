@@ -11,7 +11,7 @@ public class Users {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.image = image;
+        this.image = image; // base64
     }
 
     public String getName() {
@@ -39,7 +39,7 @@ public class Users {
     }
 
     public String getImage() {
-        return image;
+        return "default";
     }
 
     public void setImage(String image) {
