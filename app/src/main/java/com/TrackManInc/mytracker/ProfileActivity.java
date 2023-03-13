@@ -4,23 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -44,10 +38,7 @@ public class ProfileActivity extends AppCompatActivity {
                     if (user.getImage().equals("default")) {
                         profileImageView.setImageResource(R.drawable.profile);
                     } else {
-                        Glide.with(ProfileActivity.this)
-                                .load(user.getImage())
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(profileImageView);
+                        Picasso.get().load(user.getImage()).into(profileImageView);
                     }
                 }
 
