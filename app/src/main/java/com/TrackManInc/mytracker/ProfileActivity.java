@@ -8,7 +8,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
