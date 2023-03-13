@@ -2,13 +2,16 @@ package com.TrackManInc.mytracker;
 
 import static android.graphics.Color.RED;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,11 +25,16 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class FoodTrackerActivity extends AppCompatActivity {
 
     private ProgressBar calorieBar, proteinBar, carbsBar, fibreBar, saltBar, fatBar;
     private TextView calorieProgress, proteinProgress, carbsProgress, fibreProgress, saltProgress, fatProgress;
+    private Spinner dropdown;
+    private List<String> foodList;
     private int calorieVal=0;
     private int proteinVal=0;
     private int carbsVal=0;
@@ -111,6 +119,14 @@ public class FoodTrackerActivity extends AppCompatActivity {
         fatProgress = findViewById(R.id.fatProgress);
         fibreProgress = findViewById(R.id.fibreProgress);
         saltProgress = findViewById(R.id.saltProgress);
+        dropdown = findViewById(R.id.filterDropdown);
+
+        foodList = new ArrayList<String>();
+        foodList.add("Show all");
+        retrieveDaysFoods(getIntent().getStringExtra("DATE"));
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, foodList);
+        dropdown.setAdapter(adapter);
 
         Button temp = findViewById(R.id.temp);
 
@@ -124,7 +140,6 @@ public class FoodTrackerActivity extends AppCompatActivity {
     }
 
     private void retrieveNutrients(String formattedDate) {
-        final String[] totalMoney = {""};
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
         nutrientRef.addValueEventListener(new ValueEventListener() {
@@ -148,6 +163,25 @@ public class FoodTrackerActivity extends AppCompatActivity {
                     calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
                     setupProgressBars();
 
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void retrieveDaysFoods(String formattedDate) {
+        final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        FoodRef.addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()) {
+                    foodList.add(ds.getKey());
                 }
             }
 
