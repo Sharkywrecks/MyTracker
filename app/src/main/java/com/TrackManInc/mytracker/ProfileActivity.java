@@ -8,14 +8,9 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -38,7 +33,7 @@ public class ProfileActivity extends AppCompatActivity {
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
+                /*if (snapshot.exists()) {
                     Users user = snapshot.getValue(Users.class);
                     usernameTextView.setText(user.getName());
                     if (user.getImage().equals("default")) {
@@ -49,7 +44,7 @@ public class ProfileActivity extends AppCompatActivity {
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(profileImageView);
                     }
-                }
+                }*/
 
             }
 
