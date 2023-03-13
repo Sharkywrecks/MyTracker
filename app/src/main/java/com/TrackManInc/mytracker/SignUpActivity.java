@@ -22,11 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.ktx.Firebase;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignUpActivity extends AppCompatActivity {
-
     private EditText usernameET,emailET,passwordET;
     private Button signUpButton;
     private ProgressDialog loadingBar;
@@ -59,24 +62,29 @@ public class SignUpActivity extends AppCompatActivity {
 
         if(TextUtils.isEmpty(username)){
             Toast.makeText(this, "Please enter your name...", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(email)){
+        }else if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Please enter your email...", Toast.LENGTH_SHORT).show();
-        }
-        else if(TextUtils.isEmpty(password)){
+        }else if(!emailIsValid(email)){
+            Toast.makeText(this, "Please use a valid email...", Toast.LENGTH_SHORT).show();
+        }else if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter your password...", Toast.LENGTH_SHORT).show();
-        }
-        else{
+        }else{
             loadingBar.setTitle("Creating Account");
             loadingBar.setMessage("Please wait. We are checking the credentials.");
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            ValidatePhoneNumber(username,email,password);
+            validatePhoneNumber(username,email,password);
         }
     }
 
-    private void ValidatePhoneNumber(String name,String email,String password) {
+
+    private boolean emailIsValid(String email){
+        Pattern pat = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])\n");
+        Matcher m = pat.matcher(email);
+        return m.find();
+    }
+    private void validatePhoneNumber(String name,String email,String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 

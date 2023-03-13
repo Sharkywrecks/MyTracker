@@ -4,9 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -14,7 +15,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 
@@ -32,15 +32,18 @@ public class ProfileActivity extends AppCompatActivity {
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
+                /*if (snapshot.exists()) {
                     Users user = snapshot.getValue(Users.class);
                     usernameTextView.setText(user.getName());
                     if (user.getImage().equals("default")) {
                         profileImageView.setImageResource(R.drawable.profile);
                     } else {
-                        Picasso.get().load(user.getImage()).into(profileImageView);
+                        Glide.with(ProfileActivity.this)
+                                .load(user.getImage())
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(profileImageView);
                     }
-                }
+                }*/
 
             }
 
