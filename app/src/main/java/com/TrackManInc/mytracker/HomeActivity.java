@@ -1,8 +1,13 @@
 package com.TrackManInc.mytracker;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Menu;
@@ -11,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.TrackManInc.mytracker.Adapters.FoodVsMoneyAdapter;
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
@@ -38,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Objects;
 
 import io.paperdb.Paper;
@@ -69,8 +76,7 @@ public class HomeActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with goals activity intent or pop up", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                startDialog();
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -98,6 +104,27 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    private void startDialog() {
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.50);
+        dialog.setContentView(R.layout.goals_popup);
+        dialog.setCancelable(true);
+        dialog.show();
+        dialog.getWindow().setLayout(width, height);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        VideoView videoView = dialog.findViewById(R.id.streak_video);
+        videoView.setVideoPath("android.resource://"+getPackageName()+"/"+R.raw.streak);
+        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+            }
+        });
+        videoView.start();
     }
 
     @Override

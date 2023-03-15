@@ -5,27 +5,77 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true"
-    app:cardElevation="3dp">
-    <LinearLayout
+    app:cardElevation="3dp"
+    android:layout_gravity="center">
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:src="@drawable/banner_ver_4"
+        android:scaleType="centerCrop"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Goals"
+        android:textStyle="bold"
+        android:textSize="20dp"
+        android:gravity="center"/>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="bottom"
+        android:padding="10dp">
+        <VideoView
+            android:id="@+id/streak_video"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            />
         <TextView
+            android:id="@+id/streak_count"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Goals"
+            android:text="0"
             android:textStyle="bold"
-            android:textSize="20dp"
+            android:textSize="15dp"
             android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nutrients"
+            android:layout_gravity="center"/>
         <ProgressBar
-            android:id="@+id/saltBar"
+            android:id="@+id/nutrient_goal_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="18dp"
             android:progressDrawable="@drawable/custom_progressbar"
             />
+    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Money"
+                android:layout_gravity="center"/>
+            <ProgressBar
+                android:id="@+id/money_goal_bar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="18dp"
+                android:progressDrawable="@drawable/custom_progressbar"
+                />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>
