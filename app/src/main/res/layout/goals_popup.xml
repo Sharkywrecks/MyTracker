@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="380dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     app:cardCornerRadius="10dp"
     app:cardUseCompatPadding="true"
     app:cardElevation="3dp"
-    android:layout_gravity="center">
+    android:layout_gravity="center"
+    tools:context=".HomeActivity">
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -28,8 +30,8 @@
         android:padding="10dp">
         <VideoView
             android:id="@+id/streak_video"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
             />
         <TextView
@@ -47,10 +49,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nutrients"
+            android:text="Calories"
             android:layout_gravity="center"/>
         <ProgressBar
-            android:id="@+id/nutrient_goal_bar"
+            android:id="@+id/calorie_goal_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -58,6 +60,14 @@
             android:progressDrawable="@drawable/custom_progressbar"
             />
     </LinearLayout>
+        <TextView
+            android:id="@+id/calorieProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0g"
+            android:gravity="end"
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -76,6 +86,14 @@
                 android:progressDrawable="@drawable/custom_progressbar"
                 />
         </LinearLayout>
+        <TextView
+            android:id="@+id/moneyProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="0/0g"
+            android:gravity="end"
+            android:paddingEnd="18dp"
+            android:textSize="16dp" />
     </LinearLayout>
 
 </androidx.cardview.widget.CardView>

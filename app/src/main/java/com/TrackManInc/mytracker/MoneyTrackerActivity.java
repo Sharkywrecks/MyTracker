@@ -472,6 +472,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         xAxisTitle.setText(R.string.yearChartXAxisTitle);
         return new BarDataSet(testData, "Test Data Set 3");
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

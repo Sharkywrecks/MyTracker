@@ -329,7 +329,12 @@ public class AddFoodActivity extends AppCompatActivity {
                     fatAmount = getFoodDataValue("Fat ",elements.text());
                     saltAmount = getFoodDataValue("Salt ",elements.text());
                     fiberAmount = getFoodDataValue("Fiber ",elements.text());
-                    amountGrams = getFoodDataValue("per serving ",elements.text());
+                    //TODO:Fix amount scraper
+                    amountGrams = getFoodDataValue("Serving size:",elements.text());
+                    //System.out.println(document.getElementById("div#panel_serving_size.panel_inline_radius").text());
+                    if(amountGrams.equals("?")){
+                        amountGrams = "100";
+                    }
                 }
             } catch (IOException e) {
                 //failed
@@ -358,7 +363,7 @@ public class AddFoodActivity extends AppCompatActivity {
     }
     private String getFoodDataValue(String foodData,String extractedDataString){
         String result = "?";
-        Matcher matcher = Pattern.compile("("+foodData+"\\d+)").matcher(extractedDataString);
+        Matcher matcher = Pattern.compile("("+foodData+"\\d+\\p{Punct}?\\d*)").matcher(extractedDataString);
         if (matcher.find()) {// if it matched the pattern
             result = matcher.group(0);// the group captured by the regex
             result = result.substring(foodData.length(),result.length());

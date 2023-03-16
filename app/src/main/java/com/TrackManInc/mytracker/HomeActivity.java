@@ -1,5 +1,7 @@
 package com.TrackManInc.mytracker;
 
+import static android.graphics.Color.RED;
+
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
@@ -15,12 +17,15 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.TrackManInc.mytracker.Adapters.FoodVsMoneyAdapter;
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
+import com.TrackManInc.mytracker.Model.Nutrients;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -50,11 +55,16 @@ import java.util.Objects;
 import io.paperdb.Paper;
 
 public class HomeActivity extends AppCompatActivity {
+    private int calorieVal =0;
+    private int calorieTarget = 0,moneyTarget =0 ;
+    private TextView calorieProgress, moneyProgress;
+    private ProgressBar calorieBar,moneyBar;
     private int index = 0;
     private FoodVsMoneyAdapter adapter;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FoodVsMoney> foodVsMoneyArrayList = new ArrayList<>();
+    private Dialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,17 +117,17 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void startDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
         int height = (int)(getResources().getDisplayMetrics().heightPixels*0.50);
-        dialog.setContentView(R.layout.goals_popup);
-        dialog.setCancelable(true);
+
         dialog.show();
         dialog.getWindow().setLayout(width, height);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         VideoView videoView = dialog.findViewById(R.id.streak_video);
         videoView.setVideoPath("android.resource://"+getPackageName()+"/"+R.raw.streak);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        String formattedDate = df.format(Calendar.getInstance().getTime());
+        retrieveDialogueData(formattedDate);
         videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
@@ -155,6 +165,14 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.goals_popup);
+        dialog.setCancelable(true);
+        calorieBar = dialog.findViewById(R.id.calorie_goal_bar);
+        moneyBar = dialog.findViewById(R.id.money_goal_bar);
+        calorieProgress = dialog.findViewById(R.id.calorieProgress);
+        moneyProgress = dialog.findViewById(R.id.moneyProgress);
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -180,8 +198,10 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 }
-                foodVsMoneyArrayList.get(index).setMoney("£"+totalMoney);
-                index++;
+                if(index!=31) {
+                    foodVsMoneyArrayList.get(index).setMoney("£" + totalMoney);
+                    index++;
+                }
                 adapter.notifyDataSetChanged();
             }
             @Override
@@ -212,8 +232,74 @@ public class HomeActivity extends AppCompatActivity {
         });
         return foodList;
     }
+    private void retrieveDialogueData(String formattedDate) {
+        final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        nutrientRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                int carbsVal=0;
+                int proteinVal=0;
+                int fatVal=0;
+                int saltVal=0;
+                int fibreVal=0;
+                int amountVal=0;
+                for(DataSnapshot nutrientDS:snapshot.getChildren()){
+                    Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
+                    String carbs,protein,fat,fibre,salt,amount;
+                    carbs = checkRetrievedValue(usersNutrients.getCarbs());
+                    protein = checkRetrievedValue(usersNutrients.getProtein());
+                    fat = checkRetrievedValue(usersNutrients.getFat());
+                    fibre = checkRetrievedValue(usersNutrients.getFibre());
+                    salt = checkRetrievedValue(usersNutrients.getSalt());
+                    amount = checkRetrievedValue(usersNutrients.getSalt());
+                    carbsVal+=Integer.parseInt(carbs);
+                    proteinVal += Integer.parseInt(protein);
+                    fatVal += Integer.parseInt(fat);
+                    saltVal += Integer.parseInt(salt);
+                    fibreVal += Integer.parseInt(fibre);
+                    amountVal+=Integer.parseInt(amount);
+                    calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
+                    setupProgressBar();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void setupProgressBar() {
+        String money = foodVsMoneyArrayList.get(0).getMoney();
+        int moneyInteger = (int)Double.parseDouble(money.substring(1));
+        calorieBar.setMax(calorieTarget);
+        moneyBar.setMax(moneyTarget);
+        calorieBar.setProgress(calorieVal);
+        moneyBar.setProgress(moneyInteger);
+        calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
+        moneyProgress.setText(money + "/" + moneyTarget );
+
+        if (calorieVal >= calorieTarget) {
+            calorieProgress.setTextColor(RED);
+        }
+        if (moneyInteger >= moneyTarget) {
+            moneyProgress.setTextColor(RED);
+        }
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
+    private String checkRetrievedValue(String data) {
+        if(data==null){
+            data = "0";
+        }
+        if(data.equals("")||data.equals("?")){
+            data = "0";
+        }
+        return data;
+    }
     @Override
     protected void onRestart() {
         super.onRestart();
