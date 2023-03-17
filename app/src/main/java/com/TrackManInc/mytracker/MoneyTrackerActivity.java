@@ -259,6 +259,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
     private void addMoney(Double dayMoney){
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
         final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -282,6 +283,21 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                                 generateGraph(radioState);
                             }
                         });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
+                HashMap<String,Object> userDataMap = new HashMap<>();
+                totalMoney +=dayMoney;
+                userDataMap.put("lifetime_amount",""+totalMoney);
+                UserRef.updateChildren(userDataMap);
             }
 
             @Override

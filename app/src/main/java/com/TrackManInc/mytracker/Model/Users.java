@@ -1,19 +1,27 @@
 package com.TrackManInc.mytracker.Model;
 
 public class Users {
-    private String name,password,email,image;
+    private String name,password,email,image,lifetime_amount;
 
     public Users(){
 
     }
 
-    public Users(String name, String password, String email, String image) {
+    public Users(String name, String password, String email, String image, String lifetime_amount) {
         this.name = name;
         this.password = password;
         this.email = email;
-        this.image = image; // base64
+        this.image = image; // url
+        this.lifetime_amount = lifetime_amount;
     }
 
+    public String getLifetime_amount() {
+        return lifetime_amount;
+    }
+
+    public void setLifetime_amount(String lifetime_amount) {
+        this.lifetime_amount = lifetime_amount;
+    }
     public String getName() {
         return name;
     }
