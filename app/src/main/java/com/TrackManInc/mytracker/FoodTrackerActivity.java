@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -29,11 +30,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class FoodTrackerActivity extends AppCompatActivity {
+public class FoodTrackerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ProgressBar calorieBar, proteinBar, carbsBar, fibreBar, saltBar, fatBar;
     private TextView calorieProgress, proteinProgress, carbsProgress, fibreProgress, saltProgress, fatProgress;
     private Spinner dropdown;
+    private Button changeButton;
     private List<String> foodList;
     private int calorieVal=0;
     private int proteinVal=0;
@@ -104,6 +106,21 @@ public class FoodTrackerActivity extends AppCompatActivity {
         if (fatVal >= fatTarget) {
             fatProgress.setTextColor(RED);
         }
+
+        if(dropdown.getSelectedItem().toString() == "Show all"){
+            changeButton.setVisibility(View.INVISIBLE);
+        } else{
+            changeButton.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void resetBars(){
+        calorieVal=0;
+        proteinVal=0;
+        carbsVal=0;
+        fibreVal=0;
+        saltVal=0;
+        fatVal=0;
     }
 
     private void setUpUIView(){
@@ -120,15 +137,19 @@ public class FoodTrackerActivity extends AppCompatActivity {
         fibreProgress = findViewById(R.id.fibreProgress);
         saltProgress = findViewById(R.id.saltProgress);
         dropdown = findViewById(R.id.filterDropdown);
+        changeButton = findViewById(R.id.changeButton);
+        Button temp = findViewById(R.id.temp);
 
         foodList = new ArrayList<String>();
         foodList.add("Show all");
         retrieveDaysFoods(getIntent().getStringExtra("DATE"));
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, foodList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(this);
 
-        Button temp = findViewById(R.id.temp);
+
 
         temp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +158,16 @@ public class FoodTrackerActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
+        resetBars();
+        retrieveNutrients(getIntent().getStringExtra("DATE"));
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 
     private void retrieveNutrients(String formattedDate) {
@@ -191,6 +222,8 @@ public class FoodTrackerActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     private String checkRetrievedValue(String data) {
         if(data==null){
