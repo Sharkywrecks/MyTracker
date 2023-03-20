@@ -131,7 +131,17 @@ public class ProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Money money = snapshot.getValue(Money.class);
-                String amount = money.getAmount();
+                String amount = "0.00";
+                if(money != null){
+                    if(money.getAmount()==null){
+                        if(money.getAmount().equals("0.0")){
+                            amount = "0.00";
+                        }
+                    }else{
+                        amount = money.getAmount();
+                    }
+                }
+
                 todayAmountTextView.setText("Amount spent today: £"+amount);
             }
 
