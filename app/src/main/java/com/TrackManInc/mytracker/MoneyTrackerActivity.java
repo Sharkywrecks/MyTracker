@@ -422,7 +422,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
         chartTitle.setText(R.string.weekChartTitle);
         xAxisTitle.setText(R.string.weekChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 1");
+        return new BarDataSet(testData, "Week Data");
     }
 
     private BarDataSet findMonthData() { // Previous 4 weeks
@@ -453,7 +453,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
         chartTitle.setText(R.string.monthChartTitle);
         xAxisTitle.setText(R.string.monthChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 2");
+        return new BarDataSet(testData, "Month Data");
     }
 
     private BarDataSet findYearData(){ // previous 12 months
@@ -486,7 +486,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedMonths));
         chartTitle.setText(R.string.yearChartTitle);
         xAxisTitle.setText(R.string.yearChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 3");
+        return new BarDataSet(testData, "Year Data");
     }
 
     @Override
