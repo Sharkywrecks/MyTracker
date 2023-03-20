@@ -177,22 +177,24 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
-                    Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
-                    String carbs,protein,fat,fibre,salt,amount;
-                    carbs = checkRetrievedValue(usersNutrients.getCarbs());
-                    protein = checkRetrievedValue(usersNutrients.getProtein());
-                    fat = checkRetrievedValue(usersNutrients.getFat());
-                    fibre = checkRetrievedValue(usersNutrients.getFibre());
-                    salt = checkRetrievedValue(usersNutrients.getSalt());
-                    amount = checkRetrievedValue(usersNutrients.getSalt());
-                    carbsVal+=Integer.parseInt(carbs);
-                    proteinVal += Integer.parseInt(protein);
-                    fatVal += Integer.parseInt(fat);
-                    saltVal += Integer.parseInt(salt);
-                    fibreVal += Integer.parseInt(fibre);
-                    amountVal+=Integer.parseInt(amount);
-                    calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
-                    setupProgressBars();
+                    if (dropdown.getSelectedItem().toString() == nutrientDS.getKey() || dropdown.getSelectedItem().toString() == "Show all") {
+                        Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
+                        String carbs, protein, fat, fibre, salt, amount;
+                        carbs = checkRetrievedValue(usersNutrients.getCarbs());
+                        protein = checkRetrievedValue(usersNutrients.getProtein());
+                        fat = checkRetrievedValue(usersNutrients.getFat());
+                        fibre = checkRetrievedValue(usersNutrients.getFibre());
+                        salt = checkRetrievedValue(usersNutrients.getSalt());
+                        amount = checkRetrievedValue(usersNutrients.getSalt());
+                        carbsVal += Integer.parseInt(carbs);
+                        proteinVal += Integer.parseInt(protein);
+                        fatVal += Integer.parseInt(fat);
+                        saltVal += Integer.parseInt(salt);
+                        fibreVal += Integer.parseInt(fibre);
+                        amountVal += Integer.parseInt(amount);
+                        calorieVal = 4 * proteinVal + 4 * carbsVal + 9 * fatVal;
+                        setupProgressBars();
+                    }
 
                 }
             }
