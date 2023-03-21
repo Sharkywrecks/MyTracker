@@ -107,7 +107,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
             fatProgress.setTextColor(RED);
         }
 
-        if(dropdown.getSelectedItem().toString() == "Show all"){
+        if(dropdown.getSelectedItem().toString().equals("Show all")){
             changeButton.setVisibility(View.INVISIBLE);
         } else{
             changeButton.setVisibility(View.VISIBLE);
@@ -158,6 +158,16 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
                 startActivity(intent);
             }
         });
+
+        changeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(),ChangeFoodDataActivity.class);
+                intent.putExtra("DATE",getIntent().getStringExtra("DATE"));
+                intent.putExtra("FOOD_NAME",dropdown.getSelectedItem().toString());
+                startActivity(intent);
+            }
+        });
     }
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
@@ -177,7 +187,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
-                    if (dropdown.getSelectedItem().toString() == nutrientDS.getKey() || dropdown.getSelectedItem().toString() == "Show all") {
+                    if (dropdown.getSelectedItem().toString().equals(nutrientDS.getKey()) || dropdown.getSelectedItem().toString() == "Show all") {
                         Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
                         String carbs, protein, fat, fibre, salt, amount;
                         carbs = checkRetrievedValue(usersNutrients.getCarbs());

@@ -174,9 +174,21 @@ public class AddFoodActivity extends AppCompatActivity {
         return false;
     }
 
-    public void deleteInput(View view){
+
+    private void deleteInput(){
         //Delete from database
-        finish();
+        final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
+        rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            toastMessage("Food item deleted.");
+                            finish();
+                        }else{
+                            toastMessage("Network Error: Please try again after some time...");
+                        }
+                    }
+                });
     }
     private void initDatePicker(){
         Calendar calender = Calendar.getInstance();
@@ -212,6 +224,11 @@ public class AddFoodActivity extends AppCompatActivity {
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }
+        });
+
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {deleteInput();}
         });
     }
     private void setupCodeScanner(){
@@ -527,4 +544,6 @@ public class AddFoodActivity extends AppCompatActivity {
         super.onBackPressed();
         finish();
     }
+
+
 }

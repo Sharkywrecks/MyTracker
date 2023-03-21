@@ -25,6 +25,9 @@
             android:exported="false"
             android:theme="@style/Theme.MyTracker.NoActionBar" />
         <activity
+            android:name=".ChangeFoodDataActivity"
+            android:exported="false" />
+        <activity
             android:name=".AddFoodActivity"
             android:exported="false" />
         <activity
