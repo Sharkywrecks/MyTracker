@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
+import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -293,10 +294,13 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                String amount = user.getLifetime_amount();
+                double amountDbl = Double.parseDouble(amount);
                 double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
+                double newAmount = amountDbl + totalMoney;
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                totalMoney +=dayMoney;
-                userDataMap.put("lifetime_amount",""+totalMoney);
+                userDataMap.put("lifetime_amount",""+ newAmount);
                 UserRef.updateChildren(userDataMap);
             }
 
