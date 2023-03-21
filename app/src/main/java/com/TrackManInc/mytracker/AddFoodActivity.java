@@ -383,7 +383,9 @@ public class AddFoodActivity extends AppCompatActivity {
         Matcher matcher = Pattern.compile("("+foodData+"\\d+\\p{Punct}?\\d*)").matcher(extractedDataString);
         if (matcher.find()) {// if it matched the pattern
             result = matcher.group(0);// the group captured by the regex
-            result = result.substring(foodData.length(),result.length());
+            if(result!=null) {
+                result = result.substring(foodData.length());
+            }
         }
         return result;
     }

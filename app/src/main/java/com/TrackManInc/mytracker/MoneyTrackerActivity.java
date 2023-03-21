@@ -268,7 +268,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
                 HashMap<String,Object> userDataMap = new HashMap<>();
                 totalMoney +=dayMoney;
-                userDataMap.put("amount",""+totalMoney);
+                userDataMap.put("amount",""+String.format("%.2f",totalMoney));
                 MoneyRef.updateChildren(userDataMap)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
@@ -300,7 +300,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
                 double newAmount = amountDbl + totalMoney;
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                userDataMap.put("lifetime_amount",""+ newAmount);
+                userDataMap.put("lifetime_amount",""+ String.format("%.2f",newAmount));
                 UserRef.updateChildren(userDataMap);
             }
 
