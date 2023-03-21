@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
+import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
@@ -293,10 +294,13 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                String amount = user.getLifetime_amount();
+                double amountDbl = Double.parseDouble(amount);
                 double totalMoney = Double.parseDouble(moneyEnteredET.getText().toString());
+                double newAmount = amountDbl + totalMoney;
                 HashMap<String,Object> userDataMap = new HashMap<>();
-                totalMoney +=dayMoney;
-                userDataMap.put("lifetime_amount",""+totalMoney);
+                userDataMap.put("lifetime_amount",""+ newAmount);
                 UserRef.updateChildren(userDataMap);
             }
 
@@ -422,7 +426,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
         chartTitle.setText(R.string.weekChartTitle);
         xAxisTitle.setText(R.string.weekChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 1");
+        return new BarDataSet(testData, "Week Data");
     }
 
     private BarDataSet findMonthData() { // Previous 4 weeks
@@ -453,7 +457,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
         chartTitle.setText(R.string.monthChartTitle);
         xAxisTitle.setText(R.string.monthChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 2");
+        return new BarDataSet(testData, "Month Data");
     }
 
     private BarDataSet findYearData(){ // previous 12 months
@@ -486,7 +490,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedMonths));
         chartTitle.setText(R.string.yearChartTitle);
         xAxisTitle.setText(R.string.yearChartXAxisTitle);
-        return new BarDataSet(testData, "Test Data Set 3");
+        return new BarDataSet(testData, "Year Data");
     }
 
     @Override

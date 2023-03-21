@@ -1,6 +1,5 @@
 package com.TrackManInc.mytracker;
 
-import static android.graphics.Color.GREEN;
 import static android.graphics.Color.RED;
 
 import androidx.annotation.NonNull;
@@ -9,8 +8,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,8 +16,6 @@ import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Nutrients;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,14 +23,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 public class ProfileActivity extends AppCompatActivity {
     private ImageView profileImageView;
@@ -130,18 +121,15 @@ public class ProfileActivity extends AppCompatActivity {
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Money money = snapshot.getValue(Money.class);
                 String amount = "0.00";
-                if(money != null){
-                    if(money.getAmount()==null){
-                        if(money.getAmount().equals("0.0")){
-                            amount = "0.00";
+                if(snapshot.exists()){
+                    Money userMoney = snapshot.getValue(Money.class);
+                    if(userMoney!=null){
+                        if(!userMoney.getAmount().equals("")){
+                            amount = userMoney.getAmount();
                         }
-                    }else{
-                        amount = money.getAmount();
                     }
                 }
-
                 todayAmountTextView.setText("Amount spent today: £"+amount);
             }
 
