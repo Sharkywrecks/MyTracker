@@ -66,8 +66,8 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         fiberAmountET = findViewById(R.id.editFiber);
         quantityAmountET = findViewById(R.id.editQuantity);
         servingSizeET = findViewById(R.id.editServingSize);
-        saveButton = findViewById(R.id.save_input_button);
-        deleteButton = findViewById(R.id.delete_input_button);
+        saveButton = findViewById(R.id.save_button);
+        deleteButton = findViewById(R.id.delete_button);
     }
     private void initDatePicker(){
         final int year = Integer.parseInt(dateHtml.substring(0,4));
