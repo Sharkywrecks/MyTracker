@@ -72,12 +72,11 @@ public class AddFoodActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
     private CodeScanner mCodeScanner;
     private org.jsoup.nodes.Document document = null;
-    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity,amountGrams;
+    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity,servingSize;
 
-    private EditText foodNameET,carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET,amountET;
+    private EditText foodNameET,carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET,servingSizeET;
     private DatePickerDialog.OnDateSetListener setListener;
     private Button saveButton,deleteButton;
-    private ProgressDialog loadingBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,8 +104,7 @@ public class AddFoodActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.save_input_button);
         deleteButton = findViewById(R.id.delete_input_button);
         quantityET = findViewById(R.id.quantity);
-        amountET = findViewById(R.id.amount);
-        loadingBar = new ProgressDialog(this);
+        servingSizeET = findViewById(R.id.serving_size);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,45 +121,32 @@ public class AddFoodActivity extends AppCompatActivity {
         if(checkNoInput("Carbohydrates",carbsET)|| checkNoInput("Protein",proteinET)||
             checkNoInput("Fats",fatsET)|| checkNoInput("Salt",saltET)||
             checkNoInput("Fiber",fiberET)|| checkNoInput("Date",dateET)||
-            checkNoInput("Quantity",quantityET)|| checkNoInput("Amount",amountET)){
+            checkNoInput("Quantity",quantityET)|| checkNoInput("Serving size",servingSizeET)){
             return;
         }
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                HashMap<String,Object> userDataMap = new HashMap<>();
-                userDataMap.put("carbs",carbAmount);
-                userDataMap.put("protein",proteinAmount);
-                userDataMap.put("fat",fatAmount);
-                userDataMap.put("salt",saltAmount);
-                userDataMap.put("fiber",fiberAmount);
-                userDataMap.put("amount",amountGrams);
-                quantity = quantityET.getText().toString();
-                userDataMap.put("quantity",quantity);
+        HashMap<String,Object> userDataMap = new HashMap<>();
+        userDataMap.put("carbs",carbAmount);
+        userDataMap.put("protein",proteinAmount);
+        userDataMap.put("fat",fatAmount);
+        userDataMap.put("salt",saltAmount);
+        userDataMap.put("fiber",fiberAmount);
+        userDataMap.put("serving",servingSize);
+        quantity = quantityET.getText().toString();
+        userDataMap.put("quantity",quantity);
 
-                RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).updateChildren(userDataMap)
-                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()){
-                                    toastMessage("Food item added.");
-                                    loadingBar.dismiss();
-
-                                    finish();
-                                }else{
-                                    toastMessage("Network Error: Please try again after some time...");
-                                    loadingBar.dismiss();
-                                }
-                            }
-                        });
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).updateChildren(userDataMap)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if(task.isSuccessful()){
+                            toastMessage("Food item added.");
+                            finish();
+                        }else{
+                            toastMessage("Network Error: Please try again after some time...");
+                        }
+                    }
+                });
         finish();
     }
 
@@ -347,10 +332,10 @@ public class AddFoodActivity extends AppCompatActivity {
                     saltAmount = getFoodDataValue("Salt ",elements.text());
                     fiberAmount = getFoodDataValue("Fiber ",elements.text());
                     //TODO:Fix amount scraper
-                    amountGrams = getFoodDataValue("Serving size:",elements.text());
+                    servingSize = getFoodDataValue("Serving size:",elements.text());
                     //System.out.println(document.getElementById("div#panel_serving_size.panel_inline_radius").text());
-                    if(amountGrams.equals("?")){
-                        amountGrams = "100";
+                    if(servingSize.equals("?")){
+                        servingSize = "100";
                     }
                 }
             } catch (IOException e) {
@@ -369,7 +354,7 @@ public class AddFoodActivity extends AppCompatActivity {
             fatsET.setText(fatAmount+"g");
             saltET.setText(saltAmount+"g");
             fiberET.setText(fiberAmount+"g");
-            amountET.setText(amountGrams+"g");
+            servingSizeET.setText(servingSize+"g");
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             //}
@@ -515,7 +500,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 fiberAmount = temp.toString();
             }
         });
-        amountET.addTextChangedListener(new TextWatcher() {
+        servingSizeET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -528,7 +513,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                StringBuilder temp = new StringBuilder(amountET.getText().toString());
+                StringBuilder temp = new StringBuilder(servingSizeET.getText().toString());
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
@@ -537,7 +522,7 @@ public class AddFoodActivity extends AppCompatActivity {
                     }
                     temp.append(c);
                 }
-                amountGrams = temp.toString();
+                servingSize = temp.toString();
             }
         });
     }

@@ -228,18 +228,18 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_gravity="start|center"
-            android:text="Amount(g):"
+            android:text="Serving size(g):"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/amount"
+            android:id="@+id/serving_size"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:inputType="numberDecimal"
             android:background="@android:color/transparent"
-            android:hint="Enter amount eaten"
+            android:hint="Enter serving size"
             android:maxLines="1"
             android:minHeight="48dp"
             android:layout_marginEnd="6dp"

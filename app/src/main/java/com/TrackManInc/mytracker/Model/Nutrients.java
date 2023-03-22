@@ -7,16 +7,18 @@ public class Nutrients {
     private String salt;
     private String fibre;
     private String amount;
+    private String serving;
     public Nutrients() {
     }
 
-    public Nutrients(String carbs, String protein, String fat, String salt, String fibre,String amount) {
+    public Nutrients(String carbs, String protein, String fat, String salt, String fibre,String amount,String serving) {
         this.carbs = carbs;
         this.protein = protein;
         this.fat = fat;
         this.salt = salt;
         this.fibre = fibre;
         this.amount = amount;
+        this.serving = serving;
     }
 
     public String getCarbs() {
@@ -65,5 +67,13 @@ public class Nutrients {
 
     public void setAmount(String amount) {
         this.amount = amount;
+    }
+
+    public String getServingSize() {
+        return serving;
+    }
+
+    public void setServingSize(String serving) {
+        this.serving = serving;
     }
 }

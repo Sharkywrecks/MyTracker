@@ -18,6 +18,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -129,6 +130,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
     public void onRadioButtonClicked(View view) {
         int radioBtnId = radioGroup.getCheckedRadioButtonId();
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
         generateGraph(radioBtnId);
     }
 
@@ -426,6 +429,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedDays));
         chartTitle.setText(R.string.weekChartTitle);
         xAxisTitle.setText(R.string.weekChartXAxisTitle);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         return new BarDataSet(testData, "Week Data");
     }
 
@@ -457,6 +462,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(weekStartDates));
         chartTitle.setText(R.string.monthChartTitle);
         xAxisTitle.setText(R.string.monthChartXAxisTitle);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         return new BarDataSet(testData, "Month Data");
     }
 
@@ -490,6 +497,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(shiftedMonths));
         chartTitle.setText(R.string.yearChartTitle);
         xAxisTitle.setText(R.string.yearChartXAxisTitle);
+        ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
         return new BarDataSet(testData, "Year Data");
     }
 
