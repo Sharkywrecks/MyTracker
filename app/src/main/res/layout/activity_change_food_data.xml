@@ -239,7 +239,7 @@ android:orientation="vertical">
     android:layout_marginTop="10dp">
 
     <Button
-        android:id="@+id/delete_input_button"
+        android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
@@ -258,7 +258,7 @@ android:orientation="vertical">
         android:visibility="invisible" />
 
     <Button
-        android:id="@+id/save_input_button"
+        android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
