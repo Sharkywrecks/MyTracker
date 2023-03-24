@@ -5,24 +5,42 @@ import static android.graphics.Color.RED;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.text.Layout;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Nutrients;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -104,11 +122,17 @@ public class ProfileActivity extends AppCompatActivity {
                     usernameTextView.setText(user.getName());
                     emailTextView.setText(user.getEmail());
                     lifetimeAmountTextView.setText("Lifetime amount spent: £"+user.getLifetime_amount());
-                    if (user.getImage().equals("default")) {
-                        profileImageView.setImageResource(R.drawable.profile);
-                    } else {
-                        Picasso.get().load(user.getImage()).into(profileImageView);
-                    }
+                    //try{
+                    System.out.println(user.getImage());
+
+                    Picasso.get().load(user.getImage()).into(profileImageView);
+                    byte[] bytes=Base64.decode(user.getImage(),Base64.DEFAULT);
+                    // Initialize bitmap
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    profileImageView.setImageBitmap(bitmap);
+                    //}catch (Exception e){
+                     //   profileImageView.setImageResource(R.drawable.profile);
+                    //}
                 }
 
             }
@@ -150,11 +174,11 @@ public class ProfileActivity extends AppCompatActivity {
                     fat = checkRetrievedValue(usersNutrients.getFat());
                     fibre = checkRetrievedValue(usersNutrients.getFibre());
                     salt = checkRetrievedValue(usersNutrients.getSalt());
-                    carbsVal+=Integer.parseInt(carbs);
-                    proteinVal += Integer.parseInt(protein);
-                    fatVal += Integer.parseInt(fat);
-                    saltVal += Integer.parseInt(salt);
-                    fibreVal += Integer.parseInt(fibre);
+                    carbsVal+=Double.parseDouble(carbs);
+                    proteinVal += Double.parseDouble(protein);
+                    fatVal += Double.parseDouble(fat);
+                    saltVal += Double.parseDouble(salt);
+                    fibreVal += Double.parseDouble(fibre);
                     calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
                 }
                 if (calorieVal >= calorieTarget) {
@@ -218,6 +242,68 @@ public class ProfileActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        profileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                setProfilePicture();
+            }
+        });
+    }
+
+    private void setProfilePicture(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, 1);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Uri uri;
+        final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
+        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        UserRef.child("image").setValue("test");
+
+        if(resultCode == RESULT_OK && requestCode == 1 && data != null){
+            uri = data.getData();
+            Picasso.get().load(uri).into(profileImageView);
+            DatabaseReference imageRef = UserRef.child("image");
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                String image_base64 = bitmapToBase64(bitmap);//"data:image/jpeg;base64," + bitmapToBase64(bitmap);
+                imageRef.setValue(image_base64)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                toastMessage("Profile image updated.");
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                toastMessage("Failed to update profile image.");
+                            }
+                        });
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private String bitmapToBase64(Bitmap bitmap) {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 30, byteArrayOutputStream);
+        byte[] byteArray = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(byteArray, Base64.DEFAULT);
+    }
+
+    private void toastMessage(String message){
+        Spannable centeredText = new SpannableString(message);
+        centeredText.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),0,message.length()-1,
+                Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
 
     private String checkRetrievedValue(String data) {

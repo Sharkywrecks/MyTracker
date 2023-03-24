@@ -47,7 +47,7 @@ public class Users {
     }
 
     public String getImage() {
-        return "default";
+        return image;
     }
 
     public void setImage(String image) {
