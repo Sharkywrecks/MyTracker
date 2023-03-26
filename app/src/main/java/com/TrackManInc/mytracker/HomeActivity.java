@@ -364,7 +364,7 @@ public class HomeActivity extends AppCompatActivity {
                             userDataMap.put("password",user.getPassword());
                             userDataMap.put("name",user.getName());
                             userDataMap.put("email",user.getEmail());
-                            userDataMap.put("streak",""+Integer.parseInt(user.getStreak())+1);
+                            userDataMap.put("streak",""+(Integer.parseInt(user.getStreak())+1));
                             userDataMap.put("previous_date_streak",prevStreakDate);
                             Prevalent.currentOnlineUser.setStreak(""+(Integer.parseInt(user.getStreak())+1));
                             Prevalent.currentOnlineUser.setPrevious_date_streak(prevStreakDate);
