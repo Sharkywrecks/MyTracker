@@ -83,7 +83,6 @@ public class HomeActivity extends AppCompatActivity {
         setupUIView();
         retrieveData();
         fillRecyclerView();
-        streakCheck();
     }
 
     private void setupDrawerNav() {
@@ -224,6 +223,9 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 }
+                if(index==0){
+                    streakCheck();
+                }
                 if(index!=31) {
                     foodVsMoneyArrayList.get(index).setMoney("£" + totalMoney);
                     index++;
@@ -357,20 +359,19 @@ public class HomeActivity extends AppCompatActivity {
                         return;
                     }
                     if(foodVsMoneyArrayList.get(0).getFoodNames().get(0)!=null
-                            && foodVsMoneyArrayList.get(0).getMoney()!=null && !Objects.equals(prevStreakDate, foodVsMoneyArrayList.get(0).getDate())){
+                            && foodVsMoneyArrayList.get(0).getMoney()!=null && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
                         if(prevStreak==Integer.parseInt(Prevalent.currentOnlineUser.getStreak())){
                             HashMap<String,Object> userDataMap = new HashMap<>();
                             prevStreakDate = foodVsMoneyArrayList.get(0).getDate();
                             userDataMap.put("password",user.getPassword());
                             userDataMap.put("name",user.getName());
                             userDataMap.put("email",user.getEmail());
-                            userDataMap.put("streak",""+(Integer.parseInt(user.getStreak())+1));
+                            userDataMap.put("streak",""+(prevStreak+1));
                             userDataMap.put("previous_date_streak",prevStreakDate);
-                            Prevalent.currentOnlineUser.setStreak(""+(Integer.parseInt(user.getStreak())+1));
+                            Prevalent.currentOnlineUser.setStreak(""+(prevStreak+1));
                             Prevalent.currentOnlineUser.setPrevious_date_streak(prevStreakDate);
                             userDataMap.put("lifetime_amount",user.getLifetime_amount());
                             userDataMap.put("image",user.getImage());
-
                             userRef.updateChildren(userDataMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -404,7 +405,6 @@ public class HomeActivity extends AppCompatActivity {
         super.onRestart();
         index=0;
         retrieveData();
-        streakCheck();
     }
 
 }
