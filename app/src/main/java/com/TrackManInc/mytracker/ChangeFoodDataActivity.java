@@ -11,9 +11,11 @@ import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.TextWatcher;
 import android.text.style.AlignmentSpan;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -37,7 +39,8 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class ChangeFoodDataActivity extends AppCompatActivity {
-    private String dateHtml,newDateHtml = null, foodName,date;
+    private String dateHtml,newDateHtml = null,date;
+    private String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,quantity,servingSize;
     private EditText carbAmountET, proteinAmountET, fatsAmountET, saltAmountET, fiberAmountET, foodNameET, dateET, quantityAmountET,servingSizeET;
     private DatePickerDialog.OnDateSetListener setListener;
     private Button deleteButton,saveButton;
@@ -68,7 +71,161 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         servingSizeET = findViewById(R.id.editServingSize);
         saveButton = findViewById(R.id.save_button);
         deleteButton = findViewById(R.id.delete_button);
+        setupETListeners();
     }
+    private void setupETListeners() {
+        carbAmountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(carbAmountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                carbAmount = temp.toString();
+            }
+        });
+        proteinAmountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(proteinAmountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                proteinAmount = temp.toString();
+            }
+        });
+        fatsAmountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(fatsAmountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                fatAmount = temp.toString();
+            }
+        });
+        saltAmountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(saltAmountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                saltAmount = temp.toString();
+            }
+        });
+        fiberAmountET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(fiberAmountET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                fiberAmount = temp.toString();
+            }
+        });
+        servingSizeET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                StringBuilder temp = new StringBuilder(servingSizeET.getText().toString());
+                char[] charTemp = temp.toString().toCharArray();
+                temp = new StringBuilder();
+                for (char c : charTemp) {
+                    if (!Character.isDigit(c)) {
+                        break;
+                    }
+                    temp.append(c);
+                }
+                servingSize = temp.toString();
+            }
+        });
+    }
+
     private void initDatePicker(){
         final int year = Integer.parseInt(dateHtml.substring(0,4));
         final int month = Integer.parseInt(dateHtml.substring(5,7));
@@ -136,13 +293,14 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         }
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> userDataMap = new HashMap<>();
-        userDataMap.put("carbs",carbAmountET.getText().toString());
-        userDataMap.put("protein",proteinAmountET.getText().toString());
-        userDataMap.put("fat",fatsAmountET.getText().toString());
-        userDataMap.put("salt",saltAmountET.getText().toString());
-        userDataMap.put("fiber",fiberAmountET.getText().toString());
-        userDataMap.put("serving",servingSizeET.getText().toString());
-        userDataMap.put("quantity",quantityAmountET.getText().toString());
+        userDataMap.put("carbs",carbAmount);
+        userDataMap.put("protein",proteinAmount);
+        userDataMap.put("fat",fatAmount);
+        userDataMap.put("salt",saltAmount);
+        userDataMap.put("fiber",fiberAmount);
+        userDataMap.put("serving",servingSize);
+        quantity = quantityAmountET.getText().toString();
+        userDataMap.put("quantity",quantity);
 
         RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(newDateHtml).child(foodName).updateChildren(userDataMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -195,10 +353,10 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                         carbAmountET.setText(checkRetrievedValue(foodNutrient.getCarbs()));
                         proteinAmountET.setText(checkRetrievedValue(foodNutrient.getProtein()));
                         fatsAmountET.setText(checkRetrievedValue(foodNutrient.getFat()));
-                        fiberAmountET.setText(checkRetrievedValue(foodNutrient.getFibre()));
+                        fiberAmountET.setText(checkRetrievedValue(foodNutrient.getFiber()));
                         saltAmountET.setText(checkRetrievedValue(foodNutrient.getSalt()));
-                        quantityAmountET.setText(checkRetrievedValue(foodNutrient.getAmount()));
-                        servingSizeET.setText(checkRetrievedValue(foodNutrient.getServingSize()));
+                        quantityAmountET.setText(checkRetrievedValue(foodNutrient.getQuantity()));
+                        servingSizeET.setText(checkRetrievedValue(foodNutrient.getServing()));
                     }
                 }
                 @Override

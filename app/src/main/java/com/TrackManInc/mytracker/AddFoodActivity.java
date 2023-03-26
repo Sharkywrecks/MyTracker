@@ -72,7 +72,7 @@ public class AddFoodActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 101;
     private CodeScanner mCodeScanner;
     private org.jsoup.nodes.Document document = null;
-    String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity,servingSize;
+    private String foodName,carbAmount,proteinAmount,fatAmount,saltAmount,fiberAmount,dateHtml,quantity,servingSize;
 
     private EditText foodNameET,carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET,servingSizeET;
     private DatePickerDialog.OnDateSetListener setListener;
@@ -104,6 +104,7 @@ public class AddFoodActivity extends AppCompatActivity {
         saveButton = findViewById(R.id.save_input_button);
         deleteButton = findViewById(R.id.delete_input_button);
         quantityET = findViewById(R.id.quantity);
+        quantityET.setText("1");
         servingSizeET = findViewById(R.id.serving_size);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -392,7 +393,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);

@@ -26,7 +26,10 @@ import com.TrackManInc.mytracker.Adapters.FoodVsMoneyAdapter;
 import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Nutrients;
+import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.navigation.NavigationView;
@@ -50,14 +53,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Objects;
 
 import io.paperdb.Paper;
 
 public class HomeActivity extends AppCompatActivity {
-    private int calorieVal =0;
+    private double calorieVal =0;
     private int calorieTarget = 0,moneyTarget =0 ;
-    private TextView calorieProgress, moneyProgress;
+    private TextView calorieProgress, moneyProgress,streakTV;
     private ProgressBar calorieBar,moneyBar;
     private int index = 0;
     private FoodVsMoneyAdapter adapter;
@@ -65,6 +69,9 @@ public class HomeActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<FoodVsMoney> foodVsMoneyArrayList = new ArrayList<>();
     private Dialog dialog;
+    private int prevStreak=0;
+    private String prevStreakDate="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,6 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         setupUIView();
         retrieveData();
         fillRecyclerView();
+        streakCheck();
     }
 
     private void setupDrawerNav() {
@@ -134,6 +142,7 @@ public class HomeActivity extends AppCompatActivity {
                 mp.setLooping(true);
             }
         });
+        videoView.setSoundEffectsEnabled(false);
         videoView.start();
     }
 
@@ -173,6 +182,23 @@ public class HomeActivity extends AppCompatActivity {
         moneyBar = dialog.findViewById(R.id.money_goal_bar);
         calorieProgress = dialog.findViewById(R.id.calorieProgress);
         moneyProgress = dialog.findViewById(R.id.moneyProgress);
+        streakTV = dialog.findViewById(R.id.streak_count);
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                if(user!=null) {
+                    prevStreak = Integer.parseInt(user.getStreak());
+                    prevStreakDate = user.getPrevious_date_streak();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -238,27 +264,28 @@ public class HomeActivity extends AppCompatActivity {
         nutrientRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                int carbsVal=0;
-                int proteinVal=0;
-                int fatVal=0;
-                int saltVal=0;
-                int fibreVal=0;
-                int amountVal=0;
+                double carbsVal=0;
+                double proteinVal=0;
+                double fatVal=0;
+                double saltVal=0;
+                double fibreVal=0;
+                double amountVal=0;
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
                     Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
+                    if(usersNutrients==null){return;}
                     String carbs,protein,fat,fibre,salt,amount;
                     carbs = checkRetrievedValue(usersNutrients.getCarbs());
                     protein = checkRetrievedValue(usersNutrients.getProtein());
                     fat = checkRetrievedValue(usersNutrients.getFat());
-                    fibre = checkRetrievedValue(usersNutrients.getFibre());
+                    fibre = checkRetrievedValue(usersNutrients.getFiber());
                     salt = checkRetrievedValue(usersNutrients.getSalt());
                     amount = checkRetrievedValue(usersNutrients.getSalt());
-                    carbsVal+=Integer.parseInt(carbs);
-                    proteinVal += Integer.parseInt(protein);
-                    fatVal += Integer.parseInt(fat);
-                    saltVal += Integer.parseInt(salt);
-                    fibreVal += Integer.parseInt(fibre);
-                    amountVal+=Integer.parseInt(amount);
+                    carbsVal+=Double.parseDouble(carbs);
+                    proteinVal += Double.parseDouble(protein);
+                    fatVal += Double.parseDouble(fat);
+                    saltVal += Double.parseDouble(salt);
+                    fibreVal += Double.parseDouble(fibre);
+                    amountVal+=Double.parseDouble(amount);
                     calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
                     setupProgressBar();
                 }
@@ -276,8 +303,9 @@ public class HomeActivity extends AppCompatActivity {
         int moneyInteger = (int)Double.parseDouble(money.substring(1));
         calorieBar.setMax(calorieTarget);
         moneyBar.setMax(moneyTarget);
-        calorieBar.setProgress(calorieVal);
+        calorieBar.setProgress((int)calorieVal);
         moneyBar.setProgress(moneyInteger);
+        streakTV.setText(Prevalent.currentOnlineUser.getStreak());
         calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
         moneyProgress.setText(money + "/" + moneyTarget );
 
@@ -288,8 +316,79 @@ public class HomeActivity extends AppCompatActivity {
             moneyProgress.setTextColor(RED);
         }
     }
+    private boolean dateDifference(String date2){
+        if(date2.equals("")||date2.equals(foodVsMoneyArrayList.get(0).getDate())){return true;}
+        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_MONTH,-1);
+        String date1 = df.format(cal.getTime());
+        cal.clear();
+        if(date1.equals(date2)){
+            return true;
+        }
+        return false;
+    }
+    private void streakCheck(){
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Users user = snapshot.getValue(Users.class);
+                if(user!=null){
+                    if(!dateDifference(user.getPrevious_date_streak())){
+                        HashMap<String,Object> userDataMap = new HashMap<>();
+                        prevStreakDate = foodVsMoneyArrayList.get(0).getDate();
+                        userDataMap.put("password",user.getPassword());
+                        userDataMap.put("name",user.getName());
+                        userDataMap.put("email",user.getEmail());
+                        userDataMap.put("streak","0");
+                        userDataMap.put("previous_date_streak",prevStreakDate);
+                        Prevalent.currentOnlineUser.setStreak("0");
+                        Prevalent.currentOnlineUser.setPrevious_date_streak(prevStreakDate);
+                        userDataMap.put("lifetime_amount",user.getLifetime_amount());
+                        userDataMap.put("image",user.getImage());
 
+                        userRef.updateChildren(userDataMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(HomeActivity.this,"Your streak went up",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        return;
+                    }
+                    if(foodVsMoneyArrayList.get(0).getFoodNames().get(0)!=null
+                            && foodVsMoneyArrayList.get(0).getMoney()!=null && !Objects.equals(prevStreakDate, foodVsMoneyArrayList.get(0).getDate())){
+                        if(prevStreak==Integer.parseInt(Prevalent.currentOnlineUser.getStreak())){
+                            HashMap<String,Object> userDataMap = new HashMap<>();
+                            prevStreakDate = foodVsMoneyArrayList.get(0).getDate();
+                            userDataMap.put("password",user.getPassword());
+                            userDataMap.put("name",user.getName());
+                            userDataMap.put("email",user.getEmail());
+                            userDataMap.put("streak",""+Integer.parseInt(user.getStreak())+1);
+                            userDataMap.put("previous_date_streak",prevStreakDate);
+                            Prevalent.currentOnlineUser.setStreak(""+(Integer.parseInt(user.getStreak())+1));
+                            Prevalent.currentOnlineUser.setPrevious_date_streak(prevStreakDate);
+                            userDataMap.put("lifetime_amount",user.getLifetime_amount());
+                            userDataMap.put("image",user.getImage());
 
+                            userRef.updateChildren(userDataMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(HomeActivity.this,"Your streak went up",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
     @SuppressLint("NotifyDataSetChanged")
     private String checkRetrievedValue(String data) {
         if(data==null){
@@ -305,6 +404,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onRestart();
         index=0;
         retrieveData();
+        streakCheck();
     }
 
 }

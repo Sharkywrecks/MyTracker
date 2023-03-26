@@ -172,7 +172,7 @@ public class ProfileActivity extends AppCompatActivity {
                     carbs = checkRetrievedValue(usersNutrients.getCarbs());
                     protein = checkRetrievedValue(usersNutrients.getProtein());
                     fat = checkRetrievedValue(usersNutrients.getFat());
-                    fibre = checkRetrievedValue(usersNutrients.getFibre());
+                    fibre = checkRetrievedValue(usersNutrients.getFiber());
                     salt = checkRetrievedValue(usersNutrients.getSalt());
                     carbsVal+=Double.parseDouble(carbs);
                     proteinVal += Double.parseDouble(protein);

@@ -27,8 +27,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
-
+import java.util.Set;
+import java.util.TreeSet;
 
 public class FoodTrackerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -37,13 +40,13 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
     private Spinner dropdown;
     private Button changeButton;
     private List<String> foodList;
-    private int calorieVal=0;
-    private int proteinVal=0;
-    private int carbsVal=0;
-    private int fibreVal=0;
-    private int saltVal=0;
-    private int fatVal=0;
-    private int amountVal=0;
+    private double calorieVal=0;
+    private double proteinVal=0;
+    private double carbsVal=0;
+    private double fibreVal=0;
+    private double saltVal=0;
+    private double fatVal=0;
+    private double amountVal=0;
     private int calorieTarget, proteinTarget, carbsTarget, fibreTarget, saltTarget, fatTarget;
 
     @Override
@@ -63,7 +66,6 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
 
         setUpUIView();
         retrieveNutrients(getIntent().getStringExtra("DATE"));
-        setupProgressBars();
     }
 
     private void setupProgressBars() {
@@ -74,12 +76,12 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         saltBar.setMax(saltTarget);
         fatBar.setMax(fatTarget);
 
-        calorieBar.setProgress(calorieVal);
-        proteinBar.setProgress(proteinVal);
-        carbsBar.setProgress(carbsVal);
-        fibreBar.setProgress(fibreVal);
-        saltBar.setProgress(saltVal);
-        fatBar.setProgress(fatVal);
+        calorieBar.setProgress((int)calorieVal);
+        proteinBar.setProgress((int)proteinVal);
+        carbsBar.setProgress((int)carbsVal);
+        fibreBar.setProgress((int)fibreVal);
+        saltBar.setProgress((int)saltVal);
+        fatBar.setProgress((int)fatVal);
 
         calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
         proteinProgress.setText(proteinVal + "/" + proteinTarget + "g");
@@ -105,12 +107,6 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         }
         if (fatVal >= fatTarget) {
             fatProgress.setTextColor(RED);
-        }
-
-        if(dropdown.getSelectedItem().toString().equals("Show all")){
-            changeButton.setVisibility(View.INVISIBLE);
-        } else{
-            changeButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -144,11 +140,6 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         foodList.add("Show all");
         retrieveDaysFoods(getIntent().getStringExtra("DATE"));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, foodList);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        dropdown.setAdapter(adapter);
-        dropdown.setOnItemSelectedListener(this);
-
 
 
         temp.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +160,33 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
             }
         });
     }
+
+    private void setupAdapter() {
+        Set<String> toRetain = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+        toRetain.addAll(foodList);
+        Set<String> set = new LinkedHashSet<String>(foodList);
+        set.retainAll(new LinkedHashSet<String>(toRetain));
+        foodList = new ArrayList<String>(set);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FoodTrackerActivity.this, android.R.layout.simple_spinner_item, foodList);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dropdown.setAdapter(adapter);
+        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(dropdown.getSelectedItem().toString().equals("Show all")){
+                    changeButton.setVisibility(View.INVISIBLE);
+                } else{
+                    changeButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
         resetBars();
@@ -187,21 +205,22 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
-                    if (dropdown.getSelectedItem().toString().equals(nutrientDS.getKey()) || dropdown.getSelectedItem().toString() == "Show all") {
+                    if (dropdown.getSelectedItem().toString().equals(nutrientDS.getKey()) || dropdown.getSelectedItem().toString().equals("Show all")) {
                         Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
+                        if(usersNutrients==null){return;}
                         String carbs, protein, fat, fibre, salt, amount;
                         carbs = checkRetrievedValue(usersNutrients.getCarbs());
                         protein = checkRetrievedValue(usersNutrients.getProtein());
                         fat = checkRetrievedValue(usersNutrients.getFat());
-                        fibre = checkRetrievedValue(usersNutrients.getFibre());
+                        fibre = checkRetrievedValue(usersNutrients.getFiber());
                         salt = checkRetrievedValue(usersNutrients.getSalt());
                         amount = checkRetrievedValue(usersNutrients.getSalt());
-                        carbsVal += Integer.parseInt(carbs);
-                        proteinVal += Integer.parseInt(protein);
-                        fatVal += Integer.parseInt(fat);
-                        saltVal += Integer.parseInt(salt);
-                        fibreVal += Integer.parseInt(fibre);
-                        amountVal += Integer.parseInt(amount);
+                        carbsVal += Double.parseDouble(carbs);
+                        proteinVal += Double.parseDouble(protein);
+                        fatVal += Double.parseDouble(fat);
+                        saltVal += Double.parseDouble(salt);
+                        fibreVal += Double.parseDouble(fibre);
+                        amountVal += Double.parseDouble(amount);
                         calorieVal = 4 * proteinVal + 4 * carbsVal + 9 * fatVal;
                         setupProgressBars();
                     }
@@ -226,6 +245,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     foodList.add(ds.getKey());
                 }
+                setupAdapter();
             }
 
             @Override
@@ -251,5 +271,14 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
         finish();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        resetBars();
+        retrieveDaysFoods(getIntent().getStringExtra("DATE"));
+        retrieveNutrients(getIntent().getStringExtra("DATE"));
+
     }
 }
