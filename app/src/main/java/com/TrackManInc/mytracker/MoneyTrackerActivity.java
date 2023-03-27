@@ -332,15 +332,21 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 switch(arrayNum){
                     case 0:
                         weekAmountArray.add(moneyDouble);
-                        addDataToGraph(findWeekData());
+                        BarDataSet weekDataset = findWeekData();
+                        weekDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        addDataToGraph(weekDataset);
                         break;
                     case 1:
                         monthAmountArray.add(moneyDouble);
-                        addDataToGraph(findMonthData());
+                        BarDataSet monthDataset = findMonthData();
+                        monthDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        addDataToGraph(monthDataset);
                         break;
                     case 2:
                         yearAmountArray.add(moneyDouble);
-                        addDataToGraph(findYearData());
+                        BarDataSet yearDataset = findYearData();
+                        yearDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        addDataToGraph(yearDataset);
                         break;
                     case 5:
                         addMoney(moneyDouble);
