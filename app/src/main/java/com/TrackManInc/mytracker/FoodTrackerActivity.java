@@ -64,6 +64,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         fatTarget = 97;
 
         setUpUIView();
+        setupProgressBars();
         retrieveNutrients(getIntent().getStringExtra("DATE"));
     }
 

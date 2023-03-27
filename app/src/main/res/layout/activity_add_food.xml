@@ -252,7 +252,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp">
 
-        <Button
+        <!--<Button
             android:id="@+id/delete_input_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -261,8 +261,7 @@
             android:text="Delete"
             android:textColor="@color/white"
             android:textSize="20sp"
-            android:textStyle="bold" />
-        <!--android:background="@drawable/custom_button"-->
+            android:textStyle="bold" />-->
 
         <ProgressBar
             android:id="@+id/progressBar"

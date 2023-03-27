@@ -61,7 +61,7 @@ import io.paperdb.Paper;
 public class HomeActivity extends AppCompatActivity {
     private double calorieVal =0;
     private int calorieTarget = 0,moneyTarget =0 ;
-    private TextView calorieProgress, moneyProgress,streakTV;
+    private TextView calorieProgress, moneyProgress,streakTV,usernameTV;
     private ProgressBar calorieBar,moneyBar;
     private int index = 0;
     private FoodVsMoneyAdapter adapter;
@@ -100,6 +100,8 @@ public class HomeActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
+        usernameTV = navigationView.getHeaderView(0).findViewById(R.id.user_profile_name);
+        usernameTV.setText(Prevalent.currentOnlineUser.getName());
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
