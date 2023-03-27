@@ -50,7 +50,6 @@ public class FoodVsMoneyAdapter extends RecyclerView.Adapter<FoodvsMoneyViewHold
         holder.foodListTV.setText(listToLineBrokenString(foodVsMoney.getFoodNames()));
         holder.moneyTV.setText(foodVsMoney.getMoney());
         holder.date1.setText(foodVsMoney.getDate());
-        holder.date2.setText(foodVsMoney.getDate());
         setupClickListener(holder,position);
     }
 
