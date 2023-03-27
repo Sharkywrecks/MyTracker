@@ -274,7 +274,7 @@
             android:id="@+id/save_input_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
             android:layout_marginEnd="10dp"
             android:text="Save"
             android:textColor="@color/white"

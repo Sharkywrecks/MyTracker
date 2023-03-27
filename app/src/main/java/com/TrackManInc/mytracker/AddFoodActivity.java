@@ -2,6 +2,7 @@ package com.TrackManInc.mytracker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
@@ -339,6 +340,7 @@ public class AddFoodActivity extends AppCompatActivity {
             return null;
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
