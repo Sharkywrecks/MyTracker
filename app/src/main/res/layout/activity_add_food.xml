@@ -16,22 +16,31 @@
         app:flashButtonColor="@color/white"
         app:flashButtonVisible="true"
         app:maskColor="#41000000"/>
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/scanner_view"
+        android:orientation="vertical">
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        android:layout_centerHorizontal="true"/>
     <EditText
         android:id="@+id/food_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/scanner_view"
-        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:hint="Scan food item code"
         android:textColor="@color/black"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textSize="20dp"/>
+        android:textSize="20dp"
+        android:layout_centerHorizontal="true"/>
+    </RelativeLayout>
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="330dp">
+        android:layout_height="fill_parent">
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -245,42 +254,21 @@
             android:layout_marginEnd="6dp"
             android:paddingLeft="20dp" />
     </TableRow>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <Button
+                android:id="@+id/save_input_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_gravity="center"/>
+        </LinearLayout>
     </TableLayout>
     </ScrollView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp">
-
-        <!--<Button
-            android:id="@+id/delete_input_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="10dp"
-            android:text="Delete"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />-->
-
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:visibility="invisible" />
-
-        <Button
-            android:id="@+id/save_input_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginEnd="10dp"
-            android:text="Save"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
-            <!--android:background="@drawable/custom_button"-->
-
-    </RelativeLayout>
 </LinearLayout>
