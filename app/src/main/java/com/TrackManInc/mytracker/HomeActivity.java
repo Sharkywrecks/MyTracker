@@ -223,7 +223,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 }
-                if(index==1){
+                if(index==30){
                     streakCheck();
                 }
                 if(index!=31) {
@@ -358,6 +358,7 @@ public class HomeActivity extends AppCompatActivity {
                         });
                         return;
                     }
+                    if(foodVsMoneyArrayList.get(0).getFoodNames().size()==0){return;}
                     if(foodVsMoneyArrayList.get(0).getFoodNames().get(0)!=null
                             && foodVsMoneyArrayList.get(0).getMoney()!=null && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
                         if(prevStreak==Integer.parseInt(Prevalent.currentOnlineUser.getStreak())){
