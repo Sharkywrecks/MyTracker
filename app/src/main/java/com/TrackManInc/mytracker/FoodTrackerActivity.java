@@ -27,7 +27,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -36,7 +35,7 @@ import java.util.TreeSet;
 public class FoodTrackerActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private ProgressBar calorieBar, proteinBar, carbsBar, fibreBar, saltBar, fatBar;
-    private TextView calorieProgress, proteinProgress, carbsProgress, fibreProgress, saltProgress, fatProgress;
+    private TextView calorieProgress, proteinProgress, carbsProgress, fibreProgress, saltProgress, fatProgress, date;
     private Spinner dropdown;
     private Button changeButton;
     private List<String> foodList;
@@ -136,6 +135,9 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         dropdown = findViewById(R.id.filterDropdown);
         changeButton = findViewById(R.id.changeButton);
         Button temp = findViewById(R.id.temp);
+        date = findViewById(R.id.date);
+
+        date.setText(getIntent().getStringExtra("DATE"));
 
         foodList = new ArrayList<String>();
         foodList.add("Show all");
