@@ -76,7 +76,7 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private EditText foodNameET,carbsET,proteinET,fatsET,saltET,fiberET,dateET,quantityET,servingSizeET;
     private DatePickerDialog.OnDateSetListener setListener;
-    private Button saveButton,deleteButton;
+    private Button saveButton;//,deleteButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +102,7 @@ public class AddFoodActivity extends AppCompatActivity {
         dateET.setKeyListener(null);
         foodNameET = findViewById(R.id.food_name);
         saveButton = findViewById(R.id.save_input_button);
-        deleteButton = findViewById(R.id.delete_input_button);
+        //deleteButton = findViewById(R.id.delete_input_button);
         quantityET = findViewById(R.id.quantity);
         quantityET.setText("1");
         servingSizeET = findViewById(R.id.serving_size);
@@ -160,8 +160,7 @@ public class AddFoodActivity extends AppCompatActivity {
         return false;
     }
 
-
-    private void deleteInput(){
+/*private void deleteInput(){
         //Delete from database
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -175,7 +174,7 @@ public class AddFoodActivity extends AppCompatActivity {
                         }
                     }
                 });
-    }
+    }*/
     private void initDatePicker(){
         Calendar calender = Calendar.getInstance();
         final int year = calender.get(Calendar.YEAR);
@@ -210,11 +209,6 @@ public class AddFoodActivity extends AppCompatActivity {
                 datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 datePickerDialog.show();
             }
-        });
-
-        deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {deleteInput();}
         });
     }
     private void setupCodeScanner(){
