@@ -63,6 +63,7 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:onClick="onRadioButtonClicked"
+                android:buttonTint="@color/colorPrimary"
                 android:text="@string/week" />
             <Space
                 android:layout_width="wrap_content"
@@ -74,6 +75,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="onRadioButtonClicked"
+                android:buttonTint="@color/colorPrimary"
                 android:text="@string/month" />
             <Space
                 android:layout_width="wrap_content"
@@ -85,6 +87,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="onRadioButtonClicked"
+                android:buttonTint="@color/colorPrimary"
                 android:text="@string/year" />
         </RadioGroup>
         <com.github.mikephil.charting.charts.BarChart

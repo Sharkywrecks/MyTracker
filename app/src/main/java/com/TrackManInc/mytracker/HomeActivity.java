@@ -5,10 +5,13 @@ import static android.graphics.Color.RED;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +51,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -56,12 +60,14 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Objects;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.paperdb.Paper;
 
 public class HomeActivity extends AppCompatActivity {
     private double calorieVal =0;
     private int calorieTarget = 0,moneyTarget =0 ;
-    private TextView calorieProgress, moneyProgress,streakTV,usernameTV;
+    private TextView calorieProgress, moneyProgress,streakTV, usernameTextView;
+    private CircleImageView profileImageView;
     private ProgressBar calorieBar,moneyBar;
     private int index = 0;
     private FoodVsMoneyAdapter adapter;
@@ -100,8 +106,28 @@ public class HomeActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawer,toolbar,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
-        usernameTV = navigationView.getHeaderView(0).findViewById(R.id.user_profile_name);
-        usernameTV.setText(Prevalent.currentOnlineUser.getName());
+        profileImageView = navigationView.getHeaderView(0).findViewById(R.id.user_profile_image);
+        usernameTextView = navigationView.getHeaderView(0).findViewById(R.id.user_profile_name);
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()) {
+                    Users user = snapshot.getValue(Users.class);
+                    assert user != null;
+                    usernameTextView.setText(user.getName());
+                    Picasso.get().load(user.getImage()).into(profileImageView);
+                    byte[] bytes= Base64.decode(user.getImage(),Base64.DEFAULT);
+                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                    profileImageView.setImageBitmap(bitmap);
+                }
+
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
