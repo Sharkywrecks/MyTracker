@@ -286,11 +286,10 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 checkNoInput("Quantity",quantityAmountET)|| checkNoInput("Serving size",servingSizeET)){
             return;
         }
-        if(newDateHtml!=null){
-            deleteInput();
-        }else{
+        if(newDateHtml==null){
             newDateHtml = dateHtml;
         }
+        deleteInput();
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         HashMap<String,Object> userDataMap = new HashMap<>();
         userDataMap.put("carbs",carbAmount);
