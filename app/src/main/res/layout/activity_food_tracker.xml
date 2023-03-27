@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="150dp"
+        android:layout_marginVertical="165dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
@@ -60,7 +60,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="18dp"
+                android:paddingStart="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
 
@@ -90,7 +90,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="18dp"
+                android:paddingStart="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
         <TextView
@@ -118,7 +118,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="18dp"
+            android:paddingStart="18dp"
             android:progress="100"
             android:scaleY="3"/>
         </LinearLayout>
@@ -150,7 +150,7 @@
                 android:layout_height="match_parent"
                 android:indeterminate="false"
                 android:max="100"
-                android:padding="18dp"
+                android:paddingStart="18dp"
                 android:progress="50"
                 android:scaleY="3" />
         </LinearLayout>
@@ -179,7 +179,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="18dp"
+                android:paddingStart="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
         <TextView
@@ -207,7 +207,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="18dp"
+                android:paddingStart="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
 
@@ -219,6 +219,7 @@
             android:gravity="end"
             android:paddingEnd="18dp"
             android:textSize="16dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -229,12 +230,14 @@
                 android:id="@+id/temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="50dp"
                 android:text="Add" />
 
             <Button
                 android:id="@+id/changeButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
                 android:text="Change" />
         </LinearLayout>
     </LinearLayout>

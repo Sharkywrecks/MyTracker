@@ -181,6 +181,8 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
                 } else{
                     changeButton.setVisibility(View.VISIBLE);
                 }
+                resetBars();
+                retrieveNutrients(getIntent().getStringExtra("DATE"));
             }
 
             @Override
@@ -192,8 +194,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
 
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int position, long id){
-        resetBars();
-        retrieveNutrients(getIntent().getStringExtra("DATE"));
+
     }
 
     @Override
