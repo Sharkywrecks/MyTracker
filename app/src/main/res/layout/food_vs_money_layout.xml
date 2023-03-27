@@ -16,7 +16,7 @@
             android:padding="10dp">
             <TextView
                 android:id="@+id/date1"
-                android:layout_width="160dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Date"
                 android:textColor="@color/black"
@@ -24,19 +24,7 @@
                 android:layout_marginLeft="5dp"
                 android:textStyle="bold"
                 />
-            <TextView
-                android:id="@+id/date2"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:text="Date"
-                android:textColor="@color/black"
-                android:textAlignment="viewEnd"
-                android:textSize="14dp"
-                android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp"
-                android:layout_alignParentEnd="true"
-                android:textStyle="bold"
-                />
+
             </RelativeLayout>
             <ImageView
                 android:layout_width="match_parent"
