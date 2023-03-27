@@ -223,7 +223,7 @@ public class HomeActivity extends AppCompatActivity {
                         }
                     }
                 }
-                if(index==0){
+                if(index==1){
                     streakCheck();
                 }
                 if(index!=31) {
