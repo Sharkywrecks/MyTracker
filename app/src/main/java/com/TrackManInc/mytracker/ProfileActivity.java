@@ -122,17 +122,10 @@ public class ProfileActivity extends AppCompatActivity {
                     usernameTextView.setText(user.getName());
                     emailTextView.setText(user.getEmail());
                     lifetimeAmountTextView.setText("Lifetime amount spent: £"+user.getLifetime_amount());
-                    //try{
-                    System.out.println(user.getImage());
-
                     Picasso.get().load(user.getImage()).into(profileImageView);
                     byte[] bytes=Base64.decode(user.getImage(),Base64.DEFAULT);
-                    // Initialize bitmap
                     Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
                     profileImageView.setImageBitmap(bitmap);
-                    //}catch (Exception e){
-                     //   profileImageView.setImageResource(R.drawable.profile);
-                    //}
                 }
 
             }
