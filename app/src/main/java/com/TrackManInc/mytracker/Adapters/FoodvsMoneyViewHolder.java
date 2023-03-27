@@ -16,7 +16,6 @@ public class FoodvsMoneyViewHolder extends RecyclerView.ViewHolder {
         foodListTV = itemView.findViewById(R.id.food_names);
         moneyTV = itemView.findViewById(R.id.total_day_money);
         date1 = itemView.findViewById(R.id.date1);
-        date2 = itemView.findViewById(R.id.date2);
     }
 
 }
