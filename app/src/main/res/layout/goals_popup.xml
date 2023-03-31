@@ -12,15 +12,18 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/banner_ver_4"
+        android:src="@drawable/moon_popup"
         android:scaleType="centerCrop"/>
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/acme"
+        android:gravity="center"
+        android:textColor="@color/white"
         android:text="Goals"
-        android:textStyle="bold"
-        android:textSize="20dp"
-        android:gravity="center"/>
+        android:textSize="30dp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,12 +31,12 @@
         android:orientation="vertical"
         android:layout_gravity="bottom"
         android:padding="10dp">
-        <VideoView
-            android:id="@+id/streak_video"
-            android:layout_width="300dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            />
+        <ImageView
+            android:id="@+id/flame_streak"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/flame_streak_0"
+            android:layout_gravity="center_horizontal"/>
         <TextView
             android:id="@+id/streak_count"
             android:layout_width="match_parent"
@@ -50,7 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Calories"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:textColor="@color/white"/>
         <ProgressBar
             android:id="@+id/calorie_goal_bar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -76,7 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Money"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center"
+                android:textColor="@color/white"/>
             <ProgressBar
                 android:id="@+id/money_goal_bar"
                 style="?android:attr/progressBarStyleHorizontal"

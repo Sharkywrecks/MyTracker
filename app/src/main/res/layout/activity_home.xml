@@ -11,8 +11,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@drawable/vertical_wallpaper_1"
-        android:scaleType="centerCrop" />
+        android:src="@drawable/home_background"
+        android:scaleType="fitXY"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -32,9 +32,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="MyTracker"
-                android:textSize="30sp"
+                android:textSize="40sp"
+                android:textColor="#A39D9D"
+                android:textStyle="bold"
+                android:fontFamily="@font/acme"
                 android:layout_marginTop="30dp"
-                android:gravity="center_horizontal" />
+                android:gravity="center_horizontal"
+                />
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,8 +50,10 @@
                     android:layout_height="wrap_content"
                     android:text="Food"
                     android:textSize="30sp"
+                    android:textColor="#C3BDBD"
+                    android:fontFamily="@font/acme"
                     android:gravity="start"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_alignParentLeft="true"/>
 
                 <TextView
@@ -55,8 +61,10 @@
                     android:layout_height="wrap_content"
                     android:text="Money"
                     android:textSize="30sp"
+                    android:textColor="#C3BDBD"
+                    android:fontFamily="@font/acme"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="10dp"/>
+                    android:layout_marginRight="15dp"/>
             </RelativeLayout>
 
         </LinearLayout>
@@ -77,9 +85,6 @@
             android:layout_marginBottom="16dp"
             app:srcCompat="@drawable/ic_goal"
             app:maxImageSize="50dp"
-            android:backgroundTint="@color/colorPrimaryDark"
-            android:background="@color/colorPrimaryDark"
-            android:outlineAmbientShadowColor="@color/colorPrimaryDark"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"/>
     </RelativeLayout>

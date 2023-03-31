@@ -62,7 +62,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     private RadioGroup radioGroup;
     private BarChart barChart;
     private int radioState = 0; // 0:week, 1:month, 2:year
-    private ProgressDialog loadingBar;
+    //private ProgressDialog loadingBar;
     private DatePickerDialog.OnDateSetListener setListener;
     private Button addMoneyButton;
     private ArrayList<Double> weekAmountArray = new ArrayList<>();
@@ -88,7 +88,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barChart = findViewById(R.id.bar_chart);
         chartTitle = findViewById(R.id.chart_title);
         xAxisTitle = findViewById(R.id.xAxis_title);
-        loadingBar = new ProgressDialog(this);
+        //loadingBar = new ProgressDialog(this);
         addMoneyButton=findViewById(R.id.add_money_btn);
         graphSettings();
         initDatePicker();
@@ -254,10 +254,10 @@ public class MoneyTrackerActivity extends AppCompatActivity {
             return;
         }
         Calendar.getInstance().clear();
-        loadingBar.setTitle("Adding money");
+        /*loadingBar.setTitle("Adding money");
         loadingBar.setMessage("Please wait. We are adding for "+dateHtml);
         loadingBar.setCanceledOnTouchOutside(false);
-        loadingBar.show();
+        loadingBar.show();*/
 
         retrieveDaysMoney(dateHtml,5);
     }
@@ -278,11 +278,11 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
                                     toastMessage("Money added.");
-                                    loadingBar.dismiss();
+                                    //loadingBar.dismiss();
                                     finish();
                                 }else{
                                     toastMessage("Network Error: Please try again after some time...");
-                                    loadingBar.dismiss();
+                                    //loadingBar.dismiss();
                                 }
                                 generateGraph(radioState);
                             }

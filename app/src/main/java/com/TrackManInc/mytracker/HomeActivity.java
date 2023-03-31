@@ -20,6 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -158,19 +159,12 @@ public class HomeActivity extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setLayout(width, height);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        VideoView videoView = dialog.findViewById(R.id.streak_video);
-        videoView.setVideoPath("android.resource://"+getPackageName()+"/"+R.raw.streak);
-        SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd");
-        String formattedDate = df.format(Calendar.getInstance().getTime());
-        retrieveDialogueData(formattedDate);
-        videoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.setLooping(true);
-            }
-        });
-        videoView.setSoundEffectsEnabled(false);
-        videoView.start();
+        ImageView streakIV = dialog.findViewById(R.id.flame_streak);
+        if(Integer.parseInt(Prevalent.currentOnlineUser.getStreak())>30){
+            streakIV.setImageDrawable(getDrawable(R.drawable.flame_streak_2));
+        }else if(Integer.parseInt(Prevalent.currentOnlineUser.getStreak())>10){
+            streakIV.setImageDrawable(getDrawable(R.drawable.flame_streak_1));
+        }
     }
 
     @Override

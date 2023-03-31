@@ -4,7 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="10dp"
-    app:cardElevation="15dp">
+
+    app:cardBackgroundColor="#561C1C1C">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -20,8 +21,8 @@
                 android:layout_height="wrap_content"
                 android:text="Date"
                 android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="14dp"
+                android:textColor="@color/white"
+                android:textSize="18dp"
                 android:layout_marginLeft="5dp"
                 android:textStyle="bold"
                 />
@@ -41,24 +42,25 @@
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="Touch to enter"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="14dp"
             android:layout_marginLeft="5dp"
             android:textStyle="bold"
+            android:layout_centerVertical="true"
             />
         <TextView
             android:id="@+id/total_day_money"
             android:layout_width="160dp"
             android:layout_height="wrap_content"
             android:text="Total money"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textAlignment="viewEnd"
             android:textSize="20dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_alignParentEnd="true"
             android:textStyle="bold"
-            />
+            android:layout_centerVertical="true"/>
     </RelativeLayout>
 </LinearLayout>
 
