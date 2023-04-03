@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".FoodTrackerActivity">
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/food_tracker_background"
+        android:scaleType="fitXY"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +18,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Days Nutrients"
-            android:textSize="40dp"
+            android:textSize="40sp"
+            android:textColor="#A39D9D"
+            android:textStyle="bold"
+            android:fontFamily="@font/acme"
             android:gravity="center"
             android:layout_marginTop="20dp"/>
         <TextView
@@ -24,7 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="date"
-            android:textSize="20dp"
+            android:textSize="30sp"
+            android:textColor="#C3BDBD"
+            android:fontFamily="@font/acme"
             android:gravity="center" />
     </LinearLayout>
 
@@ -32,7 +39,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginVertical="165dp"
+        android:layout_centerInParent="true"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp">
 
@@ -60,7 +67,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="18dp"
+                android:padding="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
 
@@ -90,7 +97,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="18dp"
+                android:padding="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
         <TextView
@@ -118,7 +125,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingStart="18dp"
+            android:padding="18dp"
             android:progress="100"
             android:scaleY="3"/>
         </LinearLayout>
@@ -150,7 +157,7 @@
                 android:layout_height="match_parent"
                 android:indeterminate="false"
                 android:max="100"
-                android:paddingStart="18dp"
+                android:padding="18dp"
                 android:progress="50"
                 android:scaleY="3" />
         </LinearLayout>
@@ -179,7 +186,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="18dp"
+                android:padding="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
         <TextView
@@ -207,7 +214,7 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingStart="18dp"
+                android:padding="18dp"
                 android:scaleY="3"/>
         </LinearLayout>
 
@@ -219,29 +226,27 @@
             android:gravity="end"
             android:paddingEnd="18dp"
             android:textSize="16dp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="50dp"
-                android:text="Add" />
-
-            <Button
-                android:id="@+id/changeButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:text="Change" />
-        </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp">
 
+        <Button
+            android:id="@+id/temp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add" />
+
+        <Button
+            android:id="@+id/changeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Change" />
+    </LinearLayout>
 
 </RelativeLayout>
