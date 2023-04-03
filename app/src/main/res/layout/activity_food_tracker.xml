@@ -60,7 +60,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Calories"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:textColor="#A39D9D"/>
 
             <ProgressBar
                 android:id="@+id/calorieBar"
@@ -78,7 +79,8 @@
             android:text="0/0g"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -90,7 +92,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Fat"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:textColor="#A39D9D"/>
 
             <ProgressBar
                 android:id="@+id/fatBar"
@@ -107,7 +110,8 @@
             android:text="0/0g"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
 
         <LinearLayout
         android:layout_width="match_parent"
@@ -119,7 +123,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Carbohydrates"
-            android:textSize="18dp" />
+            android:textSize="18dp"
+            android:textColor="#A39D9D"/>
         <ProgressBar
             android:id="@+id/carbsBar"
             style="?android:attr/progressBarStyleHorizontal"
@@ -136,7 +141,8 @@
             android:text="0/0"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -148,7 +154,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Protein"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:textColor="#A39D9D"/>
 
             <ProgressBar
                 android:id="@+id/proteinBar"
@@ -168,7 +175,8 @@
             android:text="0/0"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -180,7 +188,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Fibre"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:textColor="#A39D9D"/>
             <ProgressBar
                 android:id="@+id/fibreBar"
                 style="?android:attr/progressBarStyleHorizontal"
@@ -196,7 +205,8 @@
             android:text="0/0"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
@@ -207,7 +217,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Salt"
-                android:textSize="18dp" />
+                android:textSize="18dp"
+                android:textColor="#A39D9D"/>
 
             <ProgressBar
                 android:id="@+id/saltBar"
@@ -215,7 +226,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="18dp"
-                android:scaleY="3"/>
+                android:scaleY="3" />
         </LinearLayout>
 
         <TextView
@@ -225,7 +236,8 @@
             android:text="0/0"
             android:gravity="end"
             android:paddingEnd="18dp"
-            android:textSize="16dp" />
+            android:textSize="16dp"
+            android:textColor="#A39D9D"/>
     </LinearLayout>
 
     <LinearLayout
