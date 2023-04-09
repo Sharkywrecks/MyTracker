@@ -36,7 +36,7 @@
             android:id="@+id/money_entered"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:inputType="numberDecimal"
+            android:inputType="numberDecimal|numberSigned"
             android:hint="@string/enter_money_used_today"
             />
         <Button
