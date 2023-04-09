@@ -56,7 +56,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_food_tracker);
 
         //temp values//
-        calorieTarget = 2500;
+        calorieTarget = Integer.parseInt(Prevalent.currentOnlineUser.getCalorie());
         proteinTarget = 55;
         carbsTarget = 333;
         fibreTarget = 30;
