@@ -255,8 +255,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     for (String key : savedState.keySet()) {
                         UserRef.child(key).setValue(savedState.get(key));
                     }
+                    compareMaps();
+                    overridePendingTransition(R.anim.slide_in_right,R.anim.slide_out_left);
+                    try {
+                        Thread.sleep(400);
+                    } catch (InterruptedException e) {
+                        throw new RuntimeException(e);
+                    }
+                    finish();
                 }
-                compareMaps();
             }
         });
 
