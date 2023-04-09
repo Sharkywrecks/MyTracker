@@ -212,11 +212,10 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Users user = snapshot.getValue(Users.class);
+                Prevalent.currentOnlineUser = user;
                 if(user!=null) {
                     prevStreak = Integer.parseInt(user.getStreak());
                     prevStreakDate = user.getPrevious_date_streak();
-                    calorieTarget = Integer.parseInt(user.getCalorie());
-                    moneyTarget = Integer.parseInt(user.getMoney());
                 }
             }
 
@@ -329,6 +328,8 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void setupProgressBar() {
+        calorieTarget = Integer.parseInt(Prevalent.currentOnlineUser.getCalorie());
+        moneyTarget = Integer.parseInt(Prevalent.currentOnlineUser.getMoney());
         String money = foodVsMoneyArrayList.get(0).getMoney();
         int moneyInteger = (int)Double.parseDouble(money.substring(1));
         calorieBar.setMax(calorieTarget);
@@ -338,14 +339,12 @@ public class HomeActivity extends AppCompatActivity {
         streakTV.setText(Prevalent.currentOnlineUser.getStreak());
         calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
         moneyProgress.setText(money + "/" + moneyTarget );
-
         if (calorieVal >= calorieTarget) {
             calorieProgress.setTextColor(RED);
         }
         if (moneyInteger >= moneyTarget) {
             moneyProgress.setTextColor(RED);
         }
-        System.out.println("Reached setup");
     }
     private boolean dateDifference(String date2){
         if(date2.equals("")||date2.equals(foodVsMoneyArrayList.get(0).getDate())){return true;}

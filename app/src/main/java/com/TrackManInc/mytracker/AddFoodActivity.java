@@ -160,22 +160,6 @@ public class AddFoodActivity extends AppCompatActivity {
         }
         return false;
     }
-
-/*private void deleteInput(){
-        //Delete from database
-        final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if(task.isSuccessful()){
-                            toastMessage("Food item deleted.");
-                            finish();
-                        }else{
-                            toastMessage("Network Error: Please try again after some time...");
-                        }
-                    }
-                });
-    }*/
     private void initDatePicker(){
         Calendar calender = Calendar.getInstance();
         final int year = calender.get(Calendar.YEAR);

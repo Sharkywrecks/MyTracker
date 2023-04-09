@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
@@ -44,11 +45,11 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        setupUI();
+        setupUIView();
     }
 
 
-    private void setupUI(){
+    private void setupUIView(){
         gender = (Spinner)findViewById(R.id.gender_spinner);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(SettingsActivity.this, android.R.layout.simple_spinner_item,paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -57,6 +58,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         name = findViewById(R.id.nameET);
         email = findViewById(R.id.email_ET);
+        email.setFocusable(false);
+        email.setKeyListener(null);
+        email.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(SettingsActivity.this,"Contact admins to change",Toast.LENGTH_SHORT).show();
+            }
+        });
         password = findViewById(R.id.password_ET);
         age = findViewById(R.id.age_ET);
         height = findViewById(R.id.height_ET);
@@ -117,24 +126,6 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void afterTextChanged(Editable editable) {
                 currentState.replace("name", editable.toString());
-                compareMaps();
-            }
-        });
-
-        email.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-                currentState.replace("email", editable.toString());
                 compareMaps();
             }
         });
@@ -251,6 +242,13 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             @Override
             public void onClick(View view) {
                 savedState.putAll(currentState);
+                Prevalent.currentOnlineUser.setCalorie(savedState.get("calorie"));
+                Prevalent.currentOnlineUser.setMoney(savedState.get("money"));
+                Prevalent.currentOnlineUser.setWeight(savedState.get("weight"));
+                Prevalent.currentOnlineUser.setHeight(savedState.get("height"));
+                Prevalent.currentOnlineUser.setAge(savedState.get("age"));
+                Prevalent.currentOnlineUser.setPassword(savedState.get("password"));
+                Prevalent.currentOnlineUser.setName(savedState.get("name"));
                 if(save.isEnabled()){
                     for (String key : savedState.keySet()) {
                         UserRef.child(key).setValue(savedState.get(key));
