@@ -160,11 +160,13 @@ public class HomeActivity extends AppCompatActivity {
         dialog.getWindow().setLayout(width, height);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         ImageView streakIV = dialog.findViewById(R.id.flame_streak);
+        retrieveDialogueData(foodVsMoneyArrayList.get(0).getDate());
         if(Integer.parseInt(Prevalent.currentOnlineUser.getStreak())>30){
             streakIV.setImageDrawable(getDrawable(R.drawable.flame_streak_2));
         }else if(Integer.parseInt(Prevalent.currentOnlineUser.getStreak())>10){
             streakIV.setImageDrawable(getDrawable(R.drawable.flame_streak_1));
         }
+
     }
 
     @Override
@@ -296,23 +298,24 @@ public class HomeActivity extends AppCompatActivity {
                 double amountVal=0;
                 for(DataSnapshot nutrientDS:snapshot.getChildren()){
                     Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
-                    if(usersNutrients==null){return;}
-                    String carbs,protein,fat,fibre,salt,amount;
-                    carbs = checkRetrievedValue(usersNutrients.getCarbs());
-                    protein = checkRetrievedValue(usersNutrients.getProtein());
-                    fat = checkRetrievedValue(usersNutrients.getFat());
-                    fibre = checkRetrievedValue(usersNutrients.getFiber());
-                    salt = checkRetrievedValue(usersNutrients.getSalt());
-                    amount = checkRetrievedValue(usersNutrients.getSalt());
-                    carbsVal+=Double.parseDouble(carbs);
-                    proteinVal += Double.parseDouble(protein);
-                    fatVal += Double.parseDouble(fat);
-                    saltVal += Double.parseDouble(salt);
-                    fibreVal += Double.parseDouble(fibre);
-                    amountVal+=Double.parseDouble(amount);
-                    calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
-                    setupProgressBar();
+                    if(usersNutrients!=null){
+                        String carbs,protein,fat,fibre,salt,amount;
+                        carbs = checkRetrievedValue(usersNutrients.getCarbs());
+                        protein = checkRetrievedValue(usersNutrients.getProtein());
+                        fat = checkRetrievedValue(usersNutrients.getFat());
+                        fibre = checkRetrievedValue(usersNutrients.getFiber());
+                        salt = checkRetrievedValue(usersNutrients.getSalt());
+                        amount = checkRetrievedValue(usersNutrients.getSalt());
+                        carbsVal+=Double.parseDouble(carbs);
+                        proteinVal += Double.parseDouble(protein);
+                        fatVal += Double.parseDouble(fat);
+                        saltVal += Double.parseDouble(salt);
+                        fibreVal += Double.parseDouble(fibre);
+                        amountVal+=Double.parseDouble(amount);
+                        calorieVal = 4*proteinVal + 4*carbsVal + 9*fatVal;
+                    }
                 }
+                setupProgressBar();
             }
 
             @Override
@@ -339,6 +342,7 @@ public class HomeActivity extends AppCompatActivity {
         if (moneyInteger >= moneyTarget) {
             moneyProgress.setTextColor(RED);
         }
+        System.out.println("Reached setup");
     }
     private boolean dateDifference(String date2){
         if(date2.equals("")||date2.equals(foodVsMoneyArrayList.get(0).getDate())){return true;}
@@ -378,11 +382,12 @@ public class HomeActivity extends AppCompatActivity {
                                 Toast.makeText(HomeActivity.this,"Your streak went up",Toast.LENGTH_SHORT).show();
                             }
                         });
+                        retrieveDialogueData(foodVsMoneyArrayList.get(0).getDate());
                         return;
                     }
                     if(foodVsMoneyArrayList.get(0).getFoodNames().size()==0){return;}
                     if(foodVsMoneyArrayList.get(0).getFoodNames().get(0)!=null
-                            && foodVsMoneyArrayList.get(0).getMoney()!=null && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
+                            && !Objects.equals(foodVsMoneyArrayList.get(0).getMoney(), "0.00") && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
                         if(prevStreak==Integer.parseInt(Prevalent.currentOnlineUser.getStreak())){
                             HashMap<String,Object> userDataMap = new HashMap<>();
                             prevStreakDate = foodVsMoneyArrayList.get(0).getDate();
@@ -401,6 +406,7 @@ public class HomeActivity extends AppCompatActivity {
                                     Toast.makeText(HomeActivity.this,"Your streak went up",Toast.LENGTH_SHORT).show();
                                 }
                             });
+                            retrieveDialogueData(foodVsMoneyArrayList.get(0).getDate());
                         }
                     }
 
