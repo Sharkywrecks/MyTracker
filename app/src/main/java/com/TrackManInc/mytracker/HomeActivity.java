@@ -137,7 +137,8 @@ public class HomeActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), ProfileActivity.class);
                     startActivity(intent);
                 }else if(id==R.id.nav_settings){
-                    return true;
+                    Intent intent = new Intent(getApplicationContext(), SettingsActivity.class);
+                    startActivity(intent);
                 }else if(id==R.id.nav_logout){
                     Paper.book().destroy();
                     Intent intent = new Intent(getApplicationContext(),MainActivity.class);

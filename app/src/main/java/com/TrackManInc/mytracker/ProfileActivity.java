@@ -257,8 +257,6 @@ public class ProfileActivity extends AppCompatActivity {
         Uri uri;
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
-        UserRef.child("image").setValue("test");
-
         if(resultCode == RESULT_OK && requestCode == 1 && data != null){
             uri = data.getData();
             Picasso.get().load(uri).into(profileImageView);

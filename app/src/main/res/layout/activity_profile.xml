@@ -99,18 +99,24 @@
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="20dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="100dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/roundcorner"
+                        android:elevation="5dp"
                         app:srcCompat="@drawable/ic_person" />
 
                     <ImageButton
                         android:id="@+id/money_button"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="20dp"
+                        android:layout_marginBottom="5dp"
                         android:layout_weight="1"
                         android:background="@drawable/roundcorner"
+                        android:elevation="5dp"
                         app:srcCompat="@drawable/ic_menu_camera" />
 
                 </LinearLayout>

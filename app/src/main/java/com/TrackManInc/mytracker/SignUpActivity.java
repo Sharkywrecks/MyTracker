@@ -100,6 +100,12 @@ public class SignUpActivity extends AppCompatActivity {
                     userDataMap.put("previous_date_streak","");
                     userDataMap.put("lifetime_amount","0.00");
                     userDataMap.put("image","");
+                    userDataMap.put("age","");
+                    userDataMap.put("gender","");
+                    userDataMap.put("height","");
+                    userDataMap.put("weight","");
+                    userDataMap.put("money","");
+                    userDataMap.put("calorie","");
 
                     RootRef.child("Users").child(email).updateChildren(userDataMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
