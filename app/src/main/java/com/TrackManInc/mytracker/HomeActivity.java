@@ -215,6 +215,8 @@ public class HomeActivity extends AppCompatActivity {
                 if(user!=null) {
                     prevStreak = Integer.parseInt(user.getStreak());
                     prevStreakDate = user.getPrevious_date_streak();
+                    calorieTarget = Integer.parseInt(user.getCalorie());
+                    moneyTarget = Integer.parseInt(user.getMoney());
                 }
             }
 
