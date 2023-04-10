@@ -22,6 +22,9 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColorHint="#9E9E9E"
+            android:backgroundTint="#FFFFFF"
+            android:textColor="#9E9E9E"
             android:hint="Select Date"
             />
         <TextView
@@ -30,20 +33,25 @@
             android:layout_gravity="center_vertical"
             android:gravity="center_vertical"
             android:text="@string/pound"
-            android:textColor="#000000"
+            android:textColor="#9E9E9E"
             android:textSize="20sp" />
         <EditText
             android:id="@+id/money_entered"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:textColor="#9E9E9E"
+            android:backgroundTint="#FFFFFF"
             android:inputType="numberDecimal|numberSigned"
+            android:textColorHint="#9E9E9E"
             android:hint="@string/enter_money_used_today"
             />
+
         <Button
             android:id="@+id/add_money_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:autoSizeTextType="uniform"
+            android:backgroundTint="#919191"
             android:text="@string/add_money" />
     </LinearLayout>
 
@@ -71,7 +79,8 @@
                 android:layout_weight="1"
                 android:checked="true"
                 android:onClick="onRadioButtonClicked"
-                android:buttonTint="@color/colorPrimary"
+                android:textColor="#9E9E9E"
+                android:buttonTint="#9E9E9E"
                 android:text="@string/week" />
             <Space
                 android:layout_width="wrap_content"
@@ -83,7 +92,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="onRadioButtonClicked"
-                android:buttonTint="@color/colorPrimary"
+                android:textColor="#9E9E9E"
+                android:buttonTint="#9E9E9E"
                 android:text="@string/month" />
             <Space
                 android:layout_width="wrap_content"
@@ -95,7 +105,8 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:onClick="onRadioButtonClicked"
-                android:buttonTint="@color/colorPrimary"
+                android:textColor="#9E9E9E"
+                android:buttonTint="#9E9E9E"
                 android:text="@string/year" />
         </RadioGroup>
         <com.github.mikephil.charting.charts.BarChart
@@ -116,15 +127,18 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"/>
+
         <TextView
             android:id="@+id/chart_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textColor="#000000"
-            android:textFontWeight="10"
-            android:textSize="24sp"
+            android:fontFamily="@font/acme"
             android:text="text"
+            android:textAlignment="center"
+            android:textColor="#9E9E9E"
+            android:textFontWeight="10"
+            android:textSize="26sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -135,7 +149,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:textColor="#000000"
+            android:textColor="#9E9E9E"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

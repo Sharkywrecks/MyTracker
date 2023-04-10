@@ -44,6 +44,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -103,8 +105,11 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
     private void graphSettings(){  // temporary settings for now
         barChart.setNoDataText("No Data.");
-        barChart.setNoDataTextColor(Color.BLACK);
-        barChart.setBorderColor(Color.BLACK);
+        barChart.setNoDataTextColor(Color.parseColor("#9E9E9E"));
+        barChart.setBorderColor(Color.parseColor("#9E9E9E"));
+        barChart.getXAxis().setTextColor(Color.parseColor("#9E9E9E"));
+        barChart.getAxisLeft().setTextColor(Color.parseColor("#9E9E9E"));
+        barChart.getAxisRight().setTextColor(Color.parseColor("#9E9E9E"));
         barChart.setDrawBorders(true);
         barChart.setBorderWidth(3);
         barChart.setDescription(null);
@@ -332,20 +337,23 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 switch(arrayNum){
                     case 0:
                         weekAmountArray.add(moneyDouble);
-                        BarDataSet weekDataset = findWeekData();
-                        weekDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
-                        addDataToGraph(weekDataset);
+                        BarDataSet weekDataSet = findWeekData();
+                        weekDataSet.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        weekDataSet.setValueTextColor(Color.parseColor("#9E9E9E"));
+                        addDataToGraph(weekDataSet);
                         break;
                     case 1:
                         monthAmountArray.add(moneyDouble);
-                        BarDataSet monthDataset = findMonthData();
-                        monthDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
-                        addDataToGraph(monthDataset);
+                        BarDataSet monthDataSet = findMonthData();
+                        monthDataSet.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        monthDataSet.setValueTextColor(Color.parseColor("#9E9E9E"));
+                        addDataToGraph(monthDataSet);
                         break;
                     case 2:
                         yearAmountArray.add(moneyDouble);
                         BarDataSet yearDataset = findYearData();
                         yearDataset.setGradientColor(Color.DKGRAY, Color.LTGRAY);
+                        yearDataset.setValueTextColor(Color.parseColor("#9E9E9E"));
                         addDataToGraph(yearDataset);
                         break;
                     case 5:
@@ -415,6 +423,18 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
 
+    private String[] findWeekStartDates(){
+        LocalDate currentDate = LocalDate.now();
+        String[] weekStartDates = new String[4];
+        for (int i = 3; i >= 0; i--) {
+            LocalDate weekStartDate = currentDate.minusDays(currentDate.getDayOfWeek().getValue() - 1);
+            String formattedWeekStartDate = weekStartDate.format(DateTimeFormatter.ofPattern("dd/MM"));
+            weekStartDates[i] = formattedWeekStartDate;
+            currentDate = currentDate.minusWeeks(1);
+        }
+        return weekStartDates;
+    }
+
     private BarDataSet findWeekData(){ // previous 7 days
         //weekDataFromDB();
         final String[] daysOfWeek = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
@@ -441,10 +461,10 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
 
     private BarDataSet findMonthData() { // Previous 4 weeks
-        String[] weekStartDates = {"Week 4","Week 3", "Week 2", "Current"};
+        String[] weekStartDates = findWeekStartDates();
+        weekStartDates[3] = "Current";
         Calendar.getInstance().clear();
         Calendar cal = Calendar.getInstance();
-        //https://stackoverflow.com/questions/10465487/get-next-week-and-previous-week-staring-and-ending-dates-in-java
         int weekDay = Calendar.DAY_OF_WEEK;
         if(monthAmountArray.size()== 28){
             for(int i =0;i<4;i++){
