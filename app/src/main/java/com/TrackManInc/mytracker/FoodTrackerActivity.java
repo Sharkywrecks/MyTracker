@@ -170,7 +170,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         Set<String> set = new LinkedHashSet<String>(foodList);
         set.retainAll(new LinkedHashSet<String>(toRetain));
         foodList = new ArrayList<String>(set);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FoodTrackerActivity.this, android.R.layout.simple_spinner_item, foodList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(FoodTrackerActivity.this, R.layout.spinner, foodList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         dropdown.setAdapter(adapter);
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

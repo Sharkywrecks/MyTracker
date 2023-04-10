@@ -50,8 +50,8 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
 
     private void setupUIView(){
-        gender = (Spinner)findViewById(R.id.gender_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(SettingsActivity.this, android.R.layout.simple_spinner_item,paths);
+        gender = findViewById(R.id.gender_spinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(SettingsActivity.this, R.layout.spinner,paths);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         gender.setAdapter(adapter);
         gender.setOnItemSelectedListener(this);
@@ -290,10 +290,14 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         changed = !savedState.equals(currentState);
         if(changed){
             save.setEnabled(true);
+            save.setAlpha(1f);
             discard.setEnabled(true);
+            discard.setAlpha(1f);
         }else{
             save.setEnabled(false);
+            save.setAlpha(.5f);
             discard.setEnabled(false);
+            discard.setAlpha(.5f);
         }
     }
 

@@ -18,6 +18,7 @@ import android.text.SpannableString;
 import android.text.style.AlignmentSpan;
 import android.util.Base64;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -83,8 +84,8 @@ public class ProfileActivity extends AppCompatActivity {
         lifetimeAmountTextView = findViewById(R.id.lifetime_amount_tv);
         todayAmountTextView = findViewById(R.id.today_amount_tv);
         ImageButton settingsButton = findViewById(R.id.settings_button);
-        ImageButton moneyButton = findViewById(R.id.money_button);
-        ImageButton foodButton = findViewById(R.id.food_button);
+        Button moneyButton = findViewById(R.id.money_button);
+        Button foodButton = findViewById(R.id.food_button);
         calorieTextView = findViewById(R.id.calorie_tv);
         fatTextView = findViewById(R.id.fat_tv);
         carbsTextView = findViewById(R.id.carbs_tv);
