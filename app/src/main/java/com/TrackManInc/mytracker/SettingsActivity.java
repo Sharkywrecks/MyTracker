@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -63,7 +64,15 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
         email.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                email.setEnabled(false);
                 Toast.makeText(SettingsActivity.this,"Contact admins to change",Toast.LENGTH_SHORT).show();
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        email.setEnabled(true);
+                    }
+                }, 2000);
             }
         });
         password = findViewById(R.id.password_ET);
