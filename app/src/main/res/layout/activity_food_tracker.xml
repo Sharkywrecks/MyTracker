@@ -252,13 +252,21 @@
             android:id="@+id/temp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add" />
+            android:backgroundTint="#424040"
+            android:layout_alignParentEnd="true"
+            android:text="Add"
+            android:textColor="#DADADA"
+            android:textSize="16sp"/>
 
         <Button
             android:id="@+id/changeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Change" />
+            android:backgroundTint="#424040"
+            android:layout_alignParentEnd="true"
+            android:text="Change"
+            android:textColor="#DADADA"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 </RelativeLayout>

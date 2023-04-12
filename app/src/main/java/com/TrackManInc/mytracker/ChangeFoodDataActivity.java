@@ -278,7 +278,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         return false;
     }
 
-    public void saveInput(){
+    private void saveInput(){
         if(checkNoInput("Carbohydrates",carbAmountET)|| checkNoInput("Protein",proteinAmountET)||
                 checkNoInput("Fats",fatsAmountET)|| checkNoInput("Salt",saltAmountET)||
                 checkNoInput("Fiber",fiberAmountET)|| checkNoInput("Date",dateET)||

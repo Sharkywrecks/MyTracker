@@ -5,8 +5,16 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 tools:context=".ChangeFoodDataActivity"
-android:orientation="vertical">
-
+android:orientation="vertical"
+android:background="#2B2A2A">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center_vertical">
     <EditText
         android:id="@+id/food_name"
         android:layout_width="wrap_content"
@@ -14,7 +22,7 @@ android:orientation="vertical">
         android:layout_centerHorizontal="true"
         android:layout_marginTop="5dp"
         android:hint="Product Name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_gravity="center"
         android:gravity="center"
         android:textSize="30dp"
@@ -35,7 +43,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Carbohydrates:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editCarbs"
@@ -47,7 +56,9 @@ android:orientation="vertical">
                 android:maxLines="3"
                 android:minHeight="48dp"
                 android:paddingLeft="10dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -61,7 +72,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Protein:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editProtein"
@@ -73,7 +85,9 @@ android:orientation="vertical">
                 android:maxLines="3"
                 android:minHeight="48dp"
                 android:paddingLeft="10dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -87,7 +101,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Fats:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editFats"
@@ -99,7 +114,9 @@ android:orientation="vertical">
                 android:maxLines="3"
                 android:minHeight="48dp"
                 android:paddingLeft="10dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -113,7 +130,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Salt:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editSalt"
@@ -125,7 +143,9 @@ android:orientation="vertical">
                 android:maxLines="3"
                 android:minHeight="48dp"
                 android:paddingLeft="10dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -139,7 +159,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Fiber:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editFiber"
@@ -151,7 +172,8 @@ android:orientation="vertical">
                 android:maxLines="3"
                 android:minHeight="48dp"
                 android:paddingLeft="10dp"
-                android:inputType="numberDecimal"/>
+                android:inputType="numberDecimal"
+                android:textColor="#BFBFBF"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -165,7 +187,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Date:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editDate"
@@ -177,7 +200,9 @@ android:orientation="vertical">
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:layout_marginEnd="6dp"
-                android:paddingLeft="20dp" />
+                android:paddingLeft="20dp"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
 
         <TableRow
@@ -192,7 +217,8 @@ android:orientation="vertical">
                 android:layout_marginLeft="25dp"
                 android:text="Quantity:"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editQuantity"
@@ -205,7 +231,10 @@ android:orientation="vertical">
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:paddingLeft="20dp"
-                android:text="1" />
+                android:paddingRight="20dp"
+                android:text="1"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
         <TableRow
             android:layout_width="match_parent"
@@ -219,7 +248,8 @@ android:orientation="vertical">
                 android:layout_gravity="start|center"
                 android:text="Serving size(g):"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textColor="@color/white"/>
 
             <EditText
                 android:id="@+id/editServingSize"
@@ -232,25 +262,25 @@ android:orientation="vertical">
                 android:maxLines="1"
                 android:minHeight="48dp"
                 android:layout_marginEnd="6dp"
-                android:paddingLeft="20dp" />
+                android:paddingLeft="20dp"
+                android:textColor="#BFBFBF"
+                android:gravity="center"/>
         </TableRow>
     </TableLayout>
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="10dp">
-
     <Button
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginStart="10dp"
+        android:backgroundTint="#424040"
+        android:layout_weight="0.5"
         android:text="Delete"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold" />
-
+        android:textColor="#DADADA"
+        android:textSize="16sp"
+        android:layout_marginStart="50dp"/>
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
@@ -262,12 +292,14 @@ android:orientation="vertical">
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="#424040"
         android:layout_alignParentEnd="true"
-        android:layout_marginEnd="10dp"
-        android:onClick="saveInput"
+        android:layout_weight="0.5"
         android:text="Save"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textColor="#DADADA"
+        android:textSize="16sp"
+        android:layout_marginEnd="50dp"/>
 </RelativeLayout>
+</LinearLayout>
+</ScrollView>
 </LinearLayout>

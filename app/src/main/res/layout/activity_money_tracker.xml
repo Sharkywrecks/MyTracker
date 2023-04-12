@@ -14,19 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <EditText
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColorHint="#9E9E9E"
+        android:backgroundTint="#FFFFFF"
+        android:textColor="#9E9E9E"
+        android:hint="Select Date"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <EditText
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:textColorHint="#9E9E9E"
-            android:backgroundTint="#FFFFFF"
-            android:textColor="#9E9E9E"
-            android:hint="Select Date"
-            />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -43,22 +44,22 @@
             android:backgroundTint="#FFFFFF"
             android:inputType="numberDecimal|numberSigned"
             android:textColorHint="#9E9E9E"
-            android:hint="@string/enter_money_used_today"
-            />
+            android:hint="@string/enter_money_used_today" />
 
         <Button
             android:id="@+id/add_money_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:autoSizeTextType="uniform"
-            android:backgroundTint="#919191"
-            android:text="@string/add_money" />
+            android:backgroundTint="#424040"
+            android:text="@string/add_money"
+            android:textColor="#DADADA"
+            android:textSize="16sp"/>
     </LinearLayout>
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="fill_parent">
 
         <RadioGroup
             android:id="@+id/radio_group"

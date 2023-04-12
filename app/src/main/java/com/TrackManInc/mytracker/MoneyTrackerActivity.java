@@ -224,7 +224,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         barData.addDataSet(barDataSet);
         barChart.setData(barData);
         barChart.invalidate();
-        barChart.animateXY(500, 900, Easing.Linear, Easing.EaseOutCubic);
+        barChart.animateXY(0, 1900, Easing.Linear, Easing.EaseOutCubic);
     }
 
     private String[] rightCircularShift(String[] arr, int startIdx){

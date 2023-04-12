@@ -89,7 +89,6 @@ public class AddFoodActivity extends AppCompatActivity {
         initDatePicker();
         setupPermissionsCamera();
         setupCodeScanner();
-        checkForEditNote();
     }
 
     private void setupUIView() {
@@ -103,7 +102,6 @@ public class AddFoodActivity extends AppCompatActivity {
         dateET.setKeyListener(null);
         foodNameET = findViewById(R.id.food_name);
         saveButton = findViewById(R.id.save_input_button);
-        //deleteButton = findViewById(R.id.delete_input_button);
         quantityET = findViewById(R.id.quantity);
         quantityET.setText("1");
         servingSizeET = findViewById(R.id.serving_size);
@@ -116,9 +114,6 @@ public class AddFoodActivity extends AppCompatActivity {
         setupETListeners();
     }
 
-    private void checkForEditNote() {
-        //Option to edit data
-    }
     public void saveInput(){
         if(checkNoInput("Carbohydrates",carbsET)|| checkNoInput("Protein",proteinET)||
             checkNoInput("Fats",fatsET)|| checkNoInput("Salt",saltET)||
@@ -398,7 +393,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c)&& c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -423,7 +418,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c)&& c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -448,7 +443,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c)&& c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -473,7 +468,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c)&& c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -498,7 +493,7 @@ public class AddFoodActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c)&& c!='.') {
                         break;
                     }
                     temp.append(c);

@@ -345,7 +345,15 @@
                     android:paddingTop="5dp"
                     android:paddingRight="5dp"
                     android:paddingBottom="5dp">
-
+                    <Button
+                        android:id="@+id/discard_btn"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="#424040"
+                        android:layout_weight="0.5"
+                        android:text="Discard Changes"
+                        android:textColor="#DADADA"
+                        android:textSize="16sp" />
                     <Button
                         android:id="@+id/save_btn"
                         android:layout_width="0dp"
@@ -356,15 +364,7 @@
                         android:textColor="#DADADA"
                         android:textSize="16sp" />
 
-                    <Button
-                        android:id="@+id/discard_btn"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:backgroundTint="#424040"
-                        android:layout_weight="0.5"
-                        android:text="Discard Changes"
-                        android:textColor="#DADADA"
-                        android:textSize="16sp" />
+
                 </LinearLayout>
 
             </LinearLayout>
