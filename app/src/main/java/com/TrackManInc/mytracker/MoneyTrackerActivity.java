@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -23,7 +22,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.TrackManInc.mytracker.Model.FoodVsMoney;
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
@@ -49,14 +47,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Random;
+
 public class MoneyTrackerActivity extends AppCompatActivity {
     private TextView chartTitle, xAxisTitle;
     private EditText moneyEnteredET, dateET;
@@ -140,7 +136,6 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         generateGraph(radioBtnId);
     }
 
-
     private void initDatePicker(){
         Calendar calender = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
@@ -165,6 +160,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         date = dayStr+"/"+monthStr+"/"+year;
         dateHtml = year+"/"+monthStr+"/"+dayStr;
         dateET.setText(date);
+        changeMoneyEnteredHint(date);
         setListener = new DatePickerDialog.OnDateSetListener(){
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
@@ -181,37 +177,62 @@ public class MoneyTrackerActivity extends AppCompatActivity {
                 date = day+"/"+m+"/"+year;
                 dateHtml = year+"/"+m+"/"+day;
                 dateET.setText(date);
+                changeMoneyEnteredHint(date);
             }
         };
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(MoneyTrackerActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
-                        year,month-1,day);
+                try {
+                    calender.setTime(Objects.requireNonNull(sdf.parse(dateHtml)));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
+                int year = calender.get(Calendar.YEAR);
+                int month = calender.get(Calendar.MONTH);
+                int day = calender.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(MoneyTrackerActivity.this, R.style.DialogTheme,setListener,
+                        year,month,day);
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 datePickerDialog.show();
             }
         });
     }
 
+    private void changeMoneyEnteredHint(String dateStr){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate date = LocalDate.parse(dateStr, formatter);
+        LocalDate today = LocalDate.now();
+        boolean isToday = date.isEqual(today);
+        if(isToday){
+            moneyEnteredET.setHint("Enter money used today");
+        }else{
+            moneyEnteredET.setHint("Enter money used "+dateStr);
+        }
+    }
+
     private void generateGraph(int id) {
         if(id == R.id.prev_week_radio_btn){
             if(radioState == 0 && !barChart.isEmpty()){
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.INVISIBLE);
                 return;
             }
             radioState = 0;
             weekDataFromDB();
         }else if(id == R.id.prev_month_radio_btn){
             if(radioState == 1 && !barChart.isEmpty()){
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.INVISIBLE);
                 return;
             }
             radioState = 1;
             monthDataFromDB();
         }else if(id == R.id.prev_year_radio_btn){
             if(radioState == 2 && !barChart.isEmpty()){
+                ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
+                progressBar.setVisibility(View.INVISIBLE);
                 return;
             }
             radioState = 2;
@@ -239,31 +260,12 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         System.arraycopy(firstPart, 0, shiftedArr, secondPart.length, firstPart.length);
         return shiftedArr;
     }
-    private String calenderDate(Calendar calendar){
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        month = month+1;
-        String d = String.valueOf(day);
-        String m = String.valueOf(month);
-        if(day<10){
-            d = "0"+day;
-        }
-        if(month<10){
-            m = "0"+month;
-        }
-        return year+"/"+m+"/"+d;
-    }
+
     private void getMoney(){
         if(checkNoInput("Money used today.", moneyEnteredET)){
             return;
         }
         Calendar.getInstance().clear();
-        /*loadingBar.setTitle("Adding money");
-        loadingBar.setMessage("Please wait. We are adding for "+dateHtml);
-        loadingBar.setCanceledOnTouchOutside(false);
-        loadingBar.show();*/
-
         retrieveDaysMoney(dateHtml,5);
     }
     private void addMoney(Double dayMoney){

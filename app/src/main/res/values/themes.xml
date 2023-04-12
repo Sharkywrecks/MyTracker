@@ -14,6 +14,9 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/grey</item>
+    </style>
     <style name="Theme.Custom" parent="@style/Theme.AppCompat">
         <item name="windowActionBar">false</item>
         <item name="windowActionBarOverlay">true</item>

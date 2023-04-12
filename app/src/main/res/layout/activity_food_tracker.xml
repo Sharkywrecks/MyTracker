@@ -17,7 +17,7 @@
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Days Nutrients"
+            android:text="@string/day_s_nutrients"
             android:textSize="40sp"
             android:textColor="#A39D9D"
             android:textStyle="bold"
@@ -59,7 +59,7 @@
                 android:id="@+id/calorieLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Calories"
+                android:text="@string/calories"
                 android:textSize="18dp"
                 android:textColor="#A39D9D"/>
 
@@ -91,7 +91,7 @@
                 android:id="@+id/fatLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Fat"
+                android:text="@string/fat"
                 android:textSize="18dp"
                 android:textColor="#A39D9D"/>
 
@@ -122,7 +122,7 @@
             android:id="@+id/carbsLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Carbohydrates"
+            android:text="@string/carbohydrates"
             android:textSize="18dp"
             android:textColor="#A39D9D"/>
         <ProgressBar
@@ -153,7 +153,7 @@
                 android:id="@+id/proteinLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Protein"
+                android:text="@string/protein"
                 android:textSize="18dp"
                 android:textColor="#A39D9D"/>
 
@@ -187,7 +187,7 @@
                 android:id="@+id/fibreLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Fibre"
+                android:text="@string/fibre"
                 android:textSize="18sp"
                 android:textColor="#A39D9D"/>
             <ProgressBar
@@ -216,7 +216,7 @@
                 android:id="@+id/saltLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="Salt"
+                android:text="@string/salt"
                 android:textSize="18dp"
                 android:textColor="#A39D9D"/>
 
