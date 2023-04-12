@@ -4,6 +4,7 @@ import static android.graphics.Color.RED;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -45,7 +46,6 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
     private double fibreVal=0;
     private double saltVal=0;
     private double fatVal=0;
-    private double amountVal=0;
     private int calorieTarget, proteinTarget, carbsTarget, fibreTarget, saltTarget, fatTarget;
 
     @Override
@@ -55,13 +55,12 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_food_tracker);
 
-        //temp values//
         calorieTarget = Integer.parseInt(Prevalent.currentOnlineUser.getCalorie());
-        proteinTarget = 55;
-        carbsTarget = 333;
-        fibreTarget = 30;
+        proteinTarget = calorieTarget / 40 ;
+        carbsTarget = calorieTarget / 8;
+        fibreTarget = calorieTarget / 1000 * 14;
         saltTarget = 6;
-        fatTarget = 97;
+        fatTarget = calorieTarget * 3 / 90;
 
         setUpUIView();
         setupProgressBars();
@@ -90,24 +89,12 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         saltProgress.setText(saltVal + "/" + saltTarget + "g");
         fatProgress.setText(fatVal + "/" + fatTarget + "g");
 
-        if (calorieVal >= calorieTarget) {
-            calorieProgress.setTextColor(RED);
-        }
-        if (proteinVal >= proteinTarget) {
-            proteinProgress.setTextColor(RED);
-        }
-        if (carbsVal >= carbsTarget) {
-            carbsProgress.setTextColor(RED);
-        }
-        if (fibreVal >= fibreTarget) {
-            fibreProgress.setTextColor(RED);
-        }
-        if (saltVal >= saltTarget) {
-            saltProgress.setTextColor(RED);
-        }
-        if (fatVal >= fatTarget) {
-            fatProgress.setTextColor(RED);
-        }
+        if (calorieVal >= calorieTarget) calorieProgress.setTextColor(RED);
+        if (proteinVal >= proteinTarget) proteinProgress.setTextColor(RED);
+        if (carbsVal >= carbsTarget) carbsProgress.setTextColor(RED);
+        if (fibreVal >= fibreTarget) fibreProgress.setTextColor(RED);
+        if (saltVal >= saltTarget) saltProgress.setTextColor(RED);
+        if (fatVal >= fatTarget) fatProgress.setTextColor(RED);
     }
 
     public void resetBars(){
@@ -117,6 +104,15 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         fibreVal=0;
         saltVal=0;
         fatVal=0;
+
+        calorieProgress.setTextColor(Color.parseColor("#A39D9D"));
+        proteinProgress.setTextColor(Color.parseColor("#A39D9D"));
+        carbsProgress.setTextColor(Color.parseColor("#A39D9D"));
+        fibreProgress.setTextColor(Color.parseColor("#A39D9D"));
+        saltProgress.setTextColor(Color.parseColor("#A39D9D"));
+        fatProgress.setTextColor(Color.parseColor("#A39D9D"));
+
+
     }
 
     private void setUpUIView(){
@@ -139,7 +135,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
 
         date.setText(getIntent().getStringExtra("DATE"));
 
-        foodList = new ArrayList<String>();
+        foodList = new ArrayList<>();
         foodList.add("Show all");
         retrieveDaysFoods(getIntent().getStringExtra("DATE"));
 
@@ -224,7 +220,6 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
                         fatVal += Double.parseDouble(fat);
                         saltVal += Double.parseDouble(salt);
                         fibreVal += Double.parseDouble(fibre);
-                        amountVal += Double.parseDouble(amount);
                         calorieVal = 4 * proteinVal + 4 * carbsVal + 9 * fatVal;
                         setupProgressBars();
                     }
