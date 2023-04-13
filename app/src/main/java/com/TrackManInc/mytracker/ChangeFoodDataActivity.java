@@ -73,6 +73,22 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         setupETListeners();
     }
     private void setupETListeners() {
+        foodNameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                foodName = foodNameET.getText().toString();
+            }
+        });
         carbAmountET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -90,7 +106,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -115,7 +131,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -140,7 +156,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -165,7 +181,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -190,7 +206,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);
@@ -215,7 +231,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 char[] charTemp = temp.toString().toCharArray();
                 temp = new StringBuilder();
                 for (char c : charTemp) {
-                    if (!Character.isDigit(c)) {
+                    if (!Character.isDigit(c) && c!='.') {
                         break;
                     }
                     temp.append(c);

@@ -351,6 +351,22 @@ public class AddFoodActivity extends AppCompatActivity {
         return result;
     }
     private void setupETListeners() {
+        foodNameET.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                foodName = foodNameET.getText().toString();
+            }
+        });
         carbsET.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
