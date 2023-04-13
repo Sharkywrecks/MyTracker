@@ -208,18 +208,18 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
                     if (dropdown.getSelectedItem().toString().equals(nutrientDS.getKey()) || dropdown.getSelectedItem().toString().equals("Show all")) {
                         Nutrients usersNutrients = nutrientDS.getValue(Nutrients.class);
                         if(usersNutrients==null){return;}
-                        String carbs, protein, fat, fibre, salt, amount;
+                        String carbs, protein, fat, fibre, salt, quantity;
                         carbs = checkRetrievedValue(usersNutrients.getCarbs());
                         protein = checkRetrievedValue(usersNutrients.getProtein());
                         fat = checkRetrievedValue(usersNutrients.getFat());
                         fibre = checkRetrievedValue(usersNutrients.getFiber());
                         salt = checkRetrievedValue(usersNutrients.getSalt());
-                        amount = checkRetrievedValue(usersNutrients.getSalt());
-                        carbsVal += Double.parseDouble(carbs);
-                        proteinVal += Double.parseDouble(protein);
-                        fatVal += Double.parseDouble(fat);
-                        saltVal += Double.parseDouble(salt);
-                        fibreVal += Double.parseDouble(fibre);
+                        quantity = checkRetrievedValue(usersNutrients.getQuantity());
+                        carbsVal += (Double.parseDouble(carbs)*Double.parseDouble(quantity));
+                        proteinVal += (Double.parseDouble(protein)*Double.parseDouble(quantity));
+                        fatVal += (Double.parseDouble(fat)*Double.parseDouble(quantity));
+                        saltVal += (Double.parseDouble(salt)*Double.parseDouble(quantity));
+                        fibreVal += (Double.parseDouble(fibre)*Double.parseDouble(quantity));
                         calorieVal = 4 * proteinVal + 4 * carbsVal + 9 * fatVal;
                         setupProgressBars();
                     }
