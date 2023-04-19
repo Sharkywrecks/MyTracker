@@ -132,7 +132,7 @@ public class AddFoodActivity extends AppCompatActivity {
         quantity = quantityET.getText().toString();
         userDataMap.put("quantity",quantity);
 
-        RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).updateChildren(userDataMap)
+        RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(dateHtml).child(foodName).updateChildren(userDataMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {

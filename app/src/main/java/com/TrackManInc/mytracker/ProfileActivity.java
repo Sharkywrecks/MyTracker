@@ -110,9 +110,9 @@ public class ProfileActivity extends AppCompatActivity {
         String dateHtml = year+"/"+monthStr+"/"+dayStr;
 
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference UserRef = RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
-        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);;
-        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);;
+        final DatabaseReference UserRef = RootRef.child("Users").child(Prevalent.currentOnlineUser.getName());
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getName()).child(dateHtml);;
+        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(dateHtml);;
 
         UserRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -123,10 +123,12 @@ public class ProfileActivity extends AppCompatActivity {
                     usernameTextView.setText(user.getName());
                     emailTextView.setText(user.getEmail());
                     lifetimeAmountTextView.setText("Lifetime amount spent: £"+user.getLifetime_amount());
-                    Picasso.get().load(user.getImage()).into(profileImageView);
-                    byte[] bytes=Base64.decode(user.getImage(),Base64.DEFAULT);
-                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    profileImageView.setImageBitmap(bitmap);
+                    if (user.getImage()!=null && !user.getImage().equals("")) {
+                        Picasso.get().load(user.getImage()).into(profileImageView);
+                        byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        profileImageView.setImageBitmap(bitmap);
+                    }
                 }
 
             }
@@ -257,7 +259,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Uri uri;
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getName());
         if(resultCode == RESULT_OK && requestCode == 1 && data != null){
             uri = data.getData();
             Picasso.get().load(uri).into(profileImageView);
@@ -270,6 +272,7 @@ public class ProfileActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Void aVoid) {
                                 toastMessage("Profile image updated.");
+                                Prevalent.currentOnlineUser.setImage(image_base64);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {

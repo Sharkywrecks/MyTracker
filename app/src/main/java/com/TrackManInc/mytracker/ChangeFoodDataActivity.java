@@ -316,7 +316,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         quantity = quantityAmountET.getText().toString();
         userDataMap.put("quantity",quantity);
 
-        RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(newDateHtml).child(foodName).updateChildren(userDataMap)
+        RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(newDateHtml).child(foodName).updateChildren(userDataMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -340,7 +340,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
     private void deleteInput(){
         //Delete from database
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+        rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -354,7 +354,7 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
     }
     private void getData(String formattedDate) {
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference foodRef = rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate).child(foodName);
+        final DatabaseReference foodRef = rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(formattedDate).child(foodName);
             foodRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {

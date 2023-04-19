@@ -40,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
     private boolean changed;
 
     private final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-    private final DatabaseReference UserRef = RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
+    private final DatabaseReference UserRef = RootRef.child("Users").child(Prevalent.currentOnlineUser.getName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -59,18 +59,18 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         name = findViewById(R.id.nameET);
         email = findViewById(R.id.email_ET);
-        email.setFocusable(false);
-        email.setKeyListener(null);
-        email.setOnClickListener(new View.OnClickListener() {
+        name.setFocusable(false);
+        name.setKeyListener(null);
+        name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                email.setEnabled(false);
+                name.setEnabled(false);
                 Toast.makeText(SettingsActivity.this,"Contact admins to change",Toast.LENGTH_SHORT).show();
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        email.setEnabled(true);
+                        name.setEnabled(true);
                     }
                 }, 2000);
             }
@@ -121,7 +121,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             }
         });
 
-        name.addTextChangedListener(new TextWatcher() {
+        email.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 

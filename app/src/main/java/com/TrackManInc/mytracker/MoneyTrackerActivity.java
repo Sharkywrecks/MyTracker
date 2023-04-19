@@ -270,8 +270,8 @@ public class MoneyTrackerActivity extends AppCompatActivity {
     }
     private void addMoney(Double dayMoney){
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getEmail());
-        final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(dateHtml);
+        final DatabaseReference UserRef =  RootRef.child("Users").child(Prevalent.currentOnlineUser.getName());
+        final DatabaseReference MoneyRef =  RootRef.child("User Money").child(Prevalent.currentOnlineUser.getName()).child(dateHtml);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -323,7 +323,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
 
     private void retrieveDaysMoney(String formattedDate, int arrayNum) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

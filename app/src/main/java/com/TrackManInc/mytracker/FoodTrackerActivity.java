@@ -200,7 +200,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
 
     private void retrieveNutrients(String formattedDate) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         nutrientRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -236,7 +236,7 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
 
     private void retrieveDaysFoods(String formattedDate) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         FoodRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override

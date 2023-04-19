@@ -64,7 +64,9 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Please enter your name...", Toast.LENGTH_SHORT).show();
         }else if(TextUtils.isEmpty(email)){
             Toast.makeText(this, "Please enter your email...", Toast.LENGTH_SHORT).show();
-        }else if(!emailIsValid(email)){
+        }else if(!usernameIsValid(username)){
+            Toast.makeText(this, "'.', '$', '#', '[', ']' are not valid characters", Toast.LENGTH_SHORT).show();
+        } else if(!emailIsValid(email)){
             Toast.makeText(this, "Please use a valid email...", Toast.LENGTH_SHORT).show();
         }else if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter your password...", Toast.LENGTH_SHORT).show();
@@ -74,24 +76,31 @@ public class SignUpActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            validatePhoneNumber(username,email,password);
+            validateUser(username,email,password);
         }
+    }
+
+    private boolean usernameIsValid(String username) {
+        if (username.contains("#") || username.contains(".") || username.contains("$") || username.contains("[") || username.contains("]")){
+            return false;
+        }
+        return true;
     }
 
 
     private boolean emailIsValid(String email){
-        Pattern pat = Pattern.compile("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])\n");
+        Pattern pat = Pattern.compile("[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+");//("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])\n");
         Matcher m = pat.matcher(email);
         return m.find();
     }
-    private void validatePhoneNumber(String name,String email,String password) {
+    private void validateUser(String name,String email,String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!(snapshot.child("Users").child(email).exists())){
+                if(!(snapshot.child("Users").child(name).exists())){
                     HashMap<String,Object> userDataMap = new HashMap<>();
                     userDataMap.put("password",password);
                     userDataMap.put("name",name);
@@ -107,7 +116,7 @@ public class SignUpActivity extends AppCompatActivity {
                     userDataMap.put("money","100");
                     userDataMap.put("calorie","2500");
 
-                    RootRef.child("Users").child(email).updateChildren(userDataMap)
+                    RootRef.child("Users").child(name).updateChildren(userDataMap)
                             .addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
@@ -124,9 +133,9 @@ public class SignUpActivity extends AppCompatActivity {
                                 }
                             });
                 }else{
-                    Toast.makeText(getApplicationContext(), "This "+email+" already exists", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "The username "+name+" already exists", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
-                    Toast.makeText(getApplicationContext(), "Please try again using another email address.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Please try again using another.", Toast.LENGTH_SHORT).show();
                 }
             }
 

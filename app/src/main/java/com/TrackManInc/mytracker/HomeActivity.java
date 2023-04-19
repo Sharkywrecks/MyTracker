@@ -109,7 +109,7 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         profileImageView = navigationView.getHeaderView(0).findViewById(R.id.user_profile_image);
         usernameTextView = navigationView.getHeaderView(0).findViewById(R.id.user_profile_name);
-        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getName());
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -117,10 +117,12 @@ public class HomeActivity extends AppCompatActivity {
                     Users user = snapshot.getValue(Users.class);
                     assert user != null;
                     usernameTextView.setText(user.getName());
-                    Picasso.get().load(user.getImage()).into(profileImageView);
-                    byte[] bytes= Base64.decode(user.getImage(),Base64.DEFAULT);
-                    Bitmap bitmap= BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                    profileImageView.setImageBitmap(bitmap);
+                    if (user.getImage()!=null && !user.getImage().equals("")) {
+                        Picasso.get().load(user.getImage()).into(profileImageView);
+                        byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
+                        Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        profileImageView.setImageBitmap(bitmap);
+                    }
                 }
 
             }
@@ -207,7 +209,7 @@ public class HomeActivity extends AppCompatActivity {
         calorieProgress = dialog.findViewById(R.id.calorieProgress);
         moneyProgress = dialog.findViewById(R.id.moneyProgress);
         streakTV = dialog.findViewById(R.id.streak_count);
-        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getName());
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -235,7 +237,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void retrieveDaysMoney(String formattedDate) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference MoneyRef = RootRef.child("User Money").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         MoneyRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -268,7 +270,7 @@ public class HomeActivity extends AppCompatActivity {
     private ArrayList<String> retrieveDaysFoods(String formattedDate) {
         ArrayList<String> foodList = new ArrayList<>();
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference FoodRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         FoodRef.addValueEventListener(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -288,7 +290,7 @@ public class HomeActivity extends AppCompatActivity {
     }
     private void retrieveDialogueData(String formattedDate) {
         final DatabaseReference RootRef = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getEmail()).child(formattedDate);
+        final DatabaseReference nutrientRef = RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(formattedDate);
         nutrientRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -357,7 +359,7 @@ public class HomeActivity extends AppCompatActivity {
         return false;
     }
     private void streakCheck(){
-        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getEmail());
+        final DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(Prevalent.currentOnlineUser.getName());
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -434,6 +436,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onRestart();
         index=0;
         retrieveData();
+        setupDrawerNav();
     }
 
 }

@@ -28,7 +28,7 @@ import io.paperdb.Paper;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText inputEmail, inputPassword;
+    private EditText inputUsername, inputPassword;
     private Button loginButton;
     private ProgressDialog loadingBar;
 
@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void setupUIView() {
-        inputEmail = findViewById(R.id.username_or_email);
+        inputUsername = findViewById(R.id.username);
         inputPassword = findViewById(R.id.password);
         checkBoxRememberMe = findViewById(R.id.remember_me_chk);
         loginButton = findViewById(R.id.log_in_button);
@@ -60,11 +60,11 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void LoginUser(){
-        String email=inputEmail.getText().toString();
+        String name=inputUsername.getText().toString();
         String password=inputPassword.getText().toString();
 
-        if(TextUtils.isEmpty(email)){
-            Toast.makeText(this, "Please enter your email address...", Toast.LENGTH_SHORT).show();
+        if(TextUtils.isEmpty(name)){
+            Toast.makeText(this, "Please enter your username...", Toast.LENGTH_SHORT).show();
         }
         else if(TextUtils.isEmpty(password)){
             Toast.makeText(this, "Please enter your password...", Toast.LENGTH_SHORT).show();
@@ -74,13 +74,13 @@ public class LoginActivity extends AppCompatActivity {
             loadingBar.setCanceledOnTouchOutside(false);
             loadingBar.show();
 
-            AllowAccessToAccount(email,password);
+            AllowAccessToAccount(name,password);
         }
     }
 
-    private void AllowAccessToAccount(String email, String password) {
+    private void AllowAccessToAccount(String name, String password) {
         if(checkBoxRememberMe.isChecked()){
-            Paper.book().write(Prevalent.userEmailKey,email);
+            Paper.book().write(Prevalent.usernameKey,name);
             Paper.book().write(Prevalent.userPasswordKey,password);
         }
 
@@ -90,9 +90,9 @@ public class LoginActivity extends AppCompatActivity {
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child(parentDbName).child(email).exists()){
-                    Users usersData = snapshot.child(parentDbName).child(email).getValue(Users.class);
-                    if(usersData.getEmail().equals(email)){
+                if(snapshot.child(parentDbName).child(name).exists()){
+                    Users usersData = snapshot.child(parentDbName).child(name).getValue(Users.class);
+                    if(usersData.getName().equals(name)){
                         if(usersData.getPassword().equals(password)){
                             if(parentDbName.equals("Users")){
                                 Toast.makeText(LoginActivity.this, "Logged in successfully", Toast.LENGTH_SHORT).show();
@@ -107,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    Toast.makeText(LoginActivity.this, "Account with this "+email+" does not exist.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "Account with this "+name+" does not exist.", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
                 }
             }

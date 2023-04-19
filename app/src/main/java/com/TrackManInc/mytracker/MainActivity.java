@@ -40,12 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupPaper() {
         Paper.init(this);
-        String userEmailKey = Paper.book().read(Prevalent.userEmailKey);
+        String username = Paper.book().read(Prevalent.usernameKey);
         String userPasswordKey = Paper.book().read(Prevalent.userPasswordKey);
 
-        if(userEmailKey!= "" && userPasswordKey!=""){
-            if(!TextUtils.isEmpty(userEmailKey) && !TextUtils.isEmpty(userPasswordKey)){
-                AllowAccess(userEmailKey,userPasswordKey);
+        if(username!= "" && userPasswordKey!=""){
+            if(!TextUtils.isEmpty(username) && !TextUtils.isEmpty(userPasswordKey)){
+                AllowAccess(username,userPasswordKey);
 
                 loadingBar.setTitle("Already logged in");
                 loadingBar.setMessage("Please wait...");
@@ -75,17 +75,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    private void AllowAccess(final String email, final String password) {
+    private void AllowAccess(final String name, final String password) {
         final DatabaseReference RootRef;
         RootRef = FirebaseDatabase.getInstance().getReference();
 
         RootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(snapshot.child("Users").child(email).exists()){
-                    Users usersData = snapshot.child("Users").child(email).getValue(Users.class);
+                if(snapshot.child("Users").child(name).exists()){
+                    Users usersData = snapshot.child("Users").child(name).getValue(Users.class);
 
-                    if(usersData.getEmail().equals(email)){
+                    if(usersData.getName().equals(name)){
                         if(usersData.getPassword().equals(password)){
                             Toast.makeText(getApplicationContext(), "You are already logged in.", Toast.LENGTH_SHORT).show();
                             loadingBar.dismiss();
@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 }else{
-                    Toast.makeText(getApplicationContext(), "Account with this "+email+" address does not exist.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Account with this "+name+" username does not exist.", Toast.LENGTH_SHORT).show();
                     loadingBar.dismiss();
                 }
             }
