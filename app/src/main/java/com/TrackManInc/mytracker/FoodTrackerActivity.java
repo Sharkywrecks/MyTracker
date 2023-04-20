@@ -82,12 +82,12 @@ public class FoodTrackerActivity extends AppCompatActivity implements AdapterVie
         saltBar.setProgress((int)saltVal);
         fatBar.setProgress((int)fatVal);
 
-        calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
-        proteinProgress.setText(proteinVal + "/" + proteinTarget + "g");
-        carbsProgress.setText(carbsVal + "/" + carbsTarget + "g");
-        fibreProgress.setText(fibreVal + "/" + fibreTarget + "g");
-        saltProgress.setText(saltVal + "/" + saltTarget + "g");
-        fatProgress.setText(fatVal + "/" + fatTarget + "g");
+        calorieProgress.setText(String.format("%.1f",calorieVal) + "/" + calorieTarget + "kcal");
+        proteinProgress.setText(String.format("%.1f", proteinVal) + "/" + proteinTarget + "g");
+        carbsProgress.setText(String.format("%.1f",carbsVal) + "/" + carbsTarget + "g");
+        fibreProgress.setText(String.format("%.1f",fibreVal) + "/" + fibreTarget + "g");
+        saltProgress.setText(String.format("%.1f",saltVal)  + "/" + saltTarget + "g");
+        fatProgress.setText(String.format("%.1f",fatVal)  + "/" + fatTarget + "g");
 
         if (calorieVal >= calorieTarget) calorieProgress.setTextColor(RED);
         if (proteinVal >= proteinTarget) proteinProgress.setTextColor(RED);
