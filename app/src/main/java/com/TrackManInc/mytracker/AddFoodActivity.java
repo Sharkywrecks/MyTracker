@@ -324,13 +324,13 @@ public class AddFoodActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             //if(!foodNameEditText.getText().toString().equals(foodName)) {
-            foodNameET.setText(foodName);
-            carbsET.setText(carbAmount+"g");
-            proteinET.setText(proteinAmount+"g");
-            fatsET.setText(fatAmount+"g");
-            saltET.setText(saltAmount+"g");
-            fiberET.setText(fiberAmount+"g");
-            servingSizeET.setText(servingSize+"g");
+            foodNameET.setText(String.format("%.1f",foodName));
+            carbsET.setText(String.format("%.1f",carbAmount)+"g");
+            proteinET.setText(String.format("%.1f",proteinAmount)+"g");
+            fatsET.setText(String.format("%.1f",fatAmount)+"g");
+            saltET.setText(String.format("%.1f",saltAmount)+"g");
+            fiberET.setText(String.format("%.1f",fiberAmount)+"g");
+            servingSizeET.setText(String.format("%.0f",servingSize)+"g");
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             //}

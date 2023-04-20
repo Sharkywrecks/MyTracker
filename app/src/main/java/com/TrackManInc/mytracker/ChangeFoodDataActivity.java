@@ -364,13 +364,13 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                         if(dateET.getText().toString().equals("")){
                             dateET.setText(dateHtml.substring(8)+"/"+dateHtml.substring(5,7)+"/"+dateHtml.substring(0,4));
                         }
-                        carbAmountET.setText(checkRetrievedValue(foodNutrient.getCarbs()));
-                        proteinAmountET.setText(checkRetrievedValue(foodNutrient.getProtein()));
-                        fatsAmountET.setText(checkRetrievedValue(foodNutrient.getFat()));
-                        fiberAmountET.setText(checkRetrievedValue(foodNutrient.getFiber()));
-                        saltAmountET.setText(checkRetrievedValue(foodNutrient.getSalt()));
-                        quantityAmountET.setText(checkRetrievedValue(foodNutrient.getQuantity()));
-                        servingSizeET.setText(checkRetrievedValue(foodNutrient.getServing()));
+                        carbAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getCarbs())));
+                        proteinAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getProtein())));
+                        fatsAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getFat())));
+                        fiberAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getFiber())));
+                        saltAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getSalt())));
+                        quantityAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getQuantity())));
+                        servingSizeET.setText(String.format("%.0f",checkRetrievedValue(foodNutrient.getServing())));
                     }
                 }
                 @Override
