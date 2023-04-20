@@ -283,10 +283,10 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
                     password.setText(savedState.get("password"));
                     age.setText(savedState.get("age"));
                     gender.setSelection(Integer.parseInt(Objects.requireNonNull(savedState.get("gender"))));//0:female, 1:male
-                    height.setText(savedState.get("height"));
-                    weight.setText(savedState.get("weight"));
-                    calorie.setText(savedState.get("calorie"));
-                    money.setText(savedState.get("money"));
+                    height.setText(String.format("%.2f",savedState.get("height")));
+                    weight.setText(String.format("%.1f",savedState.get("weight")));
+                    calorie.setText(String.format("%.1f",savedState.get("calorie")));
+                    money.setText(String.format("%.2f",savedState.get("money")));
                     currentState.putAll(savedState);
                 }
                 compareMaps();
