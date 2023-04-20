@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.DecimalDigitsInputFilter;
+import com.TrackManInc.mytracker.Filters.TextInputFilter;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -59,6 +62,7 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
 
         name = findViewById(R.id.nameET);
         email = findViewById(R.id.email_ET);
+        email.setFilters(new InputFilter[]{new TextInputFilter(200)});
         name.setFocusable(false);
         name.setKeyListener(null);
         name.setOnClickListener(new View.OnClickListener() {
@@ -76,12 +80,17 @@ public class SettingsActivity extends AppCompatActivity implements AdapterView.O
             }
         });
         password = findViewById(R.id.password_ET);
+        password.setFilters(new InputFilter[]{new TextInputFilter(20)});
         age = findViewById(R.id.age_ET);
+        age.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(0,3)});
         height = findViewById(R.id.height_ET);
+        height.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         weight = findViewById(R.id.weight_ET);
+        weight.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         calorie = findViewById(R.id.calorie_ET);
+        calorie.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         money = findViewById(R.id.money_ET);
-
+        money.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         save = findViewById(R.id.save_btn);
         discard = findViewById(R.id.discard_btn);
 

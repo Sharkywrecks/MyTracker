@@ -1,5 +1,6 @@
 package com.TrackManInc.mytracker;
 
+import com.TrackManInc.mytracker.Filters.DecimalDigitsInputFilter;
 import com.TrackManInc.mytracker.Model.Nutrients;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 
@@ -12,9 +13,12 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.AlignmentSpan;
 import android.view.View;
@@ -62,12 +66,19 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         dateET.setFocusable(false);
         dateET.setKeyListener(null);
         carbAmountET = findViewById(R.id.editCarbs);
+        carbAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         proteinAmountET = findViewById(R.id.editProtein);
+        proteinAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         fatsAmountET = findViewById(R.id.editFats);
+        fatsAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         saltAmountET = findViewById(R.id.editSalt);
+        saltAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         fiberAmountET = findViewById(R.id.editFiber);
+        fiberAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         quantityAmountET = findViewById(R.id.editQuantity);
+        quantityAmountET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         servingSizeET = findViewById(R.id.editServingSize);
+        servingSizeET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         saveButton = findViewById(R.id.save_button);
         deleteButton = findViewById(R.id.delete_button);
         setupETListeners();
@@ -364,13 +375,13 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                         if(dateET.getText().toString().equals("")){
                             dateET.setText(dateHtml.substring(8)+"/"+dateHtml.substring(5,7)+"/"+dateHtml.substring(0,4));
                         }
-                        carbAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getCarbs())));
-                        proteinAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getProtein())));
-                        fatsAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getFat())));
-                        fiberAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getFiber())));
-                        saltAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getSalt())));
-                        quantityAmountET.setText(String.format("%.1f",checkRetrievedValue(foodNutrient.getQuantity())));
-                        servingSizeET.setText(String.format("%.0f",checkRetrievedValue(foodNutrient.getServing())));
+                        carbAmountET.setText(checkRetrievedValue(foodNutrient.getCarbs()));
+                        proteinAmountET.setText(checkRetrievedValue(foodNutrient.getProtein()));
+                        fatsAmountET.setText(checkRetrievedValue(foodNutrient.getFat()));
+                        fiberAmountET.setText(checkRetrievedValue(foodNutrient.getFiber()));
+                        saltAmountET.setText(checkRetrievedValue(foodNutrient.getSalt()));
+                        quantityAmountET.setText(checkRetrievedValue(foodNutrient.getQuantity()));
+                        servingSizeET.setText(checkRetrievedValue(foodNutrient.getServing()));
                     }
                 }
                 @Override

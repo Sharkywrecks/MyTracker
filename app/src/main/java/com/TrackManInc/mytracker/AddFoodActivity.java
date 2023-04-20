@@ -3,24 +3,18 @@ package com.TrackManInc.mytracker;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.app.DatePickerDialog;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -34,9 +28,10 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.DecimalDigitsInputFilter;
+import com.TrackManInc.mytracker.Filters.TextInputFilter;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.budiyev.android.codescanner.AutoFocusMode;
 import com.budiyev.android.codescanner.CodeScanner;
@@ -46,18 +41,13 @@ import com.budiyev.android.codescanner.ErrorCallback;
 import com.budiyev.android.codescanner.ScanMode;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 import org.jsoup.Jsoup;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -93,14 +83,20 @@ public class AddFoodActivity extends AppCompatActivity {
 
     private void setupUIView() {
         carbsET = findViewById(R.id.carbs);
+        carbsET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         proteinET = findViewById(R.id.protein);
+        proteinET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         fatsET = findViewById(R.id.fats);
+        fatsET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         saltET = findViewById(R.id.salt);
+        saltET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         fiberET = findViewById(R.id.fiber);
+        fiberET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(3)});
         dateET = findViewById(R.id.date);
         dateET.setFocusable(false);
         dateET.setKeyListener(null);
         foodNameET = findViewById(R.id.food_name);
+        foodNameET.setFilters(new InputFilter[]{new TextInputFilter()});
         saveButton = findViewById(R.id.save_input_button);
         quantityET = findViewById(R.id.quantity);
         quantityET.setText("1");
@@ -324,13 +320,13 @@ public class AddFoodActivity extends AppCompatActivity {
         protected void onPostExecute(Void unused) {
             super.onPostExecute(unused);
             //if(!foodNameEditText.getText().toString().equals(foodName)) {
-            foodNameET.setText(String.format("%.1f",foodName));
-            carbsET.setText(String.format("%.1f",carbAmount)+"g");
-            proteinET.setText(String.format("%.1f",proteinAmount)+"g");
-            fatsET.setText(String.format("%.1f",fatAmount)+"g");
-            saltET.setText(String.format("%.1f",saltAmount)+"g");
-            fiberET.setText(String.format("%.1f",fiberAmount)+"g");
-            servingSizeET.setText(String.format("%.0f",servingSize)+"g");
+            foodNameET.setText(foodName);
+            carbsET.setText(carbAmount+"g");
+            proteinET.setText(proteinAmount+"g");
+            fatsET.setText(fatAmount+"g");
+            saltET.setText(saltAmount+"g");
+            fiberET.setText(fiberAmount+"g");
+            servingSizeET.setText(servingSize+"g");
             ProgressBar progressBar = (ProgressBar) findViewById(R.id.progressBar);
             progressBar.setVisibility(View.INVISIBLE);
             //}

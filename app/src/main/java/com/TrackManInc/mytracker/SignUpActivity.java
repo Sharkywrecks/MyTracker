@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.TextInputFilter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -44,8 +46,11 @@ public class SignUpActivity extends AppCompatActivity {
     }
     private void setupUIView(){
         usernameET = findViewById(R.id.username);
+        usernameET.setFilters(new InputFilter[]{new TextInputFilter(20)});
         emailET = findViewById(R.id.email);
+        emailET.setFilters(new InputFilter[]{new TextInputFilter(100)});
         passwordET = findViewById(R.id.password);
+        passwordET.setFilters(new InputFilter[]{new TextInputFilter(100)});
         signUpButton = findViewById(R.id.sign_up_button);
         loadingBar = new ProgressDialog(this);
         signUpButton.setOnClickListener(new View.OnClickListener() {

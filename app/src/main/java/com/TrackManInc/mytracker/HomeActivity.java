@@ -389,7 +389,7 @@ public class HomeActivity extends AppCompatActivity {
                     }
                     if(foodVsMoneyArrayList.get(0).getFoodNames().size()==0){return;}
                     if(foodVsMoneyArrayList.get(0).getFoodNames().get(0)!=null
-                            && !Objects.equals(foodVsMoneyArrayList.get(0).getMoney(), "0.00") && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
+                            && !Objects.equals(foodVsMoneyArrayList.get(0).getMoney(), "£0.00") && !prevStreakDate.equals(foodVsMoneyArrayList.get(0).getDate())){
                         if(prevStreak==Integer.parseInt(Prevalent.currentOnlineUser.getStreak())){
                             HashMap<String,Object> userDataMap = new HashMap<>();
                             prevStreakDate = foodVsMoneyArrayList.get(0).getDate();

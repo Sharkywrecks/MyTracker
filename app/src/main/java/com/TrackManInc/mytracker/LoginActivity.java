@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -16,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.TextInputFilter;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
 import com.google.firebase.database.DataSnapshot;
@@ -46,7 +48,9 @@ public class LoginActivity extends AppCompatActivity {
 
     private void setupUIView() {
         inputUsername = findViewById(R.id.username);
+        inputUsername.setFilters(new InputFilter[]{new TextInputFilter(20)});
         inputPassword = findViewById(R.id.password);
+        inputPassword.setFilters(new InputFilter[]{new TextInputFilter(20)});
         checkBoxRememberMe = findViewById(R.id.remember_me_chk);
         loginButton = findViewById(R.id.log_in_button);
         Paper.init(this);

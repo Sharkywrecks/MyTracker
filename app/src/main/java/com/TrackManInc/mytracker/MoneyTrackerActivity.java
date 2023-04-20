@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -22,6 +23,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.DecimalDigitsInputFilter;
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Users;
 import com.TrackManInc.mytracker.Prevalent.Prevalent;
@@ -82,6 +84,7 @@ public class MoneyTrackerActivity extends AppCompatActivity {
         dateET.setFocusable(false);
         dateET.setKeyListener(null);
         moneyEnteredET = findViewById(R.id.money_entered);
+        moneyEnteredET.setFilters(new InputFilter[]{new DecimalDigitsInputFilter(2)});
         radioGroup = findViewById(R.id.radio_group);
         barChart = findViewById(R.id.bar_chart);
         chartTitle = findViewById(R.id.chart_title);
