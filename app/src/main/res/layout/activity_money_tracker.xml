@@ -43,6 +43,7 @@
             android:textColor="#9E9E9E"
             android:backgroundTint="#FFFFFF"
             android:inputType="numberDecimal|numberSigned"
+            android:maxLength="8"
             android:textColorHint="#9E9E9E"
             android:hint="@string/enter_money_used_today" />
 

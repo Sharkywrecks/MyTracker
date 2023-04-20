@@ -122,7 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
                     assert user != null;
                     usernameTextView.setText(user.getName());
                     emailTextView.setText(user.getEmail());
-                    lifetimeAmountTextView.setText("Lifetime amount spent: £"+user.getLifetime_amount());
+                    lifetimeAmountTextView.setText("Lifetime amount spent: £"+ String.format("%.2f",user.getLifetime_amount()));
                     if (user.getImage()!=null && !user.getImage().equals("")) {
                         Picasso.get().load(user.getImage()).into(profileImageView);
                         byte[] bytes = Base64.decode(user.getImage(), Base64.DEFAULT);
@@ -195,12 +195,12 @@ public class ProfileActivity extends AppCompatActivity {
                 if (fatVal >= fatTarget) {
                     fatTextView.setTextColor(RED);
                 }
-                calorieTextView.setText("Calories: "+calorieVal+" kcal");
-                fatTextView.setText("Fat: "+fatVal+"g");
-                carbsTextView.setText("Carbohydrates: "+carbsVal+"g");
-                proteinTextView.setText("Protein: "+proteinVal+"g");
-                fibreTextView.setText("Fibre: "+fibreVal+"g");
-                saltTextView.setText("Salt: "+saltVal+"g");
+                calorieTextView.setText("Calories: "+String.format("%.1f",calorieVal)+" kcal");
+                fatTextView.setText("Fat: "+String.format("%.1f",fatVal)+"g");
+                carbsTextView.setText("Carbohydrates: "+String.format("%.1f",carbsVal)+"g");
+                proteinTextView.setText("Protein: "+String.format("%.1f",proteinVal)+"g");
+                fibreTextView.setText("Fibre: "+String.format("%.1f",fibreVal)+"g");
+                saltTextView.setText("Salt: "+String.format("%.1f",saltVal)+"g");
 
             }
 
