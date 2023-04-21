@@ -12,6 +12,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputFilter;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -24,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.TrackManInc.mytracker.Filters.DecimalDigitsInputFilter;
 import com.TrackManInc.mytracker.Model.Money;
 import com.TrackManInc.mytracker.Model.Nutrients;
 import com.TrackManInc.mytracker.Model.Users;
@@ -51,12 +53,12 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView profileImageView;
     private TextView usernameTextView, emailTextView, lifetimeAmountTextView, todayAmountTextView;
     private TextView calorieTextView, fatTextView, carbsTextView, proteinTextView, fibreTextView, saltTextView;
-    private int calorieVal=0;
-    private int proteinVal=0;
-    private int carbsVal=0;
-    private int fibreVal=0;
-    private int saltVal=0;
-    private int fatVal=0;
+    private double calorieVal=0;
+    private double proteinVal=0;
+    private double carbsVal=0;
+    private double fibreVal=0;
+    private double saltVal=0;
+    private double fatVal=0;
 
     private int calorieTarget, proteinTarget, carbsTarget, fibreTarget, saltTarget, fatTarget;
 
