@@ -127,7 +127,7 @@ public class AddFoodActivity extends AppCompatActivity {
         userDataMap.put("serving",servingSize);
         quantity = quantityET.getText().toString();
         userDataMap.put("quantity",quantity);
-
+        foodName = removeUnwantedCharacters(foodName);
         RootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(dateHtml).child(foodName).updateChildren(userDataMap)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
@@ -141,6 +141,18 @@ public class AddFoodActivity extends AppCompatActivity {
                     }
                 });
         finish();
+    }
+
+    private String removeUnwantedCharacters(String foodName) {
+        String s = "";
+        for (char c:foodName.toCharArray()){
+            if(c=='.'||c=='#'||c=='$'||c=='['||c==']'){
+                s+="_";
+                continue;
+            }
+            s+=String.valueOf(c);
+        }
+        return s;
     }
 
     private boolean checkNoInput(String nutrient,EditText editText) {

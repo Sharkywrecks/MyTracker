@@ -348,8 +348,20 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
                 Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         Toast.makeText(getApplicationContext(), centeredText, Toast.LENGTH_SHORT).show();
     }
+    private String removeUnwantedCharacters(String foodName) {
+        String s = "";
+        for (char c:foodName.toCharArray()){
+            if(c=='.'||c=='#'||c=='$'||c=='['||c==']'){
+                s+="_";
+                continue;
+            }
+            s+=String.valueOf(c);
+        }
+        return s;
+    }
     private void deleteInput(){
         //Delete from database
+        foodName = removeUnwantedCharacters(foodName);
         final DatabaseReference rootRef = FirebaseDatabase.getInstance().getReference();
         rootRef.child("User Foods").child(Prevalent.currentOnlineUser.getName()).child(dateHtml).child(foodName).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override

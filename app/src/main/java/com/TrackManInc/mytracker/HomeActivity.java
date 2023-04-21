@@ -308,7 +308,7 @@ public class HomeActivity extends AppCompatActivity {
                         fat = checkRetrievedValue(usersNutrients.getFat());
                         fibre = checkRetrievedValue(usersNutrients.getFiber());
                         salt = checkRetrievedValue(usersNutrients.getSalt());
-                        quantity = checkRetrievedValue(usersNutrients.getSalt());
+                        quantity = checkRetrievedValue(usersNutrients.getQuantity());
                         carbsVal+=(Double.parseDouble(carbs)*Double.parseDouble(quantity));
                         proteinVal += (Double.parseDouble(protein)*Double.parseDouble(quantity));
                         fatVal += (Double.parseDouble(fat)*Double.parseDouble(quantity));
