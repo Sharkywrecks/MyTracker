@@ -189,12 +189,10 @@ public class AddFoodActivity extends AppCompatActivity {
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(AddFoodActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(AddFoodActivity.this, R.style.DialogTheme,setListener,
                         year,month,day);
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 datePickerDialog.show();
             }
         });

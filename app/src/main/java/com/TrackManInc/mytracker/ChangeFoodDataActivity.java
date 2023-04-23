@@ -37,9 +37,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.Objects;
 
 public class ChangeFoodDataActivity extends AppCompatActivity {
     private String dateHtml,newDateHtml = null,date;
@@ -276,12 +280,10 @@ public class ChangeFoodDataActivity extends AppCompatActivity {
         dateET.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(ChangeFoodDataActivity.this,
-                        android.R.style.Theme_Holo_Light_Dialog_MinWidth,setListener,
+                DatePickerDialog datePickerDialog = new DatePickerDialog(ChangeFoodDataActivity.this, R.style.DialogTheme,setListener,
                         year,month,day);
                 datePickerDialog.getDatePicker().setMaxDate(new Date().getTime());
-                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                datePickerDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 datePickerDialog.show();
             }
         });
