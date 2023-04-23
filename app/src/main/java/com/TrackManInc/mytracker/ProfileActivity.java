@@ -197,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (fatVal >= fatTarget) {
                     fatTextView.setTextColor(RED);
                 }
-                calorieTextView.setText("Calories: "+calorieVal+" kcal");
+                calorieTextView.setText("Calories: "+String.format("%.1f",calorieVal)+" kcal");
                 fatTextView.setText("Fat: "+fatVal+"g");
                 carbsTextView.setText("Carbohydrates: "+carbsVal+"g");
                 proteinTextView.setText("Protein: "+proteinVal+"g");

@@ -54,6 +54,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -337,7 +338,7 @@ public class HomeActivity extends AppCompatActivity {
         calorieBar.setProgress((int)calorieVal);
         moneyBar.setProgress(moneyInteger);
         streakTV.setText(Prevalent.currentOnlineUser.getStreak());
-        calorieProgress.setText(calorieVal + "/" + calorieTarget + "kcal");
+        calorieProgress.setText(String.format("%.1f",calorieVal) + "/" + calorieTarget + "kcal");
         moneyProgress.setText(money + "/" + moneyTarget );
         if (calorieVal >= calorieTarget) {
             calorieProgress.setTextColor(RED);
